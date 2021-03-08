@@ -1,0 +1,18 @@
+*.pyc
+*~
+*.swo
+*.swp
+*.sqlite3
+media-images
+cache
+.idea
+.sass-cache
+docs
+todo.py
+.DS_Store
+*/.DS_Store
+settings_local*
+media
+static
+# Added by Django Setting Local `dsl`
+settings_local*
