@@ -4,6 +4,7 @@ from .views import *
 
 
 urlpatterns = [
-    path('workflows', WorkFlowAPIView.as_view()),
+    path('loans/', LoanCreateAPIView.as_view(), name='loan-create'),
+    path('loans/<uuid:application_id>', LoanStatusAPIView.as_view(), name='loan-retrive'),
 ]
 

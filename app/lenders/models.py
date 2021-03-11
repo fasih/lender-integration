@@ -23,8 +23,8 @@ class LenderSystemAPI(APIBaseModel):
     lender = models.ForeignKey('lenders.LenderSystem', null=True,
                             on_delete=models.SET_NULL)
     data = models.ManyToManyField('borrowers.LoanApplication',
-                through='lenders.LoanData',
-                through_fields=('lender_api', 'app'))
+                    through='lenders.LoanData',
+                    through_fields=('lender_api', 'app'))
 
     def __str__(self):
         return f'({self.lender}) - {self.name}'
@@ -56,12 +56,16 @@ class Loan(MFBaseModel):
 class LoanData(MFBaseModel):
     loan = models.ForeignKey('lenders.Loan', null=True,
                         on_delete=models.SET_NULL)
+
     app = models.ForeignKey('borrowers.LoanApplication', null=True,
                         on_delete=models.SET_NULL)
+
     lender_api = models.ForeignKey('lenders.LenderSystemAPI', null=True,
                         on_delete=models.SET_NULL)
+
     request = models.JSONField(null=True, default=dict)
     response = models.JSONField(null=True, default=dict)
+    response_code = models.PositiveSmallIntegerField(null=True)
 
 
 

@@ -1,6 +1,7 @@
 import structlog as logging
 
 from django.conf import settings
+from django.http.response import Http404
 
 from drf_yasg2 import openapi
 from drf_yasg2.views import get_schema_view
@@ -93,6 +94,11 @@ def exception_handler(exc, context):
     # Now add the HTTP status code to the response.
     if isinstance(exc, MFAPIException):
         response.data = exc.get_full_details()
+    elif isinstance(exc, Http404):
+        response.data = {
+            'message': str(exc),
+            'code': 404
+        }
 
     logger.exception('exception_handler',
         view_name = view.get_view_name(),

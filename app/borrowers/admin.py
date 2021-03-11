@@ -21,13 +21,18 @@ class LoanApplicationDataInlineAdmin(MFBaseAdmin, admin.TabularInline):
     formfield_overrides = {
         models.JSONField: {'widget': JSONEditorWidget},
     }
+    ordering = ('lms_api__priority',)
     max_num = 0
     extra = 0
+
+    def get_queryset(self, request):
+        qs = super().get_queryset(request)
+        return qs.select_related('lms_api').order_by('-lms_api__priority')
 
 
 
 class LoanApplicationAdmin(MFBaseAdmin, admin.ModelAdmin):
-    fields = (('lmsid', 'lms', 'cp'),)
+    fields = (('lmsid', 'cp'), ('lms', 'lender'))
     inlines = (LoanApplicationDataInlineAdmin,)
 
 

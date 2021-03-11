@@ -35,6 +35,7 @@ class LenderSystemAPIAdmin(MFBaseAdmin, admin.ModelAdmin):
 class LenderSystemAPIInlineAdmin(MFBaseAdmin, admin.TabularInline):
     model = LenderSystemAPI
     exclude = ('query_params', 'body') + MFBaseAdmin.exclude
+    ordering = ('priority',)
     extra = 0
 
 

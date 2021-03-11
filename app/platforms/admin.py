@@ -11,6 +11,7 @@ from base.admin import MFBaseAdmin
 class LoanManagementSystemAPIInlineAdmin(MFBaseAdmin, admin.TabularInline):
     model = LoanManagementSystemAPI
     exclude = ('query_params', 'body') + MFBaseAdmin.exclude
+    ordering = ('priority',)
     extra = 0
 
 

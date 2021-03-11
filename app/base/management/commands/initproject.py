@@ -18,9 +18,7 @@ class Command(BaseCommand):
             admin.is_staff = True
             admin.save()
 
-            management.call_command('loaddata', 'platforms', verbosity=1)
-            management.call_command('loaddata', 'borrowers', verbosity=1)
-            management.call_command('loaddata', 'lenders', verbosity=1)
+            management.call_command('loaddata', 'initproject', verbosity=1)
 
             self.stdout.write(self.style.SUCCESS('Created superuser and loaded module fixtures.'))
             self.stdout.write(self.style.SUCCESS('Project initialization completed :)'))

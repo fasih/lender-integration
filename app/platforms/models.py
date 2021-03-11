@@ -23,8 +23,8 @@ class LoanManagementSystemAPI(APIBaseModel):
     lms = models.ForeignKey('platforms.LoanManagementSystem', null=True,
                             on_delete=models.SET_NULL, verbose_name='LMS')
     data = models.ManyToManyField('borrowers.LoanApplication',
-                through='borrowers.LoanApplicationData',
-                through_fields=('lms_api', 'loan'))
+                    through='borrowers.LoanApplicationData',
+                    through_fields=('lms_api', 'app'))
 
     def __str__(self):
         return f'({self.lms}) - {self.name}'

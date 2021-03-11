@@ -20,4 +20,4 @@ if [ "$1" == "-f" ]; then
 fi
 
 echo "Start: Running Django HTTP Server"
-#python manage.py runserver --insecure 0:8000
+python manage.py runserver --insecure 0:8000
