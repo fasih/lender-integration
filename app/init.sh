@@ -19,5 +19,10 @@ if [ "$1" == "-f" ]; then
     python manage.py initproject
 fi
 
+if [ "$1" == "-d" ]; then
+    echo "Start: Django DB Dump"
+    python manage.py dumpdata --indent 4 --natural-foreign --natural-primary --exclude=admin --exclude=auth --exclude=contenttypes --exclude=sessions > base/fixtures/initproject.json
+fi
+
 echo "Start: Running Django HTTP Server"
 python manage.py runserver --insecure 0:8000

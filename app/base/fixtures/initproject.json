@@ -28,8 +28,8 @@
         "activate_date": "2021-03-11T09:46:53.892Z",
         "deactivate_date": null,
         "name": "Borrower Info",
-        "host": "/runreports/Borrower%20Info?R_loanId={{lmsid}}",
-        "query_params": {},
+        "path": "/runreports/Borrower%20Info?R_loanId={{lmsid}}",
+        "params": {},
         "body": {},
         "method": 1,
         "auth_scheme": 1,
@@ -47,8 +47,8 @@
         "activate_date": "2021-03-11T09:46:53.900Z",
         "deactivate_date": null,
         "name": "Repayment Schedule",
-        "host": "/runreports/Repayments%20Schedule?R_loanId={{lmsid}}",
-        "query_params": {},
+        "path": "/runreports/Repayments%20Schedule?R_loanId={{lmsid}}",
+        "params": {},
         "body": {},
         "method": 1,
         "auth_scheme": 1,
@@ -66,8 +66,8 @@
         "activate_date": "2021-03-11T08:34:18.487Z",
         "deactivate_date": null,
         "name": "Loan Request",
-        "host": "/runreports/Loan%20Request?R_loanId={{lmsid}}",
-        "query_params": {},
+        "path": "/runreports/Loan%20Request?R_loanId={{lmsid}}",
+        "params": {},
         "body": {},
         "method": 1,
         "auth_scheme": 1,
@@ -90,44 +90,14 @@
 },
 {
     "model": "borrowers.loanapplication",
-    "pk": "65ec241f-bc53-4ba1-8893-59d2b630ebb6",
-    "fields": {
-        "created": "2021-03-11T12:18:20.079Z",
-        "modified": "2021-03-11T12:18:20.079Z",
-        "status": 1,
-        "activate_date": "2021-03-11T12:18:20.079Z",
-        "deactivate_date": null,
-        "lmsid": "string",
-        "lms": "6d4f1b36-6c95-4f6c-aca3-7c6503ca62d7",
-        "lender": "0262fab4-0f8a-4037-89f4-71ca10010db1",
-        "cp": "a5f57397-0ad1-4a88-b54d-b05f38290128"
-    }
-},
-{
-    "model": "borrowers.loanapplication",
     "pk": "a2fe0599-e562-474f-98fe-0fdba0593b57",
     "fields": {
         "created": "2021-03-11T08:42:40.378Z",
-        "modified": "2021-03-11T08:42:40.378Z",
+        "modified": "2021-03-11T15:13:50.123Z",
         "status": 1,
         "activate_date": "2021-03-11T08:42:40.377Z",
         "deactivate_date": null,
         "lmsid": "329",
-        "lms": "6d4f1b36-6c95-4f6c-aca3-7c6503ca62d7",
-        "lender": null,
-        "cp": "a5f57397-0ad1-4a88-b54d-b05f38290128"
-    }
-},
-{
-    "model": "borrowers.loanapplication",
-    "pk": "abd2c982-15d7-4b16-a2c2-a756b10d719a",
-    "fields": {
-        "created": "2021-03-11T12:33:12.077Z",
-        "modified": "2021-03-11T12:33:12.077Z",
-        "status": 1,
-        "activate_date": "2021-03-11T12:33:12.077Z",
-        "deactivate_date": null,
-        "lmsid": "string1",
         "lms": "6d4f1b36-6c95-4f6c-aca3-7c6503ca62d7",
         "lender": "0262fab4-0f8a-4037-89f4-71ca10010db1",
         "cp": "a5f57397-0ad1-4a88-b54d-b05f38290128"
@@ -138,7 +108,7 @@
     "pk": "2cd6b033-8a60-4ebc-9c68-6ded562035c0",
     "fields": {
         "created": "2021-03-11T09:57:08.234Z",
-        "modified": "2021-03-11T09:57:08.234Z",
+        "modified": "2021-03-11T15:13:50.151Z",
         "status": 1,
         "activate_date": "2021-03-11T09:57:08.233Z",
         "deactivate_date": null,
@@ -168,7 +138,7 @@
             "total_charges": " ",
             "advance_emi": " "
         },
-        "response_code": null
+        "response_code": 200
     }
 },
 {
@@ -176,7 +146,7 @@
     "pk": "86009a3e-a7ce-4d66-be89-fffbfe4d95c9",
     "fields": {
         "created": "2021-03-11T09:54:27.298Z",
-        "modified": "2021-03-11T09:54:27.298Z",
+        "modified": "2021-03-11T15:13:50.170Z",
         "status": 1,
         "activate_date": "2021-03-11T09:54:27.297Z",
         "deactivate_date": null,
@@ -219,7 +189,7 @@
             "vpa_address": " ",
             "partner_system_score": " "
         },
-        "response_code": null
+        "response_code": 200
     }
 },
 {
@@ -227,7 +197,7 @@
     "pk": "f184afbb-e50f-4f9d-a08e-084ab5e7a3d6",
     "fields": {
         "created": "2021-03-11T09:41:57.619Z",
-        "modified": "2021-03-11T09:52:13.676Z",
+        "modified": "2021-03-11T15:13:50.190Z",
         "status": 1,
         "activate_date": "2021-03-11T09:41:57.618Z",
         "deactivate_date": null,
@@ -270,7 +240,7 @@
             "vpa_address": " ",
             "partner_system_score": " "
         },
-        "response_code": null
+        "response_code": 200
     }
 },
 {
@@ -302,8 +272,8 @@
         "activate_date": "2021-03-11T08:42:12.147Z",
         "deactivate_date": null,
         "name": "Loan Request",
-        "host": "/loanrequest",
-        "query_params": {},
+        "path": "/loanrequest",
+        "params": {},
         "body": {},
         "method": 2,
         "auth_scheme": 1,
@@ -321,8 +291,8 @@
         "activate_date": "2021-03-11T10:02:07.173Z",
         "deactivate_date": null,
         "name": "Repayment Schedule",
-        "host": "/repaymentschedule",
-        "query_params": {},
+        "path": "/repaymentschedule",
+        "params": {},
         "body": {},
         "method": 2,
         "auth_scheme": 1,
@@ -340,8 +310,8 @@
         "activate_date": "2021-03-11T10:02:07.156Z",
         "deactivate_date": null,
         "name": "Borrower Info",
-        "host": "/borrowerinfo",
-        "query_params": {},
+        "path": "/borrowerinfo",
+        "params": {},
         "body": {},
         "method": 2,
         "auth_scheme": 1,
@@ -359,8 +329,8 @@
         "activate_date": "2021-03-11T10:02:07.179Z",
         "deactivate_date": null,
         "name": "Loan Document",
-        "host": "/loandocument",
-        "query_params": {},
+        "path": "/loandocument",
+        "params": {},
         "body": {},
         "method": 2,
         "auth_scheme": 1,
@@ -380,6 +350,23 @@
         "app": "a2fe0599-e562-474f-98fe-0fdba0593b57",
         "lender": "0262fab4-0f8a-4037-89f4-71ca10010db1",
         "loanid": null
+    }
+},
+{
+    "model": "lenders.loandata",
+    "pk": "d11b6ba1-12b1-48d7-afc3-0d722c0a4007",
+    "fields": {
+        "created": "2021-03-11T15:03:00.846Z",
+        "modified": "2021-03-11T15:31:56.717Z",
+        "status": 1,
+        "activate_date": "2021-03-11T15:03:00.846Z",
+        "deactivate_date": null,
+        "loan": "07e5e447-3e57-4088-9df4-1d523da4f4c2",
+        "app": "a2fe0599-e562-474f-98fe-0fdba0593b57",
+        "lender_api": "9c0ad848-6fdd-4bfd-8560-ab3b5868e498",
+        "request": {},
+        "response": {},
+        "response_code": null
     }
 }
 ]

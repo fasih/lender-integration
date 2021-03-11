@@ -49,11 +49,20 @@ class APIBaseModel(MFBaseModel):
     
     name = models.CharField(max_length=255, verbose_name='API Name',
                         help_text='Name of the API')
-    host = models.CharField(max_length=255, verbose_name='API Path')
-    query_params = models.JSONField(null=True, blank=True, default=dict)
-    body = models.JSONField(null=True, blank=True, default=dict)
+
+    path = models.CharField(max_length=255, verbose_name='API Path')
+
+    params = models.JSONField(null=True, blank=True, default=dict,
+                        verbose_name='Query Parameters')
+
+    body = models.JSONField(null=True, blank=True, default=dict,
+                        verbose_name='Request Body')
+
     method = models.PositiveSmallIntegerField(choices=METHOD_CHOICES)
-    auth_scheme = models.PositiveSmallIntegerField(choices=AUTH_SCHEME_CHOICES)
+
+    auth_scheme = models.PositiveSmallIntegerField(choices=AUTH_SCHEME_CHOICES,
+                        verbose_name='Auth Scheme')
+
     priority = models.PositiveSmallIntegerField(null=True, blank=True)
 
     class Meta:
