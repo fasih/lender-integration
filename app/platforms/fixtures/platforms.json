@@ -1,0 +1,91 @@
+[
+{
+    "model": "platforms.loanmanagementsystem",
+    "pk": "6d4f1b36-6c95-4f6c-aca3-7c6503ca62d7",
+    "fields": {
+        "created": "2021-03-11T07:43:58.278Z",
+        "modified": "2021-03-11T09:47:25.685Z",
+        "status": 1,
+        "activate_date": "2021-03-11T07:43:58.277Z",
+        "deactivate_date": null,
+        "base_url": "https://mayafinuat.finflux.io/fineract-provider/api/v1",
+        "api_key": null,
+        "username": null,
+        "password": null,
+        "jwt_obtain": null,
+        "jwt_refresh": null,
+        "name": "FinFlux",
+        "code": "FF"
+    }
+},
+{
+    "model": "platforms.loanmanagementsystemapi",
+    "pk": "7cd7706c-555a-4f11-ba7e-21f63e11f272",
+    "fields": {
+        "created": "2021-03-11T09:46:53.893Z",
+        "modified": "2021-03-11T09:46:53.893Z",
+        "status": 1,
+        "activate_date": "2021-03-11T09:46:53.892Z",
+        "deactivate_date": null,
+        "name": "Borrower Info",
+        "host": "/runreports/Borrower%20Info?R_loanId={{lmsid}}",
+        "query_params": {},
+        "body": {},
+        "method": 1,
+        "auth_scheme": 1,
+        "priority": null,
+        "lms": "6d4f1b36-6c95-4f6c-aca3-7c6503ca62d7"
+    }
+},
+{
+    "model": "platforms.loanmanagementsystemapi",
+    "pk": "9f01cf23-9510-48bd-ab15-fe1c34d35517",
+    "fields": {
+        "created": "2021-03-11T09:46:53.900Z",
+        "modified": "2021-03-11T09:46:53.900Z",
+        "status": 1,
+        "activate_date": "2021-03-11T09:46:53.900Z",
+        "deactivate_date": null,
+        "name": "Repayment Schedule",
+        "host": "/runreports/Repayments%20Schedule?R_loanId={{lmsid}}",
+        "query_params": {},
+        "body": {},
+        "method": 1,
+        "auth_scheme": 1,
+        "priority": null,
+        "lms": "6d4f1b36-6c95-4f6c-aca3-7c6503ca62d7"
+    }
+},
+{
+    "model": "platforms.loanmanagementsystemapi",
+    "pk": "d29ab26d-7f5e-4dd4-a8ad-b3fded9d86ff",
+    "fields": {
+        "created": "2021-03-11T08:34:18.488Z",
+        "modified": "2021-03-11T09:46:53.867Z",
+        "status": 1,
+        "activate_date": "2021-03-11T08:34:18.487Z",
+        "deactivate_date": null,
+        "name": "Loan Request",
+        "host": "/runreports/Loan%20Request?R_loanId={{lmsid}}",
+        "query_params": {},
+        "body": {},
+        "method": 1,
+        "auth_scheme": 1,
+        "priority": null,
+        "lms": "6d4f1b36-6c95-4f6c-aca3-7c6503ca62d7"
+    }
+},
+{
+    "model": "platforms.channelpartners",
+    "pk": "a5f57397-0ad1-4a88-b54d-b05f38290128",
+    "fields": {
+        "created": "2021-03-11T07:42:55.604Z",
+        "modified": "2021-03-11T07:42:55.604Z",
+        "status": 1,
+        "activate_date": "2021-03-11T07:42:55.604Z",
+        "deactivate_date": null,
+        "name": "Learning Traveller",
+        "code": "LT"
+    }
+}
+]

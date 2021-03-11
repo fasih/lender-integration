@@ -1,0 +1,153 @@
+[
+{
+    "model": "borrowers.loanapplication",
+    "pk": "a2fe0599-e562-474f-98fe-0fdba0593b57",
+    "fields": {
+        "created": "2021-03-11T08:42:40.378Z",
+        "modified": "2021-03-11T08:42:40.378Z",
+        "status": 1,
+        "activate_date": "2021-03-11T08:42:40.377Z",
+        "deactivate_date": null,
+        "lms": "6d4f1b36-6c95-4f6c-aca3-7c6503ca62d7",
+        "cp": "a5f57397-0ad1-4a88-b54d-b05f38290128",
+        "lmsid": "329"
+    }
+},
+{
+    "model": "borrowers.loanapplicationdata",
+    "pk": "2cd6b033-8a60-4ebc-9c68-6ded562035c0",
+    "fields": {
+        "created": "2021-03-11T09:57:08.234Z",
+        "modified": "2021-03-11T09:57:08.234Z",
+        "status": 1,
+        "activate_date": "2021-03-11T09:57:08.233Z",
+        "deactivate_date": null,
+        "loan": "a2fe0599-e562-474f-98fe-0fdba0593b57",
+        "lms_api": "9f01cf23-9510-48bd-ab15-fe1c34d35517",
+        "request": {
+            "loanId": 329
+        },
+        "response": {
+            "partner_loan_id": "",
+            "partner_borrower_id": "",
+            "kudos_loan_id": "",
+            "kudos_borrower_id": "",
+            "sanction_amount": "50000.000000",
+            "net_disbur_amt": "49500.0000000000",
+            "int_type": "Declining Balance",
+            "intr_rate": "26.000000",
+            "emi_count": "12",
+            "repayment_type": "1 Month",
+            "first_inst_date": "",
+            "disburse_date": "",
+            "pro_fee_amt": " ",
+            "insurance_amt": " ",
+            "app_charges": " ",
+            "stamp_charges": " ",
+            "pre_emi_interest": " ",
+            "total_charges": " ",
+            "advance_emi": " "
+        }
+    }
+},
+{
+    "model": "borrowers.loanapplicationdata",
+    "pk": "86009a3e-a7ce-4d66-be89-fffbfe4d95c9",
+    "fields": {
+        "created": "2021-03-11T09:54:27.298Z",
+        "modified": "2021-03-11T09:54:27.298Z",
+        "status": 1,
+        "activate_date": "2021-03-11T09:54:27.297Z",
+        "deactivate_date": null,
+        "loan": "a2fe0599-e562-474f-98fe-0fdba0593b57",
+        "lms_api": "7cd7706c-555a-4f11-ba7e-21f63e11f272",
+        "request": {
+            "loanId": 329
+        },
+        "response": {
+            "partner_loan_id": "329",
+            "partner_borrower_id": "-",
+            "first_name": "Ram",
+            "last_name": "Reddy5",
+            "type_of_addr": "Rented",
+            "resi_addr_ln1": "Flat 2B-G1, Models Millennium Vistas, Caranzalem",
+            "city": "Panzam",
+            "state": "GOA",
+            "pincode": "403002",
+            "appl_phone": "9502161157",
+            "appl_pan": "ABCDE1234M",
+            "email_id": "vinnie@j.com",
+            "dob": "1993-08-11",
+            "gender": "Male",
+            "photo_id_type": "Aadhaar",
+            "photo_id_num": "123078893938",
+            "addr_id_type": "Aadhaar",
+            "addr_id_num": "123078893938",
+            "total_experience": " ",
+            "cibil_score_borro": "",
+            "purpose_of_loan": "Business Funding",
+            "borro_bank_name": "HDFC Bank",
+            "borro_bank_acc_num": "5020203939366",
+            "applied_amount": "50000.000000",
+            "int_rate_reducing_perc": "26.000000",
+            "loan_tenure": "12",
+            "emi_amt": " ",
+            "processing_fees_perc": "1",
+            "partner": "500.0000000000",
+            "borro_bank_ifsc": "HDFC0004848",
+            "vpa_address": " ",
+            "partner_system_score": " "
+        }
+    }
+},
+{
+    "model": "borrowers.loanapplicationdata",
+    "pk": "f184afbb-e50f-4f9d-a08e-084ab5e7a3d6",
+    "fields": {
+        "created": "2021-03-11T09:41:57.619Z",
+        "modified": "2021-03-11T09:52:13.676Z",
+        "status": 1,
+        "activate_date": "2021-03-11T09:41:57.618Z",
+        "deactivate_date": null,
+        "loan": "a2fe0599-e562-474f-98fe-0fdba0593b57",
+        "lms_api": "d29ab26d-7f5e-4dd4-a8ad-b3fded9d86ff",
+        "request": {
+            "loanId": 329
+        },
+        "response": {
+            "partner_loan_id": "329",
+            "partner_borrower_id": "-",
+            "first_name": "Ram",
+            "last_name": "Reddy5",
+            "type_of_addr": "Rented",
+            "resi_addr_ln1": "Flat 2B-G1, Models Millennium Vistas, Caranzalem",
+            "city": "Panzam",
+            "state": "GOA",
+            "pincode": "403002",
+            "appl_phone": "9502161157",
+            "appl_pan": "ABCDE1234M",
+            "email_id": "vinnie@j.com",
+            "dob": "1993-08-11",
+            "gender": "Male",
+            "photo_id_type": "Aadhaar",
+            "photo_id_num": "123078893938",
+            "addr_id_type": "Aadhaar",
+            "addr_id_num": "123078893938",
+            "total_experience": " ",
+            "cibil_score_borro": "",
+            "purpose_of_loan": "Business Funding",
+            "borro_bank_name": "HDFC Bank",
+            "borro_bank_acc_num": "5020203939366",
+            "applied_amount": "50000.000000",
+            "int_rate_reducing_perc": "26.000000",
+            "loan_tenure": "12",
+            "emi_amt": " ",
+            "processing_fees_perc": "1",
+            "partner": "500.0000000000",
+            "borro_bank_ifsc": "HDFC0004848",
+            "vpa_address": " ",
+            "partner_system_score": " "
+        }
+    }
+}
+]
