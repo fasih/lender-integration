@@ -10,7 +10,7 @@ from base.admin import MFBaseAdmin
 
 class LoanManagementSystemAPIInlineAdmin(MFBaseAdmin, admin.TabularInline):
     model = LoanManagementSystemAPI
-    exclude = ('params', 'body') + MFBaseAdmin.exclude
+    exclude = ('params', 'headers', 'body') + MFBaseAdmin.exclude
     ordering = ('priority',)
     extra = 0
 
@@ -19,7 +19,7 @@ class LoanManagementSystemAPIInlineAdmin(MFBaseAdmin, admin.TabularInline):
 class LoanManagementSystemAPIAdmin(MFBaseAdmin, admin.ModelAdmin):
     model = LoanManagementSystemAPI
     fields = (('lms', 'name'), 'path', ('method', 'auth_scheme', 'priority'),
-                ('params', 'body'))
+                'body', ('params', 'headers'))
     formfield_overrides = {
         models.JSONField: {'widget': JSONEditorWidget},
     }

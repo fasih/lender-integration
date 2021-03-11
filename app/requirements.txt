@@ -1,5 +1,7 @@
 Django==3.1.7
 
+celery
+
 django-cors-headers
 django-debug-toolbar
 django-extensions
@@ -13,3 +15,4 @@ djangorestframework
 drf_yasg2
 
 jsonfield
+requests

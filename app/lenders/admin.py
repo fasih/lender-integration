@@ -40,7 +40,7 @@ class LoanAdmin(MFBaseAdmin, admin.ModelAdmin):
 class LenderSystemAPIAdmin(MFBaseAdmin, admin.ModelAdmin):
     model = LenderSystemAPI
     fields = (('lender', 'name'), 'path', ('method', 'auth_scheme', 'priority'),
-                ('params', 'body'))
+                'body', ('params', 'headers'))
     formfield_overrides = {
         models.JSONField: {'widget': JSONEditorWidget},
     }
@@ -49,7 +49,7 @@ class LenderSystemAPIAdmin(MFBaseAdmin, admin.ModelAdmin):
 
 class LenderSystemAPIInlineAdmin(MFBaseAdmin, admin.TabularInline):
     model = LenderSystemAPI
-    exclude = ('params', 'body') + MFBaseAdmin.exclude
+    exclude = ('params', 'headers', 'body') + MFBaseAdmin.exclude
     ordering = ('priority',)
     extra = 0
 

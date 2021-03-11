@@ -39,7 +39,7 @@ class LoanDataSerializer(serializers.ModelSerializer):
 
 
 
-class LoanApplicationSerializer(serializers.ModelSerializer):
+class LoanApplicationDataSerializer(serializers.ModelSerializer):
 
     api_name = serializers.CharField(source='lms_api.name')
 
@@ -51,9 +51,10 @@ class LoanApplicationSerializer(serializers.ModelSerializer):
 
 class LoanApplicationStatusSerializer(serializers.ModelSerializer):
 
-    lms_status = LoanApplicationSerializer(many=True)
-    lender_status = LoanDataSerializer(many=True)
+    status = serializers.CharField()
+    lms_status = LoanApplicationDataSerializer(source='lms_data', many=True)
+    lender_status = LoanDataSerializer(source='lender_data', many=True)
 
     class Meta:
         model = LoanApplication
-        fields = ('lms_status', 'lender_status')
+        fields = ('status', 'lms_status', 'lender_status')

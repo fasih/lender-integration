@@ -1,10 +1,20 @@
 [
 {
+    "model": "authtoken.token",
+    "pk": "c82d73dce1bc746e8a22d2c918d4d04dd77bbc9a",
+    "fields": {
+        "user": [
+            "admin"
+        ],
+        "created": "2021-03-11T17:02:03.070Z"
+    }
+},
+{
     "model": "platforms.loanmanagementsystem",
     "pk": "6d4f1b36-6c95-4f6c-aca3-7c6503ca62d7",
     "fields": {
         "created": "2021-03-11T07:43:58.278Z",
-        "modified": "2021-03-11T09:47:25.685Z",
+        "modified": "2021-03-11T18:16:03.631Z",
         "status": 1,
         "activate_date": "2021-03-11T07:43:58.277Z",
         "deactivate_date": null,
@@ -23,7 +33,7 @@
     "pk": "7cd7706c-555a-4f11-ba7e-21f63e11f272",
     "fields": {
         "created": "2021-03-11T09:46:53.893Z",
-        "modified": "2021-03-11T14:09:14.874Z",
+        "modified": "2021-03-11T18:16:03.635Z",
         "status": 1,
         "activate_date": "2021-03-11T09:46:53.892Z",
         "deactivate_date": null,
@@ -31,8 +41,8 @@
         "path": "/runreports/Borrower%20Info?R_loanId={{lmsid}}",
         "params": {},
         "body": {},
-        "method": 1,
-        "auth_scheme": 1,
+        "method": "GET",
+        "auth_scheme": "Token",
         "priority": 2,
         "lms": "6d4f1b36-6c95-4f6c-aca3-7c6503ca62d7"
     }
@@ -42,7 +52,7 @@
     "pk": "9f01cf23-9510-48bd-ab15-fe1c34d35517",
     "fields": {
         "created": "2021-03-11T09:46:53.900Z",
-        "modified": "2021-03-11T14:09:22.827Z",
+        "modified": "2021-03-11T18:16:03.636Z",
         "status": 1,
         "activate_date": "2021-03-11T09:46:53.900Z",
         "deactivate_date": null,
@@ -50,8 +60,8 @@
         "path": "/runreports/Repayments%20Schedule?R_loanId={{lmsid}}",
         "params": {},
         "body": {},
-        "method": 1,
-        "auth_scheme": 1,
+        "method": "GET",
+        "auth_scheme": "Token",
         "priority": 3,
         "lms": "6d4f1b36-6c95-4f6c-aca3-7c6503ca62d7"
     }
@@ -61,7 +71,7 @@
     "pk": "d29ab26d-7f5e-4dd4-a8ad-b3fded9d86ff",
     "fields": {
         "created": "2021-03-11T08:34:18.488Z",
-        "modified": "2021-03-11T14:09:07.758Z",
+        "modified": "2021-03-11T18:16:03.634Z",
         "status": 1,
         "activate_date": "2021-03-11T08:34:18.487Z",
         "deactivate_date": null,
@@ -69,8 +79,8 @@
         "path": "/runreports/Loan%20Request?R_loanId={{lmsid}}",
         "params": {},
         "body": {},
-        "method": 1,
-        "auth_scheme": 1,
+        "method": "GET",
+        "auth_scheme": "Token",
         "priority": 1,
         "lms": "6d4f1b36-6c95-4f6c-aca3-7c6503ca62d7"
     }
@@ -86,6 +96,21 @@
         "deactivate_date": null,
         "name": "Learning Traveller",
         "code": "LT"
+    }
+},
+{
+    "model": "borrowers.loanapplication",
+    "pk": "4dd67c6f-d8e3-4bb5-9df8-9917bdaa6f5c",
+    "fields": {
+        "created": "2021-03-11T17:06:17.585Z",
+        "modified": "2021-03-11T17:06:17.585Z",
+        "status": 1,
+        "activate_date": "2021-03-11T17:06:17.585Z",
+        "deactivate_date": null,
+        "lmsid": "320",
+        "lms": "6d4f1b36-6c95-4f6c-aca3-7c6503ca62d7",
+        "lender": "0262fab4-0f8a-4037-89f4-71ca10010db1",
+        "cp": "a5f57397-0ad1-4a88-b54d-b05f38290128"
     }
 },
 {
@@ -248,7 +273,7 @@
     "pk": "0262fab4-0f8a-4037-89f4-71ca10010db1",
     "fields": {
         "created": "2021-03-11T08:41:49.963Z",
-        "modified": "2021-03-11T10:02:07.049Z",
+        "modified": "2021-03-11T18:16:17.687Z",
         "status": 1,
         "activate_date": "2021-03-11T08:41:49.961Z",
         "deactivate_date": null,
@@ -267,7 +292,7 @@
     "pk": "037afaa7-1b11-4d8e-8b9d-b1c17d8d2cb7",
     "fields": {
         "created": "2021-03-11T08:42:12.153Z",
-        "modified": "2021-03-11T10:02:07.134Z",
+        "modified": "2021-03-11T18:16:17.689Z",
         "status": 1,
         "activate_date": "2021-03-11T08:42:12.147Z",
         "deactivate_date": null,
@@ -275,8 +300,8 @@
         "path": "/loanrequest",
         "params": {},
         "body": {},
-        "method": 2,
-        "auth_scheme": 1,
+        "method": "POST",
+        "auth_scheme": "Token",
         "priority": 1,
         "lender": "0262fab4-0f8a-4037-89f4-71ca10010db1"
     }
@@ -286,7 +311,7 @@
     "pk": "230c598a-4d29-47ce-9022-920612370fb8",
     "fields": {
         "created": "2021-03-11T10:02:07.173Z",
-        "modified": "2021-03-11T10:02:07.175Z",
+        "modified": "2021-03-11T18:16:17.691Z",
         "status": 1,
         "activate_date": "2021-03-11T10:02:07.173Z",
         "deactivate_date": null,
@@ -294,8 +319,8 @@
         "path": "/repaymentschedule",
         "params": {},
         "body": {},
-        "method": 2,
-        "auth_scheme": 1,
+        "method": "POST",
+        "auth_scheme": "Token",
         "priority": 3,
         "lender": "0262fab4-0f8a-4037-89f4-71ca10010db1"
     }
@@ -305,7 +330,7 @@
     "pk": "4efcb308-421d-4f39-bd8c-61a6adb952e4",
     "fields": {
         "created": "2021-03-11T10:02:07.157Z",
-        "modified": "2021-03-11T10:02:07.157Z",
+        "modified": "2021-03-11T18:16:17.690Z",
         "status": 1,
         "activate_date": "2021-03-11T10:02:07.156Z",
         "deactivate_date": null,
@@ -313,8 +338,8 @@
         "path": "/borrowerinfo",
         "params": {},
         "body": {},
-        "method": 2,
-        "auth_scheme": 1,
+        "method": "POST",
+        "auth_scheme": "Token",
         "priority": 2,
         "lender": "0262fab4-0f8a-4037-89f4-71ca10010db1"
     }
@@ -324,7 +349,7 @@
     "pk": "9c0ad848-6fdd-4bfd-8560-ab3b5868e498",
     "fields": {
         "created": "2021-03-11T10:02:07.180Z",
-        "modified": "2021-03-11T10:02:07.180Z",
+        "modified": "2021-03-11T18:16:17.692Z",
         "status": 1,
         "activate_date": "2021-03-11T10:02:07.179Z",
         "deactivate_date": null,
@@ -332,8 +357,8 @@
         "path": "/loandocument",
         "params": {},
         "body": {},
-        "method": 2,
-        "auth_scheme": 1,
+        "method": "POST",
+        "auth_scheme": "Token",
         "priority": 4,
         "lender": "0262fab4-0f8a-4037-89f4-71ca10010db1"
     }
