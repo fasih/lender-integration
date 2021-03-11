@@ -7,7 +7,16 @@ from base.admin import MFBaseAdmin
 
 
 
-class LoanDataAdmin(MFBaseAdmin, admin.TabularInline):
+class LoanDataAdmin(MFBaseAdmin, admin.ModelAdmin):
+    model = LoanData
+    fields = (('app', 'lender_api', 'response_code'), ('request', 'response'))
+    formfield_overrides = {
+        models.JSONField: {'widget': JSONEditorWidget},
+    }
+
+
+
+class LoanDataInlineAdmin(MFBaseAdmin, admin.TabularInline):
     model = LoanData
     exclude = ('request',) + MFBaseAdmin.exclude
     formfield_overrides = {
@@ -20,7 +29,7 @@ class LoanDataAdmin(MFBaseAdmin, admin.TabularInline):
 
 class LoanAdmin(MFBaseAdmin, admin.ModelAdmin):
     fields = (('app', 'lender',),)
-    inlines = (LoanDataAdmin,)
+    inlines = (LoanDataInlineAdmin,)
 
 
 
@@ -57,5 +66,6 @@ class LenderSystemAdmin(MFBaseAdmin, admin.ModelAdmin):
 
 
 admin.site.register(Loan, LoanAdmin)
+admin.site.register(LoanData, LoanDataAdmin)
 admin.site.register(LenderSystem, LenderSystemAdmin)
 admin.site.register(LenderSystemAPI, LenderSystemAPIAdmin)

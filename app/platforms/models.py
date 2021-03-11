@@ -31,7 +31,7 @@ class LoanManagementSystemAPI(APIBaseModel):
 
     class Meta:
         verbose_name = 'LMS API'
-        verbose_name_plural = 'LMS APIs'
+        verbose_name_plural = 'LMS API'
 
 
 

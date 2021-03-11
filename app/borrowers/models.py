@@ -36,16 +36,16 @@ class LoanApplicationData(MFBaseModel):
     lms_api = models.ForeignKey('platforms.LoanManagementSystemAPI', null=True,
                         on_delete=models.SET_NULL, verbose_name='LMS API')
 
-    request = models.JSONField(null=True, default=dict)
-    response = models.JSONField(null=True, default=dict)
-    response_code = models.PositiveSmallIntegerField(null=True)
+    request = models.JSONField(null=True, default=dict, blank=True)
+    response = models.JSONField(null=True, default=dict, blank=True)
+    response_code = models.PositiveSmallIntegerField(null=True, blank=True)
 
     def __str__(self):
-        return self.loan and self.loan.lmsid
+        return self.app and self.app.lmsid
 
     class Meta:
         verbose_name = 'Application Data'
-        verbose_name_plural = 'Application Data'
+        verbose_name_plural = 'Applications Data'
 
 
 

@@ -9,6 +9,7 @@ from base.admin import MFBaseAdmin
 
 class LoanApplicationDataAdmin(MFBaseAdmin, admin.ModelAdmin):
     model = LoanApplicationData
+    fields = (('app', 'lms_api', 'response_code'), ('request', 'response'))
     formfield_overrides = {
         models.JSONField: {'widget': JSONEditorWidget},
     }

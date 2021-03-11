@@ -31,7 +31,7 @@ class LenderSystemAPI(APIBaseModel):
 
     class Meta:
         verbose_name = 'Lender API'
-        verbose_name_plural = 'Lender APIs'
+        verbose_name_plural = 'Lenders API'
 
 
 
@@ -58,14 +58,21 @@ class LoanData(MFBaseModel):
                         on_delete=models.SET_NULL)
 
     app = models.ForeignKey('borrowers.LoanApplication', null=True,
-                        on_delete=models.SET_NULL)
+                        on_delete=models.SET_NULL, verbose_name='Application')
 
     lender_api = models.ForeignKey('lenders.LenderSystemAPI', null=True,
-                        on_delete=models.SET_NULL)
+                        on_delete=models.SET_NULL, verbose_name='Lender API')
 
-    request = models.JSONField(null=True, default=dict)
-    response = models.JSONField(null=True, default=dict)
-    response_code = models.PositiveSmallIntegerField(null=True)
+    request = models.JSONField(null=True, default=dict, blank=True)
+    response = models.JSONField(null=True, default=dict, blank=True)
+    response_code = models.PositiveSmallIntegerField(null=True, blank=True)
+
+    def __str__(self):
+        return self.app and self.app.lmsid
+
+    class Meta:
+        verbose_name = 'Loan Data'
+        verbose_name_plural = 'Loans Data'
 
 
 
