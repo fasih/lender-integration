@@ -2,6 +2,8 @@ FROM python:alpine3.12
 
 MAINTAINER Fasih <fasih@cognicue.in>
 
+ENV PYTHONUNBUFFERED 1
+
 #Copy over application files
 COPY ./app /src/app
 

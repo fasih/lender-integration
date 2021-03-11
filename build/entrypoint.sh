@@ -6,11 +6,14 @@ cd /src/app || exit
 
 echo "PIP INSTALL" && pip install -r requirements.txt
 
-echo "DB MIGRATE" && python manage.py migrate --noinput
+if [[ $1 ]]; then
+    exec "$@"
+else
+    echo "MIGRATE DATABASE" && python manage.py migrate --noinput
 
-echo "COLLECT STATIC" && python manage.py collectstatic --noinput
+    echo "COLLECT STATIC" && python manage.py collectstatic --noinput
 
-#echo "INIT PROJECT" && python manage.py initproject
+    echo "INIT PROJECT" && python manage.py initproject
 
-#echo "INIT UWSGI" && uwsgi "uwsgi.ini"
-
+    echo "INIT UWSGI" && uwsgi "uwsgi.ini"
+fi

@@ -1,1 +1,15 @@
 Django==3.1.7
+
+django-cors-headers
+django-debug-toolbar
+django-extensions
+django_json_widget
+django-material-admin
+django-modeladmin-reorder
+django-settings-local
+django-structlog
+
+djangorestframework
+drf_yasg2
+
+jsonfield
