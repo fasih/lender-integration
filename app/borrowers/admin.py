@@ -18,7 +18,7 @@ class LoanApplicationDataAdmin(MFBaseAdmin, admin.ModelAdmin):
 
 class LoanApplicationDataInlineAdmin(MFBaseAdmin, admin.TabularInline):
     model = LoanApplicationData
-    exclude = ('request',) + MFBaseAdmin.exclude
+    exclude = ('request', 'response_code') + MFBaseAdmin.exclude
     formfield_overrides = {
         models.JSONField: {'widget': JSONEditorWidget},
     }
@@ -26,9 +26,8 @@ class LoanApplicationDataInlineAdmin(MFBaseAdmin, admin.TabularInline):
     max_num = 0
     extra = 0
 
-    def get_queryset(self, request):
-        qs = super().get_queryset(request)
-        return qs.select_related('lms_api').order_by('-lms_api__priority')
+    def has_delete_permission(self, request, obj=None):
+        return False
 
 
 

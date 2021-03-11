@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.models.signals import post_save, pre_save
 
 from base.models import *
 # Create your models here.
@@ -76,3 +77,7 @@ class LoanData(MFBaseModel):
 
 
 
+def loandata_pre_save(sender, instance, **kwargs):
+    instance.app = instance.loan.app
+
+pre_save.connect(loandata_pre_save, sender=LoanData)

@@ -9,7 +9,7 @@ from base.admin import MFBaseAdmin
 
 class LoanDataAdmin(MFBaseAdmin, admin.ModelAdmin):
     model = LoanData
-    fields = (('app', 'lender_api', 'response_code'), ('request', 'response'))
+    fields = (('loan', 'lender_api', 'response_code'), ('request', 'response'))
     formfield_overrides = {
         models.JSONField: {'widget': JSONEditorWidget},
     }
@@ -18,12 +18,16 @@ class LoanDataAdmin(MFBaseAdmin, admin.ModelAdmin):
 
 class LoanDataInlineAdmin(MFBaseAdmin, admin.TabularInline):
     model = LoanData
-    exclude = ('request',) + MFBaseAdmin.exclude
+    exclude = ('app', 'request', 'response_code') + MFBaseAdmin.exclude
     formfield_overrides = {
         models.JSONField: {'widget': JSONEditorWidget},
     }
+    ordering = ('lender_api__priority',)
     max_num = 0
     extra = 0
+
+    def has_delete_permission(self, request, obj=None):
+        return False
 
 
 
