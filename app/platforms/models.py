@@ -7,7 +7,7 @@ from base.models import *
 
 class LoanManagementSystem(SystemBaseModel):
     name = models.CharField(max_length=255, verbose_name='LMS',
-                        help_text='Name of Loan Management System')
+                        help_text='Name of the Loan Management System')
     code = models.CharField(max_length=10, unique=True, verbose_name='LMS Code')
 
     def __str__(self):

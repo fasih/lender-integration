@@ -58,3 +58,10 @@ class LoanApplicationStatusSerializer(serializers.ModelSerializer):
     class Meta:
         model = LoanApplication
         fields = ('status', 'lms_status', 'lender_status')
+
+
+
+class LoanApplicationTaskSerializer(serializers.Serializer):
+
+    task_name = serializers.CharField()
+    task_status = serializers.CharField()

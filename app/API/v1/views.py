@@ -17,10 +17,11 @@ from platforms.models import *
 
 
 
-class LoanCreateAPIView(generics.CreateAPIView, MFAPIView):
+class LoanApplicationCreateAPIView(MFAPIView):
     serializer_class = LoanApplicationRequestSerializer
 
-    @swagger_auto_schema(responses={201: LoanApplicationResponseSerializer()})
+    @swagger_auto_schema(responses={status.HTTP_201_CREATED: 
+        LoanApplicationResponseSerializer()})
     def post(self, request, *args, **kwargs):
         """Loan Application Create API
 
@@ -28,54 +29,92 @@ class LoanCreateAPIView(generics.CreateAPIView, MFAPIView):
         application at lenders side
         """        
 
-        return super().post(request, *args, **kwargs)
+        return self.create(request, *args, **kwargs)
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        app = self.perform_create(serializer)
-        headers = self.get_success_headers(serializer.data)
-        loan_application = LoanApplicationResponseSerializer(app)
-        return Response(loan_application.data, status=status.HTTP_201_CREATED,
+
+        instance = self.perform_create(serializer)
+        application = LoanApplicationResponseSerializer(instance)
+
+        headers = self.get_success_headers(application.data)
+
+        return Response(application.data, status=status.HTTP_201_CREATED,
                             headers=headers)
 
     def perform_create(self, serializer):
         lms = generics.get_object_or_404(LoanManagementSystem.objects,
                     code=serializer.data['lms_code'])
+
         lender = generics.get_object_or_404(LenderSystem.objects,
                     code=serializer.data['lender_code'])
+
         if serializer.data.get('partner_code'):
             cp = generics.get_object_or_404(ChannelPartners.objects,
                         code=serializer.data['partner_code'])
         else:
             cp = None
 
-        application = LoanApplication(lmsid=serializer.data['lmsid'], lms=lms,
-                                lender=lender, cp=cp)
+        instance = LoanApplication(lmsid=serializer.data['lmsid'], lms=lms,
+                                    lender=lender, cp=cp)
         try:
-            application.save()
+            instance.save()
         except IntegrityError:
             raise LoanApplicationAlreadyExist()
-        return application
+
+        return instance
 
 
 
-class LoanStatusAPIView(mixins.RetrieveModelMixin, MFAPIView):
-    lookup_url_kwarg = 'loanId'
+class LoanApplicationAPIView(MFAPIView):
+    lookup_url_kwarg = 'application_id'
     queryset = LoanApplication.objects
     serializer_class = LoanApplicationStatusSerializer
 
     def get(self, request, *args, **kwargs):
         """Loan Application Status API
 
-        #TODO
+        API fetches status of all APIs related to the loan application
         """
 
-        return self.retrieve(request, *args, **kwargs)
+        instance = self.get_object()
+        instance = self.get_status(instance)
+        serializer = self.get_serializer(instance)
+        return Response(serializer.data)
 
-    def get_object(self):
-        instance = super().get_object()
+    @swagger_auto_schema(request_body=serializers.Serializer,
+        responses={status.HTTP_200_OK: LoanApplicationTaskSerializer()})
+    def patch(self, request, *args, **kwargs):
+        """Loan Application LMS API
 
+        API submits a task to fetch loan application from the LMS
+        by calling LMS APIs in the background.
+        """        
+        from .tasks import loans_patch
+        instance = self.get_object()
+
+        data = dict(task_name=loans_patch.name, task_status='Submitted')
+
+        return Response(data)
+
+    @swagger_auto_schema(request_body=serializers.Serializer,
+        responses={200: LoanApplicationTaskSerializer()})
+    def put(self, request, *args, **kwargs):
+        """Loan Application Lender API
+
+        API submits a task to create loan application at the Lender
+        by calling Lender APIs in the background.
+        """        
+
+        from .tasks import loans_put
+        instance = self.get_object()
+
+        data = dict(task_name=loans_put.name, task_status='Submitted')
+
+        return Response(data)
+
+    def get_status(self, instance):
         instance.lms_data = LoanApplicationData.objects.filter(app=instance
                                 ).select_related('lms_api'
                                 ).order_by('lms_api__priority', '-created')

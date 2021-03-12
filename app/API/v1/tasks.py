@@ -56,6 +56,7 @@ def loans_post(application_id):
     logger.info('loans_post', status='Finished', **locals())
 
 
+
 @task(name="loans_patch")
 def loans_patch(application_id):
     logger.info('loans_patch', status='Started', **locals())
@@ -70,3 +71,8 @@ def loans_patch(application_id):
 @task(name="loans_put")
 def loans_put(application_id):
     logger.info('loans_put', status='Started', **locals())
+
+    logger.info('loans_put', status='Finished', **locals())
+
+
+

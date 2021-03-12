@@ -22,7 +22,7 @@ class LenderSystem(SystemBaseModel):
 
 class LenderSystemAPI(APIBaseModel):
     lender = models.ForeignKey('lenders.LenderSystem', null=True,
-                            on_delete=models.SET_NULL)
+                            on_delete=models.SET_NULL, verbose_name='Lender')
     data = models.ManyToManyField('borrowers.LoanApplication',
                     through='lenders.LoanData',
                     through_fields=('lender_api', 'app'))
