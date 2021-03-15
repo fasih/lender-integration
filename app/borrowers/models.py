@@ -5,7 +5,7 @@ from base.models import *
 
 
 
-class LoanApplication(MFBaseModel):
+class LoanApplication(BaseModel):
     lmsid = models.CharField(max_length=255, null=True,
                     verbose_name='Loan Application Reference No.',
                     help_text='LoanID at LMS')
@@ -19,6 +19,9 @@ class LoanApplication(MFBaseModel):
     cp = models.ForeignKey('platforms.ChannelPartners', null=True, blank=True,
                     on_delete=models.SET_NULL, verbose_name='Channel Partner')
 
+    svc = models.ManyToManyField('platforms.PlatformService', blank=True,
+                    verbose_name='Services')
+
     def __str__(self):
         return self.lmsid
 
@@ -29,16 +32,23 @@ class LoanApplication(MFBaseModel):
 
 
 
-class LoanApplicationData(MFBaseModel):
+class LoanApplicationData(BaseModel):
     app = models.ForeignKey('borrowers.LoanApplication', null=True,
                         on_delete=models.SET_NULL, verbose_name='Application')
 
     lms_api = models.ForeignKey('platforms.LoanManagementSystemAPI', null=True,
-                        on_delete=models.SET_NULL, verbose_name='LMS API')
+                        blank=True, on_delete=models.SET_NULL,
+                        verbose_name='LMS API')
+
+    svc_api = models.ForeignKey('platforms.PlatformServiceAPI', null=True,
+                        blank=True, on_delete=models.SET_NULL,
+                        verbose_name='SVC API')
 
     request = models.JSONField(null=True, default=dict, blank=True)
     response = models.JSONField(null=True, default=dict, blank=True)
-    response_code = models.PositiveSmallIntegerField(null=True, blank=True)
+
+    response_code = models.PositiveSmallIntegerField(null=True, blank=True,
+                        verbose_name='Response Status Code')
 
     def __str__(self):
         return self.app and self.app.lmsid

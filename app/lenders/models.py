@@ -1,3 +1,5 @@
+import stringcase
+
 from django.db import models
 from django.db.models.signals import post_save, pre_save
 
@@ -6,7 +8,7 @@ from base.models import *
 
 
 
-class LenderSystem(SystemBaseModel):
+class LenderSystem(ServiceBaseModel):
     name = models.CharField(max_length=255, verbose_name='Lender',
                         help_text='Name of the Lender')
     code = models.CharField(max_length=10, unique=True, verbose_name='Lender Code')
@@ -36,7 +38,7 @@ class LenderSystemAPI(APIBaseModel):
 
 
 
-class Loan(MFBaseModel):
+class Loan(BaseModel):
     app = models.ForeignKey('borrowers.LoanApplication', null=True,
                     on_delete=models.SET_NULL, verbose_name='Application')
     lender = models.ForeignKey('lenders.LenderSystem', null=True,
@@ -54,7 +56,7 @@ class Loan(MFBaseModel):
 
 
 
-class LoanData(MFBaseModel):
+class LoanData(BaseModel):
     loan = models.ForeignKey('lenders.Loan', null=True,
                         on_delete=models.SET_NULL)
 
@@ -69,7 +71,7 @@ class LoanData(MFBaseModel):
     response_code = models.PositiveSmallIntegerField(null=True, blank=True)
 
     def __str__(self):
-        return self.app and self.app.lmsid
+        return self.app and self.app.lmsid or ''
 
     class Meta:
         verbose_name = 'Loan Data'
@@ -78,6 +80,13 @@ class LoanData(MFBaseModel):
 
 
 def loandata_pre_save(sender, instance, **kwargs):
-    instance.app = instance.loan.app
+    instance.app = instance.app or instance.loan and instance.loan.app
 
 pre_save.connect(loandata_pre_save, sender=LoanData)
+
+
+
+def lender_system_api_pre_save(sender, instance, **kwargs):
+    instance.name = stringcase.alphanumcase(instance.name)
+
+pre_save.connect(lender_system_api_pre_save, sender=LenderSystemAPI)

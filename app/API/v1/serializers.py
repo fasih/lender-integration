@@ -1,31 +1,50 @@
 from rest_framework import serializers
 
 from borrowers.models import LoanApplication, LoanApplicationData
-from lenders.models import LoanData
+from lenders.models import LenderSystem, LoanData
+from platforms.models import ChannelPartners, LoanManagementSystem, PlatformService
 
 
 
 class LoanApplicationRequestSerializer(serializers.ModelSerializer):
 
-    lmsid = serializers.CharField(max_length=255)
-    lms_code = serializers.CharField(max_length=10)
-    lender_code = serializers.CharField(max_length=10)
-    partner_code = serializers.CharField(max_length=10, allow_blank=True,
-                        required=False, help_text='Channel Partner Code')
+    loan_id = serializers.CharField(max_length=255, label='Loan ID',
+                        help_text='Loan Application Reference No. at LMS')
+
+    LMS_CHOICES = LoanManagementSystem.objects.values_list('code', 'name')
+    lms_code = serializers.ChoiceField(choices=LMS_CHOICES, label='LMS Code',
+                        help_text='Loan Management System Code')
+
+    LENDER_CHOICES = LenderSystem.objects.values_list('code', 'name')
+    lender_code = serializers.ChoiceField(choices=LENDER_CHOICES,
+                        label='Lender Code', help_text='Lender System Code')
+
+    SVC_CHOICES = PlatformService.objects.values_list('code', 'name')
+    svc_code = serializers.MultipleChoiceField(choices=SVC_CHOICES,
+                        allow_blank=True, required=False, label='SVC Code',
+                        help_text='List of Services Code')
+
+    CP_CHOICES = ChannelPartners.objects.values_list('code', 'name')
+    cp_code = serializers.ChoiceField(choices=CP_CHOICES, allow_blank=True,
+                        required=False, label='CP Code',
+                        help_text='Channel Partner Code')
+
 
     class Meta:
         model = LoanApplication
-        fields = ('lmsid', 'lms_code', 'lender_code', 'partner_code')
+        fields = ('loan_id', 'lms_code', 'lender_code', 'svc_code', 'cp_code')
 
 
 
 class LoanApplicationResponseSerializer(serializers.ModelSerializer):
 
     application_id = serializers.CharField(source='pk')
+    task_name = serializers.CharField()
+    task_status = serializers.CharField()
 
     class Meta:
         model = LoanApplication
-        fields = ('application_id',)
+        fields = ('application_id', 'task_name', 'task_status')
 
 
 

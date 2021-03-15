@@ -3,7 +3,6 @@ import structlog as logging
 from django.db.utils import IntegrityError
 
 from rest_framework import generics
-from rest_framework import mixins
 from rest_framework import status
 from rest_framework.response import Response
 from drf_yasg2.utils import swagger_auto_schema
@@ -12,8 +11,13 @@ from .serializers import *
 from .execptions import *
 
 from API.views import MFAPIView
+from base.utils import apply_task
 from lenders.models import *
 from platforms.models import *
+
+
+
+logger = logging.getLogger(__name__)
 
 
 
@@ -25,8 +29,8 @@ class LoanApplicationCreateAPIView(MFAPIView):
     def post(self, request, *args, **kwargs):
         """Loan Application Create API
 
-        API fetches borrowers loan application from LMS and create loan
-        application at lenders side
+        API fetches borrower loan application from LMS and other services then
+        create lender loan application.
         """        
 
         return self.create(request, *args, **kwargs)
@@ -34,14 +38,15 @@ class LoanApplicationCreateAPIView(MFAPIView):
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-
         instance = self.perform_create(serializer)
+
+        from .tasks import loans_post
+        apply_task(loans_post.s(instance.pk), True)
+        instance.task_name = loans_post.name
+        instance.task_status = "Submitted"
         application = LoanApplicationResponseSerializer(instance)
 
-        headers = self.get_success_headers(application.data)
-
-        return Response(application.data, status=status.HTTP_201_CREATED,
-                            headers=headers)
+        return Response(application.data, status=status.HTTP_201_CREATED)
 
     def perform_create(self, serializer):
         lms = generics.get_object_or_404(LoanManagementSystem.objects,
@@ -50,16 +55,23 @@ class LoanApplicationCreateAPIView(MFAPIView):
         lender = generics.get_object_or_404(LenderSystem.objects,
                     code=serializer.data['lender_code'])
 
-        if serializer.data.get('partner_code'):
+        if serializer.data.get('cp_code'):
             cp = generics.get_object_or_404(ChannelPartners.objects,
-                        code=serializer.data['partner_code'])
+                        code=serializer.data['cp_code'])
         else:
             cp = None
 
-        instance = LoanApplication(lmsid=serializer.data['lmsid'], lms=lms,
+        if serializer.data.get('svc_code'):
+            svc = PlatformService.objects.filter(
+                        code__in=serializer.data['svc_code'])
+        else:
+            svc = []
+
+        instance = LoanApplication(lmsid=serializer.data['loan_id'], lms=lms,
                                     lender=lender, cp=cp)
         try:
             instance.save()
+            [instance.svc.add(i) for i in svc]
         except IntegrityError:
             raise LoanApplicationAlreadyExist()
 
@@ -91,10 +103,13 @@ class LoanApplicationAPIView(MFAPIView):
         API submits a task to fetch loan application from the LMS
         by calling LMS APIs in the background.
         """        
-        from .tasks import loans_patch
         instance = self.get_object()
+        from .tasks import loans_patch
+        apply_task(loans_patch.s(instance.pk), True)
+        instance.task_name = loans_patch.name
+        instance.task_status = "Submitted"
 
-        data = dict(task_name=loans_patch.name, task_status='Submitted')
+        data = dict(task_name=instance.task_name, task_status=instance.task_status)
 
         return Response(data)
 
@@ -107,10 +122,13 @@ class LoanApplicationAPIView(MFAPIView):
         by calling Lender APIs in the background.
         """        
 
-        from .tasks import loans_put
         instance = self.get_object()
+        from .tasks import loans_put
+        apply_task(loans_put.s(instance.pk), True)
+        instance.task_name = loans_put.name
+        instance.task_status = "Submitted"
 
-        data = dict(task_name=loans_put.name, task_status='Submitted')
+        data = dict(task_name=instance.task_name, task_status=instance.task_status)
 
         return Response(data)
 

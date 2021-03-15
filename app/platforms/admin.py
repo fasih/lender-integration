@@ -1,52 +1,59 @@
 from django.contrib import admin
 
-from django_json_widget.widgets import JSONEditorWidget
-
 from .models import *
-from base.admin import MFBaseAdmin
+from base.admin import *
 # Register your models here.
 
 
 
-class LoanManagementSystemAPIInlineAdmin(MFBaseAdmin, admin.TabularInline):
+class LoanManagementSystemAPIInlineAdmin(APIBaseInlineAdmin, BaseAdmin, admin.TabularInline):
     model = LoanManagementSystemAPI
-    exclude = ('params', 'headers', 'body') + MFBaseAdmin.exclude
-    ordering = ('priority',)
-    extra = 0
 
 
 
-class LoanManagementSystemAPIAdmin(MFBaseAdmin, admin.ModelAdmin):
-    model = LoanManagementSystemAPI
-    fields = (('lms', 'name'), 'path', ('method', 'auth_scheme', 'priority'),
-                'body', ('params', 'headers'))
-    formfield_overrides = {
-        models.JSONField: {'widget': JSONEditorWidget},
-    }
+class LoanManagementSystemAPIAdmin(APIBaseAdmin, JSONBaseAdmin, BaseAdmin, admin.ModelAdmin):
+    list_filter = ('lms', 'method')
+    list_select_related = ('lms',)
+    list_display = ('lms', 'name', 'method', 'priority')
+
+    fields = (('lms', 'name'), ('path', 'status'), ('method', 'auth_scheme',
+                'priority'), 'body', ('params', 'headers'))
 
 
 
-class LoanManagementSystemAdmin(MFBaseAdmin, admin.ModelAdmin):
+class LoanManagementSystemAdmin(ServiceBaseAdmin, JSONBaseAdmin, BaseAdmin, admin.ModelAdmin):
     inlines = (LoanManagementSystemAPIInlineAdmin,)
-    fieldsets = (
-        (None, {
-            'classes': ('wide',),
-            'fields': ('name', 'code')
-        }),
-        ('General API Settings', {
-            'classes': ('collapse',),
-            'fields': ('base_url', 'api_key', 'username', 'password',
-                        'jwt_obtain', 'jwt_refresh')
-        }),
-    )
 
 
 
-class ChannelPartnersAdmin(MFBaseAdmin, admin.ModelAdmin):
+class ChannelPartnersAdmin(BaseAdmin, admin.ModelAdmin):
     pass
 
 
 
+class PlatformServiceAPIInlineAdmin(APIBaseInlineAdmin, BaseAdmin, admin.TabularInline):
+    model = PlatformServiceAPI
+
+
+
+class PlatformServiceAPIAdmin(APIBaseAdmin, JSONBaseAdmin, BaseAdmin, admin.ModelAdmin):
+    list_filter = ('svc', 'method')
+    list_select_related = ('svc',)
+    list_display = ('svc', 'name', 'method')
+
+    fields = (('svc', 'name'), ('path', 'status'), ('method', 'auth_scheme',
+                'priority'), 'body', ('params', 'headers'))
+
+
+
+class PlatformServiceAdmin(ServiceBaseAdmin, JSONBaseAdmin, BaseAdmin, admin.ModelAdmin):
+    search_fields = ('name',)
+    inlines = (PlatformServiceAPIInlineAdmin,)
+
+
+
 admin.site.register(ChannelPartners, ChannelPartnersAdmin)
+admin.site.register(PlatformService, PlatformServiceAdmin)
+admin.site.register(PlatformServiceAPI, PlatformServiceAPIAdmin)
 admin.site.register(LoanManagementSystem, LoanManagementSystemAdmin)
 admin.site.register(LoanManagementSystemAPI, LoanManagementSystemAPIAdmin)

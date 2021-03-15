@@ -318,6 +318,8 @@ MATERIAL_ADMIN_SITE = {
         'loanmanagementsystem': 'account_balance_wallet',
         'loanmanagementsystemapi': 'import_export',
         'channelpartners': 'touch_app',
+        'platformservice': 'device_hub',
+        'platformserviceapi': 'import_export',
 
         'loan': 'monetization_on',
         'lendersystem': 'account_balance',
@@ -340,6 +342,8 @@ ADMIN_REORDER = (
             'platforms.LoanManagementSystem',
             'platforms.LoanManagementSystemAPI',
             'platforms.ChannelPartners',
+            'platforms.PlatformService',
+            'platforms.PlatformServiceAPI',
         )
     },
     {

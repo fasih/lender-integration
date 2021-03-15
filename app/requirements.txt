@@ -16,3 +16,4 @@ drf_yasg2
 
 jsonfield
 requests
+stringcase

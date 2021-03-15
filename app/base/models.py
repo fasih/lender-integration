@@ -8,7 +8,7 @@ from .managers import MFModelManager
 
 
 
-class MFBaseModel(ActivatorModel, TimeStampedModel, models.Model):
+class BaseModel(ActivatorModel, TimeStampedModel, models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
 
     objects = MFModelManager()
@@ -21,7 +21,7 @@ class MFBaseModel(ActivatorModel, TimeStampedModel, models.Model):
 
 
 
-class APIBaseModel(MFBaseModel):
+class APIBaseModel(BaseModel):
 
     class METHOD:
         GET    = 'GET'
@@ -77,20 +77,31 @@ class APIBaseModel(MFBaseModel):
 
 
 
-class SystemBaseModel(MFBaseModel):
+class ServiceBaseModel(BaseModel):
     base_url = models.URLField(max_length=255, null=True, blank=True,
                         verbose_name='API Base URL')
 
-    api_key = models.CharField(max_length=255, null=True, blank=True,
-                        verbose_name='API Key')
-
+    api_key = models.TextField(null=True, blank=True, verbose_name='API Key')
     username = models.CharField(max_length=255, null=True, blank=True)
     password = models.CharField(max_length=255, null=True, blank=True)
 
-    jwt_obtain = models.URLField(max_length=255, null=True, blank=True,
-                        verbose_name='JWT Obtain URL')
+    params = models.JSONField(null=True, blank=True, default=dict,
+                        verbose_name='Query Parameters')
 
-    jwt_refresh = models.URLField(max_length=255, null=True, blank=True,
-                        verbose_name='JWT Refresh URL')
+    headers = models.JSONField(null=True, blank=True, default=dict,
+                        verbose_name='Request Headers')
+
+    body = models.JSONField(null=True, blank=True, default=dict,
+                        verbose_name='Request Body')
+
+    oauth_url = models.URLField(max_length=500, null=True, blank=True,
+                        verbose_name='OAuth URL')
+
+    oauth_headers = models.JSONField(null=True, blank=True, default=dict,
+                        verbose_name='OAuth Request Headers')
+
+    oauth_body = models.JSONField(null=True, blank=True, default=dict,
+                        verbose_name='OAuth Request Body')
+
     class Meta:
         abstract = True

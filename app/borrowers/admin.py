@@ -2,26 +2,41 @@ from django.contrib import admin
 from django_json_widget.widgets import JSONEditorWidget
 
 from .models import *
-from base.admin import MFBaseAdmin
+from base.admin import BaseAdmin
 # Register your models here.
 
 
 
-class LoanApplicationDataAdmin(MFBaseAdmin, admin.ModelAdmin):
+class LoanApplicationDataAdmin(BaseAdmin, admin.ModelAdmin):
     model = LoanApplicationData
-    fields = (('app', 'lms_api', 'response_code'), ('request', 'response'))
+    search_fields = ('app__lmsid',)
+    list_display = ('app', 'lms_api', 'svc_api', 'response_code')
+    list_select_related = ('app', 'lms_api', 'svc_api')
+    list_filter = ('lms_api', 'lms_api__lms', 'svc_api', 'svc_api__svc')
+
     formfield_overrides = {
         models.JSONField: {'widget': JSONEditorWidget},
     }
 
+    def get_fields(self, request, obj=None):
+        if obj and obj.lms_api:
+            API = ('lms_api',)
+        elif obj:
+            API = ('svc_api',)
+        else:
+            API = ('lms_api', 'svc_api',)
+        fields = (('app',) + API + ('response_code',), ('request', 'response'))
+        return fields
 
 
-class LoanApplicationDataInlineAdmin(MFBaseAdmin, admin.TabularInline):
+
+class LoanApplicationDataInlineAdmin(BaseAdmin, admin.TabularInline):
     model = LoanApplicationData
-    exclude = ('request', 'response_code') + MFBaseAdmin.exclude
+    exclude = ('request', 'response_code') + BaseAdmin.exclude
     formfield_overrides = {
         models.JSONField: {'widget': JSONEditorWidget},
     }
+    readonly_fields = ('lms_api', 'svc_api')
     ordering = ('lms_api__priority',)
     max_num = 0
     extra = 0
@@ -31,8 +46,14 @@ class LoanApplicationDataInlineAdmin(MFBaseAdmin, admin.TabularInline):
 
 
 
-class LoanApplicationAdmin(MFBaseAdmin, admin.ModelAdmin):
-    fields = (('lmsid', 'cp'), ('lms', 'lender'))
+class LoanApplicationAdmin(BaseAdmin, admin.ModelAdmin):
+    search_fields = ('pk', 'lmsid',)
+    list_display = ('lmsid', 'lms')
+    list_filter = ('lms',)
+    list_select_related = ('lms',)
+
+    autocomplete_fields = ('svc',)
+    fields = (('lmsid', 'cp'), ('lms', 'lender'), 'svc')
     inlines = (LoanApplicationDataInlineAdmin,)
 
 

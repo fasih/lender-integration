@@ -2,9 +2,9 @@ from django_extensions.db.models import ActivatorModelManager, ActivatorQuerySet
 
 
 
-class MFQuerySet(ActivatorQuerySet):
+class ActiveOneQuerySet(ActivatorQuerySet):
     """
-    ActivatorQuerySet
+    ActiveOneQuerySet
 
     Queryset that returns statused one result
     """
@@ -21,13 +21,13 @@ class MFQuerySet(ActivatorQuerySet):
 class MFModelManager(ActivatorModelManager):
 
     def get_queryset(self):
-        queryset = MFQuerySet(model=self.model, using=self._db)
+        queryset = ActiveOneQuerySet(model=self.model, using=self._db)
         return queryset
 
     def one(self):
         """
         Return latest active instance of ActivatorModel:
 
-        SomeModel.objects.one(), proxy to ActivatorQuerySet.one
+        SomeModel.objects.one(), proxy to ActiveOneQuerySet.one
         """
         return self.get_queryset().one()

@@ -5,6 +5,8 @@ import traceback
 
 from django.template import Context, Template
 
+
+
 logger = logging.getLogger(__name__)
 
 
@@ -26,8 +28,8 @@ def rgetattr(obj, attr, default=sentinel):
 
 
 
-def apply_task(task_s, apply_async, **kwargs):
-    if apply_async:
+def apply_task(task_s, sync=False, **kwargs):
+    if not sync:
         task_ = task_s.apply_async(**kwargs)
         logger.info('Task', name=task_s.name, id=task_.id, action='Submitted')
         return task_
@@ -51,11 +53,27 @@ def flatten(object):
             yield item
 
 
+
 class Request(object):
+
+    class ErrorResponse:
+
+        def __init__(self, exc):
+            self.exc = exc
+
+        def json(self):
+            return {}
+
+        def text(self):
+            return ''
+
+        @property
+        def response_json(self):
+            return {'exc': str(self.exc)}
 
     class Method:
 
-        TIMEOUT = 15
+        TIMEOUT = 50
 
         def __init__(self, method):
             self.method = method
@@ -68,14 +86,23 @@ class Request(object):
                 response = self.method(*args, **kwargs)
                 try:
                     response_data = response.json()
+                    response_json = response_data
                 except ValueError:
                     response_data = response.text
+                    response_json = {'data': response_data}
+
+                response.response_json = response_json
                 logger.info('Response', args=args, kwargs=kwargs, data=response_data)
+
                 return response
-            except requests.exceptions.Timeout:
+
+            except requests.exceptions.Timeout as e:
                 logger.exception('Request', args=args, kwargs=kwargs, msg='requests.exceptions.Timeout')
             except Exception as e:
                 logger.exception('Request', args=args, kwargs=kwargs, msg=str(e))
+
+            return Response(e)
+
 
     GET = Method(requests.get)
     PUT = Method(requests.put)

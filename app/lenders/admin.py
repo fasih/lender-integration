@@ -2,26 +2,24 @@ from django.contrib import admin
 from django_json_widget.widgets import JSONEditorWidget
 
 from .models import *
-from base.admin import MFBaseAdmin
+from base.admin import *
 # Register your models here.
 
 
 
-class LoanDataAdmin(MFBaseAdmin, admin.ModelAdmin):
-    model = LoanData
+class LoanDataAdmin(JSONBaseAdmin, BaseAdmin, admin.ModelAdmin):
+    search_fields = ('app__lmsid',)
+    list_display = ('app', 'lender_api', 'response_code')
+    list_filter = ('lender_api', 'lender_api__lender')
+
     fields = (('loan', 'lender_api', 'response_code'), ('request', 'response'))
-    formfield_overrides = {
-        models.JSONField: {'widget': JSONEditorWidget},
-    }
 
 
 
-class LoanDataInlineAdmin(MFBaseAdmin, admin.TabularInline):
+
+class LoanDataInlineAdmin(JSONBaseAdmin, BaseAdmin, admin.TabularInline):
     model = LoanData
-    exclude = ('app', 'request', 'response_code') + MFBaseAdmin.exclude
-    formfield_overrides = {
-        models.JSONField: {'widget': JSONEditorWidget},
-    }
+    exclude = ('app', 'request', 'response_code') + BaseAdmin.exclude
     ordering = ('lender_api__priority',)
     max_num = 0
     extra = 0
@@ -31,43 +29,31 @@ class LoanDataInlineAdmin(MFBaseAdmin, admin.TabularInline):
 
 
 
-class LoanAdmin(MFBaseAdmin, admin.ModelAdmin):
+class LoanAdmin(BaseAdmin, admin.ModelAdmin):
+    list_filter = ('lender', 'app__lms')
+    search_fields = ('app__lmsid',)
+
     fields = (('app', 'lender',),)
     inlines = (LoanDataInlineAdmin,)
 
 
 
-class LenderSystemAPIAdmin(MFBaseAdmin, admin.ModelAdmin):
+class LenderSystemAPIAdmin(APIBaseAdmin, JSONBaseAdmin, BaseAdmin, admin.ModelAdmin):
+    list_filter = ('lender', 'method')
+    list_select_related = ('lender',)
+    list_display = ('lender', 'name', 'method', 'priority')
+
+    fields = (('lender', 'name'), ('path', 'status'), ('method', 'auth_scheme',
+                'priority'), 'body', ('params', 'headers'))
+
+
+class LenderSystemAPIInlineAdmin(APIBaseInlineAdmin, BaseAdmin, admin.TabularInline):
     model = LenderSystemAPI
-    fields = (('lender', 'name'), 'path', ('method', 'auth_scheme', 'priority'),
-                'body', ('params', 'headers'))
-    formfield_overrides = {
-        models.JSONField: {'widget': JSONEditorWidget},
-    }
 
 
 
-class LenderSystemAPIInlineAdmin(MFBaseAdmin, admin.TabularInline):
-    model = LenderSystemAPI
-    exclude = ('params', 'headers', 'body') + MFBaseAdmin.exclude
-    ordering = ('priority',)
-    extra = 0
-
-
-
-class LenderSystemAdmin(MFBaseAdmin, admin.ModelAdmin):
+class LenderSystemAdmin(ServiceBaseAdmin, JSONBaseAdmin, BaseAdmin, admin.ModelAdmin):
     inlines = (LenderSystemAPIInlineAdmin,)
-    fieldsets = (
-        (None, {
-            'classes': ('wide',),
-            'fields': ('name', 'code')
-        }),
-        ('General API Settings', {
-            'classes': ('collapse',),
-            'fields': ('base_url', 'api_key', 'username', 'password',
-                        'jwt_obtain', 'jwt_refresh')
-        }),
-    )
 
 
 
