@@ -64,11 +64,16 @@ class APIBaseModel(BaseModel):
     body = models.JSONField(null=True, blank=True, default=dict,
                         verbose_name='Request Body')
 
+    iterable = models.BooleanField(null=True, blank=True, default=False)
+
+    iterable_data = models.TextField(null=True, blank=True,
+                        verbose_name='Iterable Data Path')
+
     method = models.CharField(max_length=10, choices=METHOD_CHOICES,
                         verbose_name='HTTP Method')
 
     auth_scheme = models.CharField(max_length=10, choices=AUTH_SCHEME_CHOICES,
-                        verbose_name='Auth Scheme')
+                        verbose_name='HTTP Auth Scheme')
 
     priority = models.PositiveSmallIntegerField(null=True, blank=True)
 

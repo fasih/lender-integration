@@ -12,12 +12,7 @@ class LoanManagementSystemAPIInlineAdmin(APIBaseInlineAdmin, BaseAdmin, admin.Ta
 
 
 class LoanManagementSystemAPIAdmin(APIBaseAdmin, JSONBaseAdmin, BaseAdmin, admin.ModelAdmin):
-    list_filter = ('lms', 'method')
-    list_select_related = ('lms',)
-    list_display = ('lms', 'name', 'method', 'priority')
-
-    fields = (('lms', 'name'), ('path', 'status'), ('method', 'auth_scheme',
-                'priority'), 'body', ('params', 'headers'))
+    towhom = 'lms'
 
 
 
@@ -37,13 +32,7 @@ class PlatformServiceAPIInlineAdmin(APIBaseInlineAdmin, BaseAdmin, admin.Tabular
 
 
 class PlatformServiceAPIAdmin(APIBaseAdmin, JSONBaseAdmin, BaseAdmin, admin.ModelAdmin):
-    list_filter = ('svc', 'method')
-    list_select_related = ('svc',)
-    list_display = ('svc', 'name', 'method')
-
-    fields = (('svc', 'name'), ('path', 'status'), ('method', 'auth_scheme',
-                'priority'), 'body', ('params', 'headers'))
-
+    towhom = 'svc'
 
 
 class PlatformServiceAdmin(ServiceBaseAdmin, JSONBaseAdmin, BaseAdmin, admin.ModelAdmin):

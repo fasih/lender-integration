@@ -1,6 +1,9 @@
+import tempfile
 import structlog as logging
 
 from celery.decorators import task
+from dictor import dictor
+from django.core.files import File
 
 from base.utils import *
 from borrowers.models import *
@@ -14,11 +17,25 @@ logger = logging.getLogger(__name__)
 
 
 def fetch_from_lms(app):
+    app_data = LoanApplicationData.objects.filter(app=app,
+                        response_code__gte=200, response_code__lte=299
+                    ).select_related('lms_api', 'svc_api').order_by('created')
+
+    context = {'loanId': app.lmsid, 'lms_api': {}, 'svc_api': {}}
+
+    for each in app_data:
+       if each.lms_api:
+            context['lms_api'].update({each.lms_api.name: each.response})
+       elif each.svc_api:
+            context['svc_api'].update({each.svc_api.name: each.response})
+
     lms = app.lms
+
+    context.update(lms.__dict__)
+    context.update(lms=lms)
+
     lms_api = LoanManagementSystemAPI.objects.filter(lms=lms
                                         ).active().order_by('priority')
-    context = {'loanId': app.lmsid}
-    context.update(lms.__dict__)
 
     if lms.oauth_url:
         oauth_body = render_from_string(lms.oauth_body, context)
@@ -27,7 +44,8 @@ def fetch_from_lms(app):
                                             headers=lms.oauth_headers)
             oauth_data = response.json()
             lms.auth_token = oauth_data['access_token']
-        except:
+        except Exception as e:
+            logger.exception('fetch_from_lms', status='Exited', **locals())
             return
     elif lms.api_key:
         lms.auth_token = lms.api_key
@@ -50,37 +68,80 @@ def fetch_from_lms(app):
         body = {}
 
     for api in lms_api:
-        url = render_from_string(f'{lms.base_url}{api.path}', context)
-        request = getattr(Request, api.method)
-        kwargs = dict(headers=headers)
 
-        if api.params:
-            api_query_params = render_from_string(api.params, context)
-            query_params.update(**api_query_params)
-            kwargs.update(params=query_params)
+        app_data = LoanApplicationData.objects.filter(app=app,
+                            response_code__gte=200, response_code__lte=299
+                        ).select_related('lms_api', 'svc_api').order_by('created')
+        already_called_non_idempotent_api = False
+        for each in app_data:
+            if each.lms_api == api and api.method == api.METHOD.POST:
+                already_called_non_idempotent_api = True
+                break
+            if each.lms_api:
+                context['lms_api'].update({each.lms_api.name: each.response})
 
-        if api.headers:
-            api_headers = render_from_string(api.headers, context)
-            headers.update(**api_headers)
-            kwargs["headers"].update(headers)
+        if already_called_non_idempotent_api:
+            continue
 
-        if api.body:
-            api_body = render_from_string(api.body, context)
-            if isinstance(api_body, dict):
-                body.update(**api_body)
-                kwargs.update(json=body)
+        if api.iterable:
+            iterable_data = dictor(context, api.iterable_data) or [{}]
+        else:
+            iterable_data = [{}]
+
+        for each in iterable_data:
+            if isinstance(each, dict):
+                context.update(**each)
+                iterable_context = each
             else:
-                kwargs.update(json=api_body)
+                iterable_context = {}
 
-        if api.auth_scheme:
-            kwargs["headers"].update({"Authorization":
-                                f"{api.auth_scheme} {lms.auth_token}"})
+            url = render_from_string(f'{lms.base_url}{api.path}', context)
+            request = getattr(Request, api.method)
+            kwargs = dict(headers=headers)
 
-        response = request.send(url, **kwargs)
-        data = LoanApplicationData(app=app, lms_api=api, request=kwargs,
-                                    response=response.response_json,
-                                    response_code=response.status_code)
-        data.save()
+            if api.params:
+                api_query_params = render_from_string(api.params, context)
+                query_params.update(**api_query_params)
+                kwargs.update(params=query_params)
+
+            if api.headers:
+                api_headers = render_from_string(api.headers, context)
+                headers.update(**api_headers)
+                kwargs["headers"].update(headers)
+
+            if api.body:
+                api_body = render_from_string(api.body, context)
+                if isinstance(api_body, dict):
+                    body.update(**api_body)
+                    kwargs.update(json=body)
+                else:
+                    kwargs.update(json=api_body)
+
+            if api.auth_scheme:
+                kwargs["headers"].update({"Authorization":
+                                    f"{api.auth_scheme} {lms.auth_token}"})
+
+            response = request.send(url, **kwargs)
+            request_json = kwargs.copy()
+            request_json.update(url=url)
+
+            data = LoanApplicationData(app=app, lms_api=api,
+                                        request=request_json,
+                                        response_code=response.status_code)
+
+            filename = get_filename(response.headers.get('content-disposition'))
+            if filename:
+                lf = tempfile.NamedTemporaryFile()
+                for block in response.iter_content(1024 * 8):
+                    if not block:
+                        break
+                    lf.write(block)
+                data.response_file.save(filename, File(lf), save=False)
+                data.response = {'headers': dict(response.headers),
+                                 'iterable_context': iterable_context}
+            else:
+                data.response = response.response_json
+            data.save()
 
 
 
@@ -107,6 +168,7 @@ def push_to_lender(app):
     lms = app.lms
     lender = app.lender
 
+    context.update(lender.__dict__)
     context.update(lender=lender, lms=lms, cp=cp)
 
     lender_api = LenderSystemAPI.objects.filter(lender=lender

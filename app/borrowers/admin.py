@@ -2,21 +2,17 @@ from django.contrib import admin
 from django_json_widget.widgets import JSONEditorWidget
 
 from .models import *
-from base.admin import BaseAdmin
+from base.admin import *
 # Register your models here.
 
 
 
-class LoanApplicationDataAdmin(BaseAdmin, admin.ModelAdmin):
+class LoanApplicationDataAdmin(JSONBaseAdmin, BaseAdmin, admin.ModelAdmin):
     model = LoanApplicationData
     search_fields = ('app__lmsid',)
     list_display = ('app', 'lms_api', 'svc_api', 'response_code')
-    list_select_related = ('app', 'lms_api', 'svc_api')
     list_filter = ('lms_api', 'lms_api__lms', 'svc_api', 'svc_api__svc')
-
-    formfield_overrides = {
-        models.JSONField: {'widget': JSONEditorWidget},
-    }
+    list_select_related = ('app', 'lms_api', 'svc_api')
 
     def get_fields(self, request, obj=None):
         if obj and obj.lms_api:
@@ -25,18 +21,16 @@ class LoanApplicationDataAdmin(BaseAdmin, admin.ModelAdmin):
             API = ('svc_api',)
         else:
             API = ('lms_api', 'svc_api',)
-        fields = (('app',) + API + ('response_code',), ('request', 'response'))
+        fields = (('app',) + API + ('response_code',), ('request', 'response'),
+                    'response_file')
         return fields
 
 
 
-class LoanApplicationDataInlineAdmin(BaseAdmin, admin.TabularInline):
+class LoanApplicationDataInlineAdmin(JSONBaseAdmin, BaseAdmin, admin.TabularInline):
     model = LoanApplicationData
-    exclude = ('request', 'response_code') + BaseAdmin.exclude
-    formfield_overrides = {
-        models.JSONField: {'widget': JSONEditorWidget},
-    }
-    readonly_fields = ('lms_api', 'svc_api')
+    exclude = ('request', 'response_code', 'response_file') + BaseAdmin.exclude
+    #readonly_fields = ('lms_api', 'svc_api')
     ordering = ('lms_api__priority',)
     max_num = 0
     extra = 0

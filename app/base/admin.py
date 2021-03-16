@@ -1,4 +1,5 @@
-from django.contrib import admin
+from django.contrib import admin, messages
+from django.utils.translation import ngettext
 
 from django_json_widget.widgets import JSONEditorWidget
 
@@ -16,6 +17,26 @@ class BaseAdmin(object):
     def get_list_display(self, request):
         list_display = tuple(super().get_list_display(request))
         return list_display + self._list_display
+
+    def set_active(self, request, queryset):
+        updated = queryset.update(status=1)
+        self.message_user(request, ngettext(
+            '%d item was successfully marked as active.',
+            '%d items were successfully marked as active.',
+            updated,
+        ) % updated, messages.SUCCESS)
+    set_active.short_description = 'Marked Selected as Active'
+
+    def set_inactive(self, request, queryset):
+        updated = queryset.update(status=0)
+        self.message_user(request, ngettext(
+            '%d item was successfully marked as inactive.',
+            '%d items were successfully marked as inactive.',
+            updated,
+        ) % updated, messages.SUCCESS)
+    set_inactive.short_description = 'Marked Selected as Inactive'
+
+    actions = [set_active, set_inactive]
 
 
 
@@ -49,11 +70,44 @@ class JSONBaseAdmin(object):
 
 class APIBaseAdmin(object):
     exclude = ('activate_date', 'deactivate_date')
+    towhom = 'name'
+
+    def get_list_filter(self, request, obj=None):
+        return (self.towhom, 'method')
+
+    def get_list_select_related(self, request, obj=None):
+       return (self.towhom,)
+
+    def get_list_display(self, request, obj=None):
+       return (self.towhom, 'name', 'method', 'priority', 'iterable') + \
+                BaseAdmin._list_display
+
+    def get_ordering(self, request, obj=None):
+        return ('-status', self.towhom, 'priority')
+
+    def get_fieldsets(self, request, obj=None):
+        fieldsets = (
+            (None, {
+                'classes': ('wide',),
+                'fields': (('path', self.towhom), ('name', 'status', 'priority'),
+                            ('method', 'auth_scheme', 'iterable'))
+            }),
+            ('HTTP Request Settings', {
+                'classes': ('collapse',),
+                'fields': ('body', ('params', 'headers'))
+            }),
+            ('Iterable Data Settings', {
+                'classes': ('collapse',),
+                'fields': ('iterable_data',)
+            }),
+        )
+        return fieldsets
 
 
 
 class APIBaseInlineAdmin(object):
-    exclude = ('params', 'headers', 'body') + BaseAdmin.exclude
+    exclude = ('params', 'headers', 'body', 'iterable', 'iterable_data') + \
+                BaseAdmin.exclude
     ordering = ('priority',)
     extra = 0
 

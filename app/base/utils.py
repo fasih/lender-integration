@@ -1,13 +1,22 @@
 import functools
+import re
 import requests
 import structlog as logging
 import traceback
 
+from pathlib import Path
 from django.template import Context, Template
 
 
 
 logger = logging.getLogger(__name__)
+
+
+
+def file_uploads(instance, filename):
+    root = Path(instance._meta.db_table)
+    lmsid = instance and instance.app and (instance.app.lmsid or instance.app.pk)
+    return root / str(lmsid) / filename
 
 
 
@@ -117,3 +126,16 @@ def render_from_string(template, context=None):
     _context = Context(context or {})
     rendered_string = Template(string).render(_context)
     return eval(rendered_string)
+
+
+
+def get_filename(cd):
+    """
+    Get filename from content-disposition
+    """
+    if not cd:
+        return None
+    fname = re.findall('filename=(.+)', cd)
+    if len(fname) == 0:
+        return None
+    return fname[0]

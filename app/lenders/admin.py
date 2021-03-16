@@ -39,12 +39,8 @@ class LoanAdmin(BaseAdmin, admin.ModelAdmin):
 
 
 class LenderSystemAPIAdmin(APIBaseAdmin, JSONBaseAdmin, BaseAdmin, admin.ModelAdmin):
-    list_filter = ('lender', 'method')
-    list_select_related = ('lender',)
-    list_display = ('lender', 'name', 'method', 'priority')
+    towhom = 'lender'
 
-    fields = (('lender', 'name'), ('path', 'status'), ('method', 'auth_scheme',
-                'priority'), 'body', ('params', 'headers'))
 
 
 class LenderSystemAPIInlineAdmin(APIBaseInlineAdmin, BaseAdmin, admin.TabularInline):

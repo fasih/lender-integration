@@ -1,6 +1,7 @@
 from django.db import models
 
 from base.models import *
+from base.utils import *
 # Create your models here.
 
 
@@ -49,6 +50,9 @@ class LoanApplicationData(BaseModel):
 
     response_code = models.PositiveSmallIntegerField(null=True, blank=True,
                         verbose_name='Response Status Code')
+
+    response_file = models.FileField(null=True, blank=True,
+                                upload_to=file_uploads)
 
     def __str__(self):
         return self.app and self.app.lmsid or '-'
