@@ -23,7 +23,7 @@ class LoanApplication(BaseModel):
                     verbose_name='Services')
 
     def __str__(self):
-        return self.lmsid
+        return self.lmsid or '-'
 
     class Meta:
         verbose_name = 'Application'
@@ -51,7 +51,7 @@ class LoanApplicationData(BaseModel):
                         verbose_name='Response Status Code')
 
     def __str__(self):
-        return self.app and self.app.lmsid
+        return self.app and self.app.lmsid or '-'
 
     class Meta:
         verbose_name = 'Application Data'

@@ -95,7 +95,7 @@ def push_to_lender(app):
                     ).select_related('lms_api', 'svc_api').order_by('created')
     loan, _ = Loan.objects.get_or_create(app=app, lender=app.lender)
 
-    context = {'loanId': app.lmsid, 'lms_api': {}, 'svc_api': {}}
+    context = {'loanId': app.lmsid, 'lms_api': {}, 'svc_api': {}, 'lender_api': {}}
 
     for each in app_data:
        if each.lms_api:
@@ -142,6 +142,21 @@ def push_to_lender(app):
         body = {}
 
     for api in lender_api:
+
+        loan_data = LoanData.objects.filter(app=app,
+                            response_code__gte=200, response_code__lte=299
+                        ).select_related('lender_api').order_by('created')
+        already_called_non_idempotent_api = False
+        for each in loan_data:
+            if each.lender_api == api and api.method == api.METHOD.POST:
+                already_called_non_idempotent_api = True
+                break
+            if each.lender_api:
+                context['lender_api'].update({each.lender_api.name: each.response})
+
+        if already_called_non_idempotent_api:
+            continue
+
         url = render_from_string(f'{lender.base_url}{api.path}', context)
         request = getattr(Request, api.method)
         kwargs = dict(headers=headers)

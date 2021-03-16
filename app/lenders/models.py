@@ -47,7 +47,7 @@ class Loan(BaseModel):
                     verbose_name='Loan Reference No.', help_text='Lender LoanID')
 
     def __str__(self):
-        return self.app and self.app.lmsid
+        return self.app and self.app.lmsid or '-'
 
     class Meta:
         verbose_name = 'Loan'
@@ -71,7 +71,7 @@ class LoanData(BaseModel):
     response_code = models.PositiveSmallIntegerField(null=True, blank=True)
 
     def __str__(self):
-        return self.app and self.app.lmsid or ''
+        return self.app and self.app.lmsid or '-'
 
     class Meta:
         verbose_name = 'Loan Data'
