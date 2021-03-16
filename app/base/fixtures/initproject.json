@@ -14,16 +14,30 @@
     "pk": "6d4f1b36-6c95-4f6c-aca3-7c6503ca62d7",
     "fields": {
         "created": "2021-03-11T07:43:58.278Z",
-        "modified": "2021-03-11T18:16:03.631Z",
+        "modified": "2021-03-15T09:22:20.240Z",
         "status": 1,
         "activate_date": "2021-03-11T07:43:58.277Z",
         "deactivate_date": null,
         "base_url": "https://mayafinuat.finflux.io/fineract-provider/api/v1",
-        "api_key": null,
-        "username": null,
-        "password": null,
-        "jwt_obtain": null,
-        "jwt_refresh": null,
+        "api_key": "",
+        "username": "vinnier",
+        "password": "mayafin@2021",
+        "params": {},
+        "headers": {
+            "Fineract-Platform-TenantId": "mayafinuat"
+        },
+        "body": {},
+        "oauth_url": "https://mayafinuat.finflux.io/fineract-provider/api/oauth/token?tenantIdentifier=mayafinuat",
+        "oauth_headers": {
+            "Content-Type": "application/x-www-form-urlencoded"
+        },
+        "oauth_body": {
+            "username": "{{username}}",
+            "password": "{{password}}",
+            "grant_type": "password",
+            "client_id": "community-app",
+            "client_secret": 123
+        },
         "name": "FinFlux",
         "code": "FF"
     }
@@ -33,17 +47,42 @@
     "pk": "7cd7706c-555a-4f11-ba7e-21f63e11f272",
     "fields": {
         "created": "2021-03-11T09:46:53.893Z",
-        "modified": "2021-03-11T18:16:03.635Z",
+        "modified": "2021-03-16T12:20:11.389Z",
         "status": 1,
         "activate_date": "2021-03-11T09:46:53.892Z",
         "deactivate_date": null,
-        "name": "Borrower Info",
-        "path": "/runreports/Borrower%20Info?R_loanId={{lmsid}}",
+        "name": "BorrowerInfo",
+        "path": "/runreports/Borrower%20Info?R_loanId={{loanId}}",
         "params": {},
+        "headers": {},
         "body": {},
+        "iterable": false,
+        "iterable_data": "[]",
         "method": "GET",
-        "auth_scheme": "Token",
+        "auth_scheme": "Bearer",
         "priority": 2,
+        "lms": "6d4f1b36-6c95-4f6c-aca3-7c6503ca62d7"
+    }
+},
+{
+    "model": "platforms.loanmanagementsystemapi",
+    "pk": "826ea086-0784-4c26-849a-00c435584054",
+    "fields": {
+        "created": "2021-03-15T18:18:10.543Z",
+        "modified": "2021-03-16T12:20:32.701Z",
+        "status": 1,
+        "activate_date": "2021-03-15T18:18:10.542Z",
+        "deactivate_date": null,
+        "name": "FetchDocumentList",
+        "path": "/clients/12/documents",
+        "params": {},
+        "headers": {},
+        "body": {},
+        "iterable": false,
+        "iterable_data": "[]",
+        "method": "GET",
+        "auth_scheme": "Bearer",
+        "priority": 4,
         "lms": "6d4f1b36-6c95-4f6c-aca3-7c6503ca62d7"
     }
 },
@@ -52,17 +91,42 @@
     "pk": "9f01cf23-9510-48bd-ab15-fe1c34d35517",
     "fields": {
         "created": "2021-03-11T09:46:53.900Z",
-        "modified": "2021-03-11T18:16:03.636Z",
+        "modified": "2021-03-16T12:20:17.494Z",
         "status": 1,
         "activate_date": "2021-03-11T09:46:53.900Z",
         "deactivate_date": null,
-        "name": "Repayment Schedule",
-        "path": "/runreports/Repayments%20Schedule?R_loanId={{lmsid}}",
+        "name": "RepaymentSchedule",
+        "path": "/runreports/Repayments%20Schedule?R_loanId={{loanId}}",
         "params": {},
+        "headers": {},
         "body": {},
+        "iterable": false,
+        "iterable_data": "[]",
         "method": "GET",
-        "auth_scheme": "Token",
+        "auth_scheme": "Bearer",
         "priority": 3,
+        "lms": "6d4f1b36-6c95-4f6c-aca3-7c6503ca62d7"
+    }
+},
+{
+    "model": "platforms.loanmanagementsystemapi",
+    "pk": "bf2f2707-cf50-4e34-9b6b-b12f7526153d",
+    "fields": {
+        "created": "2021-03-16T10:16:30.622Z",
+        "modified": "2021-03-16T19:34:18.674Z",
+        "status": 1,
+        "activate_date": "2021-03-16T10:16:30.622Z",
+        "deactivate_date": null,
+        "name": "FetchDocument",
+        "path": "/clients/{{lms_api.LoanRequest.data.0.row.0|to_python:'client_id'}}/documents/{{id}}/attachment",
+        "params": {},
+        "headers": {},
+        "body": {},
+        "iterable": true,
+        "iterable_data": "lms_api.FetchDocumentList",
+        "method": "GET",
+        "auth_scheme": "Bearer",
+        "priority": 5,
         "lms": "6d4f1b36-6c95-4f6c-aca3-7c6503ca62d7"
     }
 },
@@ -71,16 +135,19 @@
     "pk": "d29ab26d-7f5e-4dd4-a8ad-b3fded9d86ff",
     "fields": {
         "created": "2021-03-11T08:34:18.488Z",
-        "modified": "2021-03-11T18:16:03.634Z",
+        "modified": "2021-03-16T12:20:05.723Z",
         "status": 1,
         "activate_date": "2021-03-11T08:34:18.487Z",
         "deactivate_date": null,
-        "name": "Loan Request",
-        "path": "/runreports/Loan%20Request?R_loanId={{lmsid}}",
+        "name": "LoanRequest",
+        "path": "/runreports/Loan%20Request?R_loanId={{loanId}}",
         "params": {},
+        "headers": {},
         "body": {},
+        "iterable": false,
+        "iterable_data": "[]",
         "method": "GET",
-        "auth_scheme": "Token",
+        "auth_scheme": "Bearer",
         "priority": 1,
         "lms": "6d4f1b36-6c95-4f6c-aca3-7c6503ca62d7"
     }
@@ -90,182 +157,638 @@
     "pk": "a5f57397-0ad1-4a88-b54d-b05f38290128",
     "fields": {
         "created": "2021-03-11T07:42:55.604Z",
-        "modified": "2021-03-11T07:42:55.604Z",
+        "modified": "2021-03-16T08:04:22.154Z",
         "status": 1,
         "activate_date": "2021-03-11T07:42:55.604Z",
         "deactivate_date": null,
-        "name": "Learning Traveller",
+        "name": "Lets Transport",
         "code": "LT"
     }
 },
 {
-    "model": "borrowers.loanapplication",
-    "pk": "4dd67c6f-d8e3-4bb5-9df8-9917bdaa6f5c",
+    "model": "platforms.platformservice",
+    "pk": "edc5fab8-2a06-4b7b-8d7a-ad363b421190",
     "fields": {
-        "created": "2021-03-11T17:06:17.585Z",
-        "modified": "2021-03-11T17:06:17.585Z",
+        "created": "2021-03-13T08:09:27.907Z",
+        "modified": "2021-03-13T08:09:27.907Z",
         "status": 1,
-        "activate_date": "2021-03-11T17:06:17.585Z",
+        "activate_date": "2021-03-13T08:09:27.907Z",
         "deactivate_date": null,
-        "lmsid": "320",
-        "lms": "6d4f1b36-6c95-4f6c-aca3-7c6503ca62d7",
-        "lender": "0262fab4-0f8a-4037-89f4-71ca10010db1",
-        "cp": "a5f57397-0ad1-4a88-b54d-b05f38290128"
+        "base_url": null,
+        "api_key": null,
+        "username": null,
+        "password": null,
+        "params": {},
+        "headers": {},
+        "body": {},
+        "oauth_url": null,
+        "oauth_headers": {},
+        "oauth_body": {},
+        "name": "PennyDrop",
+        "code": "PD"
+    }
+},
+{
+    "model": "platforms.platformserviceapi",
+    "pk": "efe9f194-0ae8-4217-9593-314f0a6c97ba",
+    "fields": {
+        "created": "2021-03-13T08:10:11.517Z",
+        "modified": "2021-03-13T08:10:11.517Z",
+        "status": 1,
+        "activate_date": "2021-03-13T08:10:11.516Z",
+        "deactivate_date": null,
+        "name": "PennyDrop",
+        "path": "/api/pennydrop",
+        "params": {},
+        "headers": {},
+        "body": {},
+        "iterable": false,
+        "iterable_data": "[]",
+        "method": "POST",
+        "auth_scheme": "Token",
+        "priority": null,
+        "svc": "edc5fab8-2a06-4b7b-8d7a-ad363b421190"
     }
 },
 {
     "model": "borrowers.loanapplication",
-    "pk": "a2fe0599-e562-474f-98fe-0fdba0593b57",
+    "pk": "093a1cd2-75bc-4fe4-b0c5-d9e3ff58259e",
     "fields": {
-        "created": "2021-03-11T08:42:40.378Z",
-        "modified": "2021-03-11T15:13:50.123Z",
+        "created": "2021-03-15T09:43:30.390Z",
+        "modified": "2021-03-15T09:43:30.390Z",
         "status": 1,
-        "activate_date": "2021-03-11T08:42:40.377Z",
+        "activate_date": "2021-03-15T09:43:30.389Z",
         "deactivate_date": null,
         "lmsid": "329",
         "lms": "6d4f1b36-6c95-4f6c-aca3-7c6503ca62d7",
         "lender": "0262fab4-0f8a-4037-89f4-71ca10010db1",
-        "cp": "a5f57397-0ad1-4a88-b54d-b05f38290128"
+        "cp": "a5f57397-0ad1-4a88-b54d-b05f38290128",
+        "svc": []
     }
 },
 {
     "model": "borrowers.loanapplicationdata",
-    "pk": "2cd6b033-8a60-4ebc-9c68-6ded562035c0",
+    "pk": "147b6b1b-3ae0-409b-89db-ee511899eece",
     "fields": {
-        "created": "2021-03-11T09:57:08.234Z",
-        "modified": "2021-03-11T15:13:50.151Z",
+        "created": "2021-03-16T19:02:05.419Z",
+        "modified": "2021-03-16T19:02:05.419Z",
         "status": 1,
-        "activate_date": "2021-03-11T09:57:08.233Z",
+        "activate_date": "2021-03-16T19:02:05.419Z",
         "deactivate_date": null,
-        "app": "a2fe0599-e562-474f-98fe-0fdba0593b57",
-        "lms_api": "9f01cf23-9510-48bd-ab15-fe1c34d35517",
+        "app": "093a1cd2-75bc-4fe4-b0c5-d9e3ff58259e",
+        "lms_api": "bf2f2707-cf50-4e34-9b6b-b12f7526153d",
+        "svc_api": null,
         "request": {
-            "loanId": 329
+            "headers": {
+                "Fineract-Platform-TenantId": "mayafinuat",
+                "Authorization": "Bearer a72d899f-4d02-4cd2-96f8-7deb583dad0b"
+            },
+            "url": "https://mayafinuat.finflux.io/fineract-provider/api/v1/clients/12/documents/30/attachment"
         },
         "response": {
-            "partner_loan_id": "",
-            "partner_borrower_id": "",
-            "kudos_loan_id": "",
-            "kudos_borrower_id": "",
-            "sanction_amount": "50000.000000",
-            "net_disbur_amt": "49500.0000000000",
-            "int_type": "Declining Balance",
-            "intr_rate": "26.000000",
-            "emi_count": "12",
-            "repayment_type": "1 Month",
-            "first_inst_date": "",
-            "disburse_date": "",
-            "pro_fee_amt": " ",
-            "insurance_amt": " ",
-            "app_charges": " ",
-            "stamp_charges": " ",
-            "pre_emi_interest": " ",
-            "total_charges": " ",
-            "advance_emi": " "
+            "Date": "Tue, 16 Mar 2021 19:02:03 GMT",
+            "Content-Type": "image/jpeg",
+            "Transfer-Encoding": "chunked",
+            "Connection": "keep-alive",
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+            "Content-Disposition": "attachment; filename=\"Screenshot_20201202-214524.jpg\"",
+            "Cache-Control": "no-cache, no-store, max-age=0, must-revalidate",
+            "Pragma": "no-cache",
+            "Expires": "0",
+            "Strict-Transport-Security": "max-age=31536000 ; includeSubDomains",
+            "X-XSS-Protection": "1; mode=block",
+            "X-Frame-Options": "DENY",
+            "X-Content-Type-Options": "nosniff",
+            "Content-Encoding": "gzip",
+            "Vary": "Accept-Encoding",
+            "conext": {
+                "id": 30,
+                "parentEntityType": "clients",
+                "parentEntityId": 12,
+                "name": "\"Aadhaar Front\"",
+                "fileName": "Screenshot_20201202-214524.jpg",
+                "size": 77317,
+                "type": "image/jpeg",
+                "description": "\"\"",
+                "reportIdentifier": 0,
+                "tagIdentifier": 0,
+                "addedOn": "Dec 14, 2020",
+                "status": {
+                    "id": 1,
+                    "code": "INITIATED",
+                    "value": "INITIATED"
+                }
+            }
         },
-        "response_code": 200
+        "response_code": 200,
+        "response_file": "borrowers_loanapplicationdata/329/Screenshot_20201202-214524_eBOYJF5.jpg"
     }
 },
 {
     "model": "borrowers.loanapplicationdata",
-    "pk": "86009a3e-a7ce-4d66-be89-fffbfe4d95c9",
+    "pk": "3819c9bc-2a7e-4024-9591-e35a7f95d198",
     "fields": {
-        "created": "2021-03-11T09:54:27.298Z",
-        "modified": "2021-03-11T15:13:50.170Z",
+        "created": "2021-03-16T19:02:00.163Z",
+        "modified": "2021-03-16T19:02:00.163Z",
         "status": 1,
-        "activate_date": "2021-03-11T09:54:27.297Z",
+        "activate_date": "2021-03-16T19:02:00.162Z",
         "deactivate_date": null,
-        "app": "a2fe0599-e562-474f-98fe-0fdba0593b57",
-        "lms_api": "7cd7706c-555a-4f11-ba7e-21f63e11f272",
+        "app": "093a1cd2-75bc-4fe4-b0c5-d9e3ff58259e",
+        "lms_api": "826ea086-0784-4c26-849a-00c435584054",
+        "svc_api": null,
         "request": {
-            "loanId": 329
+            "headers": {
+                "Fineract-Platform-TenantId": "mayafinuat",
+                "Authorization": "Bearer a72d899f-4d02-4cd2-96f8-7deb583dad0b"
+            },
+            "url": "https://mayafinuat.finflux.io/fineract-provider/api/v1/clients/12/documents"
         },
-        "response": {
-            "partner_loan_id": "329",
-            "partner_borrower_id": "-",
-            "first_name": "Ram",
-            "last_name": "Reddy5",
-            "type_of_addr": "Rented",
-            "resi_addr_ln1": "Flat 2B-G1, Models Millennium Vistas, Caranzalem",
-            "city": "Panzam",
-            "state": "GOA",
-            "pincode": "403002",
-            "appl_phone": "9502161157",
-            "appl_pan": "ABCDE1234M",
-            "email_id": "vinnie@j.com",
-            "dob": "1993-08-11",
-            "gender": "Male",
-            "photo_id_type": "Aadhaar",
-            "photo_id_num": "123078893938",
-            "addr_id_type": "Aadhaar",
-            "addr_id_num": "123078893938",
-            "total_experience": " ",
-            "cibil_score_borro": "",
-            "purpose_of_loan": "Business Funding",
-            "borro_bank_name": "HDFC Bank",
-            "borro_bank_acc_num": "5020203939366",
-            "applied_amount": "50000.000000",
-            "int_rate_reducing_perc": "26.000000",
-            "loan_tenure": "12",
-            "emi_amt": " ",
-            "processing_fees_perc": "1",
-            "partner": "500.0000000000",
-            "borro_bank_ifsc": "HDFC0004848",
-            "vpa_address": " ",
-            "partner_system_score": " "
-        },
-        "response_code": 200
+        "response": [
+            {
+                "id": 1,
+                "parentEntityType": "clients",
+                "parentEntityId": 12,
+                "name": "\"Aadhaar Card\"",
+                "fileName": "aadhar card.pdf",
+                "size": 167582,
+                "type": "application/pdf",
+                "reportIdentifier": 0,
+                "tagIdentifier": 0,
+                "addedOn": "Dec 11, 2020",
+                "status": {
+                    "id": 1,
+                    "code": "INITIATED",
+                    "value": "INITIATED"
+                }
+            },
+            {
+                "id": 30,
+                "parentEntityType": "clients",
+                "parentEntityId": 12,
+                "name": "\"Aadhaar Front\"",
+                "fileName": "Screenshot_20201202-214524.jpg",
+                "size": 77317,
+                "type": "image/jpeg",
+                "description": "\"\"",
+                "reportIdentifier": 0,
+                "tagIdentifier": 0,
+                "addedOn": "Dec 14, 2020",
+                "status": {
+                    "id": 1,
+                    "code": "INITIATED",
+                    "value": "INITIATED"
+                }
+            },
+            {
+                "id": 438,
+                "parentEntityType": "clients",
+                "parentEntityId": 12,
+                "name": "Aadhaar Front",
+                "fileName": "Screenshot 2021-01-09 at 12.24.28 PM.png",
+                "size": 524103,
+                "type": "image/png",
+                "description": "zzdasd",
+                "reportIdentifier": 0,
+                "tagIdentifier": 0,
+                "addedOn": "Jan 12, 2021",
+                "status": {
+                    "id": 1,
+                    "code": "INITIATED",
+                    "value": "INITIATED"
+                }
+            }
+        ],
+        "response_code": 200,
+        "response_file": ""
     }
 },
 {
     "model": "borrowers.loanapplicationdata",
-    "pk": "f184afbb-e50f-4f9d-a08e-084ab5e7a3d6",
+    "pk": "4b2c0db9-330d-4dfe-975c-5aa9c790a9c4",
     "fields": {
-        "created": "2021-03-11T09:41:57.619Z",
-        "modified": "2021-03-11T15:13:50.190Z",
+        "created": "2021-03-16T19:01:59.010Z",
+        "modified": "2021-03-16T19:01:59.010Z",
         "status": 1,
-        "activate_date": "2021-03-11T09:41:57.618Z",
+        "activate_date": "2021-03-16T19:01:59.009Z",
         "deactivate_date": null,
-        "app": "a2fe0599-e562-474f-98fe-0fdba0593b57",
+        "app": "093a1cd2-75bc-4fe4-b0c5-d9e3ff58259e",
         "lms_api": "d29ab26d-7f5e-4dd4-a8ad-b3fded9d86ff",
+        "svc_api": null,
         "request": {
-            "loanId": 329
+            "headers": {
+                "Fineract-Platform-TenantId": "mayafinuat",
+                "Authorization": "Bearer a72d899f-4d02-4cd2-96f8-7deb583dad0b"
+            },
+            "url": "https://mayafinuat.finflux.io/fineract-provider/api/v1/runreports/Loan%20Request?R_loanId=329"
         },
         "response": {
-            "partner_loan_id": "329",
-            "partner_borrower_id": "-",
-            "first_name": "Ram",
-            "last_name": "Reddy5",
-            "type_of_addr": "Rented",
-            "resi_addr_ln1": "Flat 2B-G1, Models Millennium Vistas, Caranzalem",
-            "city": "Panzam",
-            "state": "GOA",
-            "pincode": "403002",
-            "appl_phone": "9502161157",
-            "appl_pan": "ABCDE1234M",
-            "email_id": "vinnie@j.com",
-            "dob": "1993-08-11",
-            "gender": "Male",
-            "photo_id_type": "Aadhaar",
-            "photo_id_num": "123078893938",
-            "addr_id_type": "Aadhaar",
-            "addr_id_num": "123078893938",
-            "total_experience": " ",
-            "cibil_score_borro": "",
-            "purpose_of_loan": "Business Funding",
-            "borro_bank_name": "HDFC Bank",
-            "borro_bank_acc_num": "5020203939366",
-            "applied_amount": "50000.000000",
-            "int_rate_reducing_perc": "26.000000",
-            "loan_tenure": "12",
-            "emi_amt": " ",
-            "processing_fees_perc": "1",
-            "partner": "500.0000000000",
-            "borro_bank_ifsc": "HDFC0004848",
-            "vpa_address": " ",
-            "partner_system_score": " "
+            "columnHeaders": [
+                {
+                    "columnName": "loan_request",
+                    "columnType": "TEXT",
+                    "columnDisplayType": "TEXT",
+                    "isColumnNullable": false,
+                    "isColumnPrimaryKey": false,
+                    "columnValues": [],
+                    "visibilityCriteria": []
+                }
+            ],
+            "data": [
+                {
+                    "row": [
+                        "{\"\"partner_loan_id\"\":\"\"329\"\",\n\"\"partner_borrower_id\"\":\"\"-\"\",\n   \"client_id\":\"28\",\n  \"\"first_name\"\":\"\"Suresh\"\",\n   \"\"last_name\"\":\"\".\"\",\n   \"\"type_of_addr\"\":\"\"Rented\"\",\n \"\"resi_addr_ln1\"\":\"\"Flat 2B-G1, Models Millennium Vistas, Caranzalem\"\",\n    \"\"city\"\":\"\"Panjim\"\",\n   \"\"state\"\":\"\"GOA\"\",\n    \"\"pincode\"\":\"\"403002\"\",\n\"\"per_addr_ln1\"\":\"\"Flat 2B-G1, Models Millennium Vistas, Caranzalem\"\",\n    \"\"per_city\"\":\"\"Panjim\"\",\n   \"\"per_state\"\":\"\"GOA\"\",\n    \"\"per_pincode\"\":\"\"403002\"\",\n   \"\"appl_phone\"\":\"\"9502161157\"\",\n    \"\"appl_pan\"\":\"\"ABCDE1234M\"\",\n   \"\"email_id\"\":\"\"vinnie@j.com\"\",\n   \"\"dob\"\":\"\"1978-07-10\"\",\n   \"\"gender\"\":\"\"Male\"\",\n   \"\"photo_id_type\"\":\"\"Aadhaar\"\",\n   \"\"photo_id_num\"\":\"\"619014022831\"\",\n   \"\"addr_id_type\"\":\"\"Aadhaar\"\",\n   \"\"addr_id_num\"\":\"\"619014022831\"\",\n   \"\"total_experience\"\":\"\" \"\",\n   \"\"cibil_score_borro\"\":\"\"000-1\"\",\n   \"\"purpose_of_loan\"\":\"\"Business Funding\"\" ,\n   \"\"borro_bank_name\"\":\"\"HDFC Bank\"\",\n  \"\"borro_bank_acc_num\"\":\"\"5020203939366\"\",\n   \"\"applied_amount\"\":\"\"50000.000000\"\",\n   \"\"int_rate_reducing_perc\"\":\"\"26.000000\"\",\n    \"\"loan_tenure\"\":\"\"12\"\",\n   \"\"emi_amt\"\":\"\" \"\",\n\"\"processing_fees_perc\"\":\"\"1\"\",\n  \"\"processing_fees_amt\"\":\"\"500.0000000000\"\",\n   \"\"borro_bank_ifsc\"\":\"\"HDFC0004848\"\",\n   \"\"vpa_address\"\":\"\" \"\",\n    \"\"partner_system_score\"\":\"\" \"\" }"
+                    ]
+                }
+            ]
         },
-        "response_code": 200
+        "response_code": 200,
+        "response_file": ""
+    }
+},
+{
+    "model": "borrowers.loanapplicationdata",
+    "pk": "90dbe88f-c67e-48a6-8c9d-98e66743e454",
+    "fields": {
+        "created": "2021-03-16T19:07:29.516Z",
+        "modified": "2021-03-16T19:07:29.516Z",
+        "status": 1,
+        "activate_date": "2021-03-16T19:07:29.515Z",
+        "deactivate_date": null,
+        "app": "093a1cd2-75bc-4fe4-b0c5-d9e3ff58259e",
+        "lms_api": "bf2f2707-cf50-4e34-9b6b-b12f7526153d",
+        "svc_api": null,
+        "request": {
+            "headers": {
+                "Fineract-Platform-TenantId": "mayafinuat",
+                "Authorization": "Bearer 8af98d2c-2d56-449c-9b7b-2627a8d3269e"
+            },
+            "url": "https://mayafinuat.finflux.io/fineract-provider/api/v1/clients/12/documents/30/attachment"
+        },
+        "response": {
+            "headers": {
+                "Date": "Tue, 16 Mar 2021 19:07:27 GMT",
+                "Content-Type": "image/jpeg",
+                "Transfer-Encoding": "chunked",
+                "Connection": "keep-alive",
+                "Access-Control-Allow-Origin": "*",
+                "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+                "Content-Disposition": "attachment; filename=\"Screenshot_20201202-214524.jpg\"",
+                "Cache-Control": "no-cache, no-store, max-age=0, must-revalidate",
+                "Pragma": "no-cache",
+                "Expires": "0",
+                "Strict-Transport-Security": "max-age=31536000 ; includeSubDomains",
+                "X-XSS-Protection": "1; mode=block",
+                "X-Frame-Options": "DENY",
+                "X-Content-Type-Options": "nosniff",
+                "Content-Encoding": "gzip",
+                "Vary": "Accept-Encoding"
+            },
+            "iterable_context": {
+                "id": 438,
+                "parentEntityType": "clients",
+                "parentEntityId": 12,
+                "name": "Aadhaar Front",
+                "fileName": "Screenshot 2021-01-09 at 12.24.28 PM.png",
+                "size": 524103,
+                "type": "image/png",
+                "description": "zzdasd",
+                "reportIdentifier": 0,
+                "tagIdentifier": 0,
+                "addedOn": "Jan 12, 2021",
+                "status": {
+                    "id": 1,
+                    "code": "INITIATED",
+                    "value": "INITIATED"
+                }
+            }
+        },
+        "response_code": 200,
+        "response_file": "borrowers_loanapplicationdata/329/Screenshot_20201202-214524_pq6SI5G.jpg"
+    }
+},
+{
+    "model": "borrowers.loanapplicationdata",
+    "pk": "9f030828-ab46-4d47-9209-c0896b7fb9f9",
+    "fields": {
+        "created": "2021-03-16T19:07:23.798Z",
+        "modified": "2021-03-16T19:07:23.798Z",
+        "status": 1,
+        "activate_date": "2021-03-16T19:07:23.797Z",
+        "deactivate_date": null,
+        "app": "093a1cd2-75bc-4fe4-b0c5-d9e3ff58259e",
+        "lms_api": "bf2f2707-cf50-4e34-9b6b-b12f7526153d",
+        "svc_api": null,
+        "request": {
+            "headers": {
+                "Fineract-Platform-TenantId": "mayafinuat",
+                "Authorization": "Bearer 8af98d2c-2d56-449c-9b7b-2627a8d3269e"
+            },
+            "url": "https://mayafinuat.finflux.io/fineract-provider/api/v1/clients/12/documents/30/attachment"
+        },
+        "response": {
+            "headers": {
+                "Date": "Tue, 16 Mar 2021 19:07:21 GMT",
+                "Content-Type": "image/jpeg",
+                "Transfer-Encoding": "chunked",
+                "Connection": "keep-alive",
+                "Access-Control-Allow-Origin": "*",
+                "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+                "Content-Disposition": "attachment; filename=\"Screenshot_20201202-214524.jpg\"",
+                "Cache-Control": "no-cache, no-store, max-age=0, must-revalidate",
+                "Pragma": "no-cache",
+                "Expires": "0",
+                "Strict-Transport-Security": "max-age=31536000 ; includeSubDomains",
+                "X-XSS-Protection": "1; mode=block",
+                "X-Frame-Options": "DENY",
+                "X-Content-Type-Options": "nosniff",
+                "Content-Encoding": "gzip",
+                "Vary": "Accept-Encoding"
+            },
+            "iterable_context": {
+                "id": 1,
+                "parentEntityType": "clients",
+                "parentEntityId": 12,
+                "name": "\"Aadhaar Card\"",
+                "fileName": "aadhar card.pdf",
+                "size": 167582,
+                "type": "application/pdf",
+                "reportIdentifier": 0,
+                "tagIdentifier": 0,
+                "addedOn": "Dec 11, 2020",
+                "status": {
+                    "id": 1,
+                    "code": "INITIATED",
+                    "value": "INITIATED"
+                }
+            }
+        },
+        "response_code": 200,
+        "response_file": "borrowers_loanapplicationdata/329/Screenshot_20201202-214524_Yaw0Duz.jpg"
+    }
+},
+{
+    "model": "borrowers.loanapplicationdata",
+    "pk": "a148e583-197c-440c-9c1f-16abadf0d915",
+    "fields": {
+        "created": "2021-03-16T19:07:26.880Z",
+        "modified": "2021-03-16T19:07:26.880Z",
+        "status": 1,
+        "activate_date": "2021-03-16T19:07:26.880Z",
+        "deactivate_date": null,
+        "app": "093a1cd2-75bc-4fe4-b0c5-d9e3ff58259e",
+        "lms_api": "bf2f2707-cf50-4e34-9b6b-b12f7526153d",
+        "svc_api": null,
+        "request": {
+            "headers": {
+                "Fineract-Platform-TenantId": "mayafinuat",
+                "Authorization": "Bearer 8af98d2c-2d56-449c-9b7b-2627a8d3269e"
+            },
+            "url": "https://mayafinuat.finflux.io/fineract-provider/api/v1/clients/12/documents/30/attachment"
+        },
+        "response": {
+            "headers": {
+                "Date": "Tue, 16 Mar 2021 19:07:24 GMT",
+                "Content-Type": "image/jpeg",
+                "Transfer-Encoding": "chunked",
+                "Connection": "keep-alive",
+                "Access-Control-Allow-Origin": "*",
+                "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+                "Content-Disposition": "attachment; filename=\"Screenshot_20201202-214524.jpg\"",
+                "Cache-Control": "no-cache, no-store, max-age=0, must-revalidate",
+                "Pragma": "no-cache",
+                "Expires": "0",
+                "Strict-Transport-Security": "max-age=31536000 ; includeSubDomains",
+                "X-XSS-Protection": "1; mode=block",
+                "X-Frame-Options": "DENY",
+                "X-Content-Type-Options": "nosniff",
+                "Content-Encoding": "gzip",
+                "Vary": "Accept-Encoding"
+            },
+            "iterable_context": {
+                "id": 30,
+                "parentEntityType": "clients",
+                "parentEntityId": 12,
+                "name": "\"Aadhaar Front\"",
+                "fileName": "Screenshot_20201202-214524.jpg",
+                "size": 77317,
+                "type": "image/jpeg",
+                "description": "\"\"",
+                "reportIdentifier": 0,
+                "tagIdentifier": 0,
+                "addedOn": "Dec 14, 2020",
+                "status": {
+                    "id": 1,
+                    "code": "INITIATED",
+                    "value": "INITIATED"
+                }
+            }
+        },
+        "response_code": 200,
+        "response_file": "borrowers_loanapplicationdata/329/Screenshot_20201202-214524_eHK7Bty.jpg"
+    }
+},
+{
+    "model": "borrowers.loanapplicationdata",
+    "pk": "d78a0555-978b-4609-a023-c86a1c45c47a",
+    "fields": {
+        "created": "2021-03-16T19:01:59.805Z",
+        "modified": "2021-03-16T19:01:59.805Z",
+        "status": 1,
+        "activate_date": "2021-03-16T19:01:59.804Z",
+        "deactivate_date": null,
+        "app": "093a1cd2-75bc-4fe4-b0c5-d9e3ff58259e",
+        "lms_api": "9f01cf23-9510-48bd-ab15-fe1c34d35517",
+        "svc_api": null,
+        "request": {
+            "headers": {
+                "Fineract-Platform-TenantId": "mayafinuat",
+                "Authorization": "Bearer a72d899f-4d02-4cd2-96f8-7deb583dad0b"
+            },
+            "url": "https://mayafinuat.finflux.io/fineract-provider/api/v1/runreports/Repayments%20Schedule?R_loanId=329"
+        },
+        "response": {
+            "columnHeaders": [
+                {
+                    "columnName": "repayment_schedule",
+                    "columnType": "TEXT",
+                    "columnDisplayType": "TEXT",
+                    "isColumnNullable": false,
+                    "isColumnPrimaryKey": false,
+                    "columnValues": [],
+                    "visibilityCriteria": []
+                }
+            ],
+            "data": [
+                {
+                    "row": [
+                        "{\"partner_loan_id\":\"\",\n   \"partner_borrower_id\":\"\",\n   \"kudos_loan_id\":\"\",\n   \"kudos_borrower_id\":\"\",\n   \"sanction_amount\":\"50000.000000\",\n   \"net_disbur_amt\":\"49500.0000000000\",\n   \"int_type\":\"Declining Balance\",\n   \"intr_rate\":\"26.000000\",\n   \"emi_count\":\"12\",\n    \"repayment_type\":\"1 Month\",\n    \"first_inst_date\":\"\",\n    \"disburse_date\":\"\",\n    \"pro_fee_amt\":\" \",\n    \"insurance_amt\":\" \",\n    \"app_charges\":\" \",\n    \"stamp_charges\":\" \",\t\n    \"pre_emi_interest\":\" \",\t\n    \"total_charges\":\" \",\t\n    \"advance_emi\":\" \", }"
+                    ]
+                }
+            ]
+        },
+        "response_code": 200,
+        "response_file": ""
+    }
+},
+{
+    "model": "borrowers.loanapplicationdata",
+    "pk": "e20c17c3-74e9-4c41-b7f5-bece3911aaf9",
+    "fields": {
+        "created": "2021-03-16T19:02:02.679Z",
+        "modified": "2021-03-16T19:02:02.679Z",
+        "status": 1,
+        "activate_date": "2021-03-16T19:02:02.678Z",
+        "deactivate_date": null,
+        "app": "093a1cd2-75bc-4fe4-b0c5-d9e3ff58259e",
+        "lms_api": "bf2f2707-cf50-4e34-9b6b-b12f7526153d",
+        "svc_api": null,
+        "request": {
+            "headers": {
+                "Fineract-Platform-TenantId": "mayafinuat",
+                "Authorization": "Bearer a72d899f-4d02-4cd2-96f8-7deb583dad0b"
+            },
+            "url": "https://mayafinuat.finflux.io/fineract-provider/api/v1/clients/12/documents/30/attachment"
+        },
+        "response": {
+            "Date": "Tue, 16 Mar 2021 19:02:00 GMT",
+            "Content-Type": "image/jpeg",
+            "Transfer-Encoding": "chunked",
+            "Connection": "keep-alive",
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+            "Content-Disposition": "attachment; filename=\"Screenshot_20201202-214524.jpg\"",
+            "Cache-Control": "no-cache, no-store, max-age=0, must-revalidate",
+            "Pragma": "no-cache",
+            "Expires": "0",
+            "Strict-Transport-Security": "max-age=31536000 ; includeSubDomains",
+            "X-XSS-Protection": "1; mode=block",
+            "X-Frame-Options": "DENY",
+            "X-Content-Type-Options": "nosniff",
+            "Content-Encoding": "gzip",
+            "Vary": "Accept-Encoding",
+            "conext": {
+                "id": 1,
+                "parentEntityType": "clients",
+                "parentEntityId": 12,
+                "name": "\"Aadhaar Card\"",
+                "fileName": "aadhar card.pdf",
+                "size": 167582,
+                "type": "application/pdf",
+                "reportIdentifier": 0,
+                "tagIdentifier": 0,
+                "addedOn": "Dec 11, 2020",
+                "status": {
+                    "id": 1,
+                    "code": "INITIATED",
+                    "value": "INITIATED"
+                }
+            }
+        },
+        "response_code": 200,
+        "response_file": "borrowers_loanapplicationdata/329/Screenshot_20201202-214524_fHJdUyn.jpg"
+    }
+},
+{
+    "model": "borrowers.loanapplicationdata",
+    "pk": "e6061d56-af3c-422a-bc83-b5cf614a0f0e",
+    "fields": {
+        "created": "2021-03-16T19:01:59.371Z",
+        "modified": "2021-03-16T19:01:59.371Z",
+        "status": 1,
+        "activate_date": "2021-03-16T19:01:59.371Z",
+        "deactivate_date": null,
+        "app": "093a1cd2-75bc-4fe4-b0c5-d9e3ff58259e",
+        "lms_api": "7cd7706c-555a-4f11-ba7e-21f63e11f272",
+        "svc_api": null,
+        "request": {
+            "headers": {
+                "Fineract-Platform-TenantId": "mayafinuat",
+                "Authorization": "Bearer a72d899f-4d02-4cd2-96f8-7deb583dad0b"
+            },
+            "url": "https://mayafinuat.finflux.io/fineract-provider/api/v1/runreports/Borrower%20Info?R_loanId=329"
+        },
+        "response": {
+            "columnHeaders": [
+                {
+                    "columnName": "borrower_info",
+                    "columnType": "TEXT",
+                    "columnDisplayType": "TEXT",
+                    "isColumnNullable": false,
+                    "isColumnPrimaryKey": false,
+                    "columnValues": [],
+                    "visibilityCriteria": []
+                }
+            ],
+            "data": [
+                {
+                    "row": [
+                        "{\"partner_loan_id\":\"\",\n   \"partner_borrower_id\":\"\",\n   \"kudos_loan_id\":\"\",\n   \"kudos_borrower_id\":\"\",\n    \"loan_app_date\":\"2021-03-09\",\n   \"age\":\"42\",\n   \"marital_status\":\"Married\",    \n   \"sanction_amount\":\"50000.000000\",\n   \"cgst_on_pf_amt\":\"45.0000\",\n   \"sgst_on_pf_amt\":\"45.0000\",\n   \"igst_on_pf_amt\":\"0\",\n\"repayment_type\":\"Month\",\n   \"insurance_amt\":\"\",\n   \"stamp_charges\":\"\",\n   \"pre_emi_interest\":\"\",\n   \"first_inst_date\":\"2021-04-17\",\n   \"disburse_date\":\"2021-03-17\",\n   \"foir\":\"\",\n   \"total_charges\":\"590.0000000000\",\n    \"net_disbur_amt\":\"49410.0000000000\",\n   \"final_approved_by\":\"Akshatha M\",\n   \"final_approve_date\":\"2021-03-09\",  \n   \"employment_name\":\"Lets Transport\",\n   \"designation\":\"Driver Partner\",\n   \"employment_city\":\"Panjim\",\n   \"employment_pincode\":\"403002\",\n   \"business_name\":\"Lets Transport\",\n   \"business_type_of_addr\":\"Worklife Desk, Ground Floor, Plot 740, Phase 5, Udyog Vihar, Gurgaon - 122008\",\n   \"business_addr_ln_1\":\"Worklife Desk, Ground Floor, Plot 740, Phase 5, Udyog Vihar\",\n   \"business_city\":\"Gurgoan\",\n   \"business_state\":\"New Delhi\",\n   \"business_pincode\":\"122008\",\n   \"bureau_name\":\"CIBIL\",\n   \"monthly_income_of_the_borro\":\"\",\n   \"annual_income_of_the_borro\":\"\",}"
+                    ]
+                }
+            ]
+        },
+        "response_code": 200,
+        "response_file": ""
+    }
+},
+{
+    "model": "borrowers.loanapplicationdata",
+    "pk": "eef1b6e8-6533-43c4-86c0-fbf711a103a4",
+    "fields": {
+        "created": "2021-03-16T19:02:08.072Z",
+        "modified": "2021-03-16T19:02:08.073Z",
+        "status": 1,
+        "activate_date": "2021-03-16T19:02:08.072Z",
+        "deactivate_date": null,
+        "app": "093a1cd2-75bc-4fe4-b0c5-d9e3ff58259e",
+        "lms_api": "bf2f2707-cf50-4e34-9b6b-b12f7526153d",
+        "svc_api": null,
+        "request": {
+            "headers": {
+                "Fineract-Platform-TenantId": "mayafinuat",
+                "Authorization": "Bearer a72d899f-4d02-4cd2-96f8-7deb583dad0b"
+            },
+            "url": "https://mayafinuat.finflux.io/fineract-provider/api/v1/clients/12/documents/30/attachment"
+        },
+        "response": {
+            "Date": "Tue, 16 Mar 2021 19:02:06 GMT",
+            "Content-Type": "image/jpeg",
+            "Transfer-Encoding": "chunked",
+            "Connection": "keep-alive",
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+            "Content-Disposition": "attachment; filename=\"Screenshot_20201202-214524.jpg\"",
+            "Cache-Control": "no-cache, no-store, max-age=0, must-revalidate",
+            "Pragma": "no-cache",
+            "Expires": "0",
+            "Strict-Transport-Security": "max-age=31536000 ; includeSubDomains",
+            "X-XSS-Protection": "1; mode=block",
+            "X-Frame-Options": "DENY",
+            "X-Content-Type-Options": "nosniff",
+            "Content-Encoding": "gzip",
+            "Vary": "Accept-Encoding",
+            "conext": {
+                "id": 438,
+                "parentEntityType": "clients",
+                "parentEntityId": 12,
+                "name": "Aadhaar Front",
+                "fileName": "Screenshot 2021-01-09 at 12.24.28 PM.png",
+                "size": 524103,
+                "type": "image/png",
+                "description": "zzdasd",
+                "reportIdentifier": 0,
+                "tagIdentifier": 0,
+                "addedOn": "Jan 12, 2021",
+                "status": {
+                    "id": 1,
+                    "code": "INITIATED",
+                    "value": "INITIATED"
+                }
+            }
+        },
+        "response_code": 200,
+        "response_file": "borrowers_loanapplicationdata/329/Screenshot_20201202-214524_qX9uzJs.jpg"
     }
 },
 {
@@ -273,16 +796,22 @@
     "pk": "0262fab4-0f8a-4037-89f4-71ca10010db1",
     "fields": {
         "created": "2021-03-11T08:41:49.963Z",
-        "modified": "2021-03-11T18:16:17.687Z",
+        "modified": "2021-03-15T10:09:20.141Z",
         "status": 1,
         "activate_date": "2021-03-11T08:41:49.961Z",
         "deactivate_date": null,
         "base_url": "https://stagingplatformapi.kudosfinance.in/v3/api",
-        "api_key": null,
+        "api_key": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjb21wYW55X2lkIjoxNDYsImNvbXBhbnlfY29kZSI6Ik1BWTAxMzciLCJwcm9kdWN0X2lkIjoyNDksImxvYW5fc2NoZW1hX2lkIjoiMjY3IiwiY3JlZGl0X3J1bGVfZ3JpZF9pZCI6bnVsbCwiYXV0b21hdGljX2NoZWNrX2NyZWRpdCI6MCwidHlwZSI6ImFwaSIsInRva2VuX2lkIjoiMTQ2LTI0OS0xNjA5NzY1ODUyMjkxIiwiZW52aXJvbm1lbnQiOiJzYW5kYm94IiwiaWF0IjoxNjA5NzY1ODUyfQ.NCEQ44S3ployLB-SHoPRGNZM9VmPI0XJiInO5GXZw0s",
         "username": null,
         "password": null,
-        "jwt_obtain": null,
-        "jwt_refresh": null,
+        "params": {},
+        "headers": {
+            "company_code": "MAY0137"
+        },
+        "body": {},
+        "oauth_url": null,
+        "oauth_headers": {},
+        "oauth_body": {},
         "name": "Kudos",
         "code": "KU"
     }
@@ -292,16 +821,57 @@
     "pk": "037afaa7-1b11-4d8e-8b9d-b1c17d8d2cb7",
     "fields": {
         "created": "2021-03-11T08:42:12.153Z",
-        "modified": "2021-03-11T18:16:17.689Z",
+        "modified": "2021-03-16T06:19:29.348Z",
         "status": 1,
         "activate_date": "2021-03-11T08:42:12.147Z",
         "deactivate_date": null,
-        "name": "Loan Request",
+        "name": "LoanRequest",
         "path": "/loanrequest",
         "params": {},
-        "body": {},
+        "headers": {},
+        "body": [
+            {
+                "partner_loan_id": "{{cp.code}}_{{lms_api.LoanRequest.data.0.row.0|to_python:'partner_loan_id'}}",
+                "partner_borrower_id": "{{cp.code}}_{{lms_api.LoanRequest.data.0.row.0|to_python:'partner_borrower_id'}}",
+                "first_name": "{{lms_api.LoanRequest.data.0.row.0|to_python:'first_name'}}",
+                "last_name": "{{lms_api.LoanRequest.data.0.row.0|to_python:'last_name'}}",
+                "type_of_addr": "{{lms_api.LoanRequest.data.0.row.0|to_python:'type_of_addr'}}",
+                "resi_addr_ln1": "{{lms_api.LoanRequest.data.0.row.0|to_python:'resi_addr_ln1'}}",
+                "city": "{{lms_api.LoanRequest.data.0.row.0|to_python:'city'}}",
+                "state": "{{lms_api.LoanRequest.data.0.row.0|to_python:'state'}}",
+                "pincode": "{{lms_api.LoanRequest.data.0.row.0|to_python:'pincode'}}",
+                "per_addr_ln1": "{{lms_api.LoanRequest.data.0.row.0|to_python:'resi_addr_ln1'}}",
+                "per_city": "{{lms_api.LoanRequest.data.0.row.0|to_python:'city'}}",
+                "per_state": "{{lms_api.LoanRequest.data.0.row.0|to_python:'state'}}",
+                "per_pincode": "{{lms_api.LoanRequest.data.0.row.0|to_python:'pincode'}}",
+                "appl_phone": "{{lms_api.LoanRequest.data.0.row.0|to_python:'appl_phone'}}",
+                "appl_pan": "{{lms_api.LoanRequest.data.0.row.0|to_python:'appl_pan'}}",
+                "email_id": "{{lms_api.LoanRequest.data.0.row.0|to_python:'email_id'}}",
+                "dob": "{{lms_api.LoanRequest.data.0.row.0|to_python:'dob'}}",
+                "gender": "{{lms_api.LoanRequest.data.0.row.0|to_python:'gender'}}",
+                "photo_id_type": "{{lms_api.LoanRequest.data.0.row.0|to_python:'photo_id_type'}}",
+                "photo_id_num": "{{lms_api.LoanRequest.data.0.row.0|to_python:'photo_id_num'}}",
+                "addr_id_type": "{{lms_api.LoanRequest.data.0.row.0|to_python:'addr_id_type'}}",
+                "addr_id_num": "{{lms_api.LoanRequest.data.0.row.0|to_python:'addr_id_num'}}",
+                "total_experience": "{{lms_api.LoanRequest.data.0.row.0|to_python:'total_experience'|default_if_blank:'0'}}",
+                "cibil_score_borro": "{{lms_api.LoanRequest.data.0.row.0|to_python:'cibil_score_borro'|default_if_blank:'0'}}",
+                "purpose_of_loan": "{{lms_api.LoanRequest.data.0.row.0|to_python:'purpose_of_loan'}}",
+                "borro_bank_name": "{{lms_api.LoanRequest.data.0.row.0|to_python:'borro_bank_name'}}",
+                "borro_bank_acc_num": "{{lms_api.LoanRequest.data.0.row.0|to_python:'borro_bank_acc_num'}}",
+                "applied_amount": "{{lms_api.LoanRequest.data.0.row.0|to_python:'applied_amount'}}",
+                "int_rate_reducing_perc": "{{lms_api.LoanRequest.data.0.row.0|to_python:'int_rate_reducing_perc'}}",
+                "loan_tenure": "{{lms_api.LoanRequest.data.0.row.0|to_python:'loan_tenure'}}",
+                "emi_amt": "{{lms_api.LoanRequest.data.0.row.0|to_python|calculate_emi}}",
+                "processing_fees_perc": "{{lms_api.LoanRequest.data.0.row.0|to_python:'processing_fees_perc'}}",
+                "processing_fees_amt": "{{lms_api.LoanRequest.data.0.row.0|to_python:'partner'}}",
+                "borro_bank_ifsc": "{{lms_api.LoanRequest.data.0.row.0|to_python:'borro_bank_ifsc'}}",
+                "partner_system_score": "{{lms_api.LoanRequest.data.0.row.0|to_python:'partner_system_score'|default_if_blank:'0'}}"
+            }
+        ],
+        "iterable": false,
+        "iterable_data": "[]",
         "method": "POST",
-        "auth_scheme": "Token",
+        "auth_scheme": "Bearer",
         "priority": 1,
         "lender": "0262fab4-0f8a-4037-89f4-71ca10010db1"
     }
@@ -311,16 +881,41 @@
     "pk": "230c598a-4d29-47ce-9022-920612370fb8",
     "fields": {
         "created": "2021-03-11T10:02:07.173Z",
-        "modified": "2021-03-11T18:16:17.691Z",
+        "modified": "2021-03-16T08:47:28.020Z",
         "status": 1,
         "activate_date": "2021-03-11T10:02:07.173Z",
         "deactivate_date": null,
-        "name": "Repayment Schedule",
+        "name": "RepaymentSchedule",
         "path": "/repaymentschedule",
         "params": {},
-        "body": {},
+        "headers": {},
+        "body": [
+            {
+                "partner_loan_id": "{{lender_api.LoanRequest.data.preparedbiTmpl.0.partner_loan_id}}",
+                "partner_borrower_id": "{{lender_api.LoanRequest.data.preparedbiTmpl.0.partner_borrower_id}}",
+                "kudos_loan_id": "{lender_api.LoanRequest.data.preparedbiTmpl.0.kudos_loan_id}}",
+                "kudos_borrower_id": "{{lender_api.LoanRequest.data.preparedbiTmpl.0.kudos_borrower_id}}",
+                "sanction_amount": "{{lms_api.RepaymentSchedule.data.0.row.0|to_python:'sanction_amount'|default_if_blank:'0'}}",
+                "net_disbur_amt": "{{lms_api.RepaymentSchedule.data.0.row.0|to_python:'net_disbur_amt'|default_if_blank:'0'}}",
+                "int_type": "{{lms_api.RepaymentSchedule.data.0.row.0|to_python:'int_type'}}",
+                "intr_rate": "{{lms_api.RepaymentSchedule.data.0.row.0|to_python:'intr_rate'|default_if_blank:'0'}}",
+                "emi_count": "{{lms_api.RepaymentSchedule.data.0.row.0|to_python:'emi_count'|default_if_blank:'0'}}",
+                "repayment_type": "{{lms_api.RepaymentSchedule.data.0.row.0|to_python:'repayment_type'}}",
+                "first_inst_date": "{{lms_api.RepaymentSchedule.data.0.row.0|to_python:'first_inst_date'}}",
+                "disburse_date": "{{lms_api.RepaymentSchedule.data.0.row.0|to_python:'disburse_date'}}",
+                "pro_fee_amt": "{{lms_api.RepaymentSchedule.data.0.row.0|to_python:'pro_fee_amt'|default_if_blank:'0'}}",
+                "insurance_amt": "{{lms_api.RepaymentSchedule.data.0.row.0|to_python:'insurance_amt'|default_if_blank:'0'}}",
+                "app_charges": "{{lms_api.RepaymentSchedule.data.0.row.0|to_python:'app_charges'|default_if_blank:'0'}}",
+                "stamp_charges": "{{lms_api.RepaymentSchedule.data.0.row.0|to_python:'stamp_charges'|default_if_blank:'0'}}",
+                "pre_emi_interest": "{{lms_api.RepaymentSchedule.data.0.row.0|to_python:'pre_emi_interest'|default_if_blank:'0'}}",
+                "total_charges": "{{lms_api.RepaymentSchedule.data.0.row.0|to_python:'total_charges'|default_if_blank:'0'}}",
+                "advance_emi": "{{lms_api.RepaymentSchedule.data.0.row.0|to_python:'advance_emi'|default_if_blank:'0'}}"
+            }
+        ],
+        "iterable": false,
+        "iterable_data": "[]",
         "method": "POST",
-        "auth_scheme": "Token",
+        "auth_scheme": "Bearer",
         "priority": 3,
         "lender": "0262fab4-0f8a-4037-89f4-71ca10010db1"
     }
@@ -330,16 +925,54 @@
     "pk": "4efcb308-421d-4f39-bd8c-61a6adb952e4",
     "fields": {
         "created": "2021-03-11T10:02:07.157Z",
-        "modified": "2021-03-11T18:16:17.690Z",
+        "modified": "2021-03-16T08:36:29.499Z",
         "status": 1,
         "activate_date": "2021-03-11T10:02:07.156Z",
         "deactivate_date": null,
-        "name": "Borrower Info",
+        "name": "BorrowerInfo",
         "path": "/borrowerinfo",
         "params": {},
-        "body": {},
+        "headers": {},
+        "body": [
+            {
+                "partner_loan_id": "{{lender_api.LoanRequest.data.preparedbiTmpl.0.partner_loan_id}}",
+                "partner_borrower_id": "{{lender_api.LoanRequest.data.preparedbiTmpl.0.partner_borrower_id}}",
+                "kudos_loan_id": "{{lender_api.LoanRequest.data.preparedbiTmpl.0.kudos_loan_id}}",
+                "kudos_borrower_id": "{{lender_api.LoanRequest.data.preparedbiTmpl.0.kudos_borrower_id}}",
+                "loan_app_date": "{{lms_api.BorrowerInfo.data.0.row.0|to_python:'loan_app_date'}}",
+                "age": "{{lms_api.BorrowerInfo.data.0.row.0|to_python:'age'}}",
+                "marital_status": "{{lms_api.BorrowerInfo.data.0.row.0|to_python:'marital_status'}}",
+                "sanction_amount": "{{lms_api.BorrowerInfo.data.0.row.0|to_python:'sanction_amount'|default_if_blank:'0'}}",
+                "cgst_on_pf_amt": "{{lms_api.BorrowerInfo.data.0.row.0|to_python:'cgst_on_pf_amt'|default_if_blank:'0'}}",
+                "sgst_on_pf_amt": "{{lms_api.BorrowerInfo.data.0.row.0|to_python:'sgst_on_pf_amt'|default_if_blank:'0'}}",
+                "igst_on_pf_amt": "{{lms_api.BorrowerInfo.data.0.row.0|to_python:'igst_on_pf_amt'|default_if_blank:'0'}}",
+                "repayment_type": "{{lms_api.BorrowerInfo.data.0.row.0|to_python:'repayment_type'}}",
+                "insurance_amt": "{{lms_api.BorrowerInfo.data.0.row.0|to_python:'insurance_amt'|default_if_blank:'0'}}",
+                "stamp_charges": "{{lms_api.BorrowerInfo.data.0.row.0|to_python:'stamp_charges'|default_if_blank:'0'}}",
+                "pre_emi_interest": "{{lms_api.BorrowerInfo.data.0.row.0|to_python:'pre_emi_interest'|default_if_blank:'0'}}",
+                "first_inst_date": "{{lms_api.BorrowerInfo.data.0.row.0|to_python:'first_inst_date'}}",
+                "disburse_date": "{{lms_api.BorrowerInfo.data.0.row.0|to_python:'disburse_date'}}",
+                "foir": "{{lms_api.BorrowerInfo.data.0.row.0|to_python:'foir'}}",
+                "total_charges": "{{lms_api.BorrowerInfo.data.0.row.0|to_python:'total_charges'}}",
+                "net_disbur_amt": "{{lms_api.BorrowerInfo.data.0.row.0|to_python:'net_disbur_amt'|default_if_blank:'0'}}",
+                "final_approve_status": "{{lms_api.BorrowerInfo.data.0.row.0|to_python:'final_approve_status'|default_if_blank:'Approved'}}",
+                "final_approved_by": "{{lms_api.BorrowerInfo.data.0.row.0|to_python:'final_approved_by'}}",
+                "final_approve_date": "{{lms_api.BorrowerInfo.data.0.row.0|to_python:'final_approve_date'}}",
+                "employment_name": "{{lms_api.BorrowerInfo.data.0.row.0|to_python:'employment_name'}}",
+                "designation": "{{lms_api.BorrowerInfo.data.0.row.0|to_python:'designation'}}",
+                "employment_city": "{{lms_api.BorrowerInfo.data.0.row.0|to_python:'employment_city'}}",
+                "employment_pincode": "{{lms_api.BorrowerInfo.data.0.row.0|to_python:'employment_pincode'}}",
+                "employment_addr_ln_1": "{{lms_api.BorrowerInfo.data.0.row.0|to_python:'business_addr_ln_1'}}",
+                "employment_state": "{{lms_api.BorrowerInfo.data.0.row.0|to_python:'business_state'}}",
+                "bureau_name": "{{lms_api.BorrowerInfo.data.0.row.0|to_python:'bureau_name'}}",
+                "monthly_income_of_the_borro": "{{lms_api.BorrowerInfo.data.0.row.0|to_python:'monthly_income_of_the_borro'|default_if_blank:'0'}}",
+                "annual_income_of_the_borro": "{{lms_api.BorrowerInfo.data.0.row.0|to_python:'annual_income_of_the_borro'|default_if_blank:'0'}}"
+            }
+        ],
+        "iterable": false,
+        "iterable_data": "[]",
         "method": "POST",
-        "auth_scheme": "Token",
+        "auth_scheme": "Bearer",
         "priority": 2,
         "lender": "0262fab4-0f8a-4037-89f4-71ca10010db1"
     }
@@ -349,49 +982,743 @@
     "pk": "9c0ad848-6fdd-4bfd-8560-ab3b5868e498",
     "fields": {
         "created": "2021-03-11T10:02:07.180Z",
-        "modified": "2021-03-11T18:16:17.692Z",
-        "status": 1,
+        "modified": "2021-03-15T10:18:40.937Z",
+        "status": 0,
         "activate_date": "2021-03-11T10:02:07.179Z",
         "deactivate_date": null,
         "name": "Loan Document",
         "path": "/loandocument",
         "params": {},
+        "headers": {},
         "body": {},
+        "iterable": false,
+        "iterable_data": "[]",
         "method": "POST",
-        "auth_scheme": "Token",
+        "auth_scheme": "Bearer",
         "priority": 4,
         "lender": "0262fab4-0f8a-4037-89f4-71ca10010db1"
     }
 },
 {
     "model": "lenders.loan",
-    "pk": "07e5e447-3e57-4088-9df4-1d523da4f4c2",
+    "pk": "2276ec2c-5b0d-42d5-b2d1-c13e24a386e9",
     "fields": {
-        "created": "2021-03-11T08:44:40.794Z",
-        "modified": "2021-03-11T08:44:40.794Z",
+        "created": "2021-03-15T12:11:46.318Z",
+        "modified": "2021-03-15T12:11:46.318Z",
         "status": 1,
-        "activate_date": "2021-03-11T08:44:40.790Z",
+        "activate_date": "2021-03-15T12:11:46.318Z",
         "deactivate_date": null,
-        "app": "a2fe0599-e562-474f-98fe-0fdba0593b57",
+        "app": "093a1cd2-75bc-4fe4-b0c5-d9e3ff58259e",
         "lender": "0262fab4-0f8a-4037-89f4-71ca10010db1",
         "loanid": null
     }
 },
 {
     "model": "lenders.loandata",
-    "pk": "d11b6ba1-12b1-48d7-afc3-0d722c0a4007",
+    "pk": "06a861a9-be55-407e-8b11-3c947a2d982e",
     "fields": {
-        "created": "2021-03-11T15:03:00.846Z",
-        "modified": "2021-03-11T15:31:56.717Z",
+        "created": "2021-03-16T08:46:29.412Z",
+        "modified": "2021-03-16T08:46:29.412Z",
         "status": 1,
-        "activate_date": "2021-03-11T15:03:00.846Z",
+        "activate_date": "2021-03-16T08:46:29.411Z",
         "deactivate_date": null,
-        "loan": "07e5e447-3e57-4088-9df4-1d523da4f4c2",
-        "app": "a2fe0599-e562-474f-98fe-0fdba0593b57",
-        "lender_api": "9c0ad848-6fdd-4bfd-8560-ab3b5868e498",
-        "request": {},
-        "response": {},
-        "response_code": null
+        "loan": "2276ec2c-5b0d-42d5-b2d1-c13e24a386e9",
+        "app": "093a1cd2-75bc-4fe4-b0c5-d9e3ff58259e",
+        "lender_api": "230c598a-4d29-47ce-9022-920612370fb8",
+        "request": {
+            "headers": {
+                "company_code": "MAY0137",
+                "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjb21wYW55X2lkIjoxNDYsImNvbXBhbnlfY29kZSI6Ik1BWTAxMzciLCJwcm9kdWN0X2lkIjoyNDksImxvYW5fc2NoZW1hX2lkIjoiMjY3IiwiY3JlZGl0X3J1bGVfZ3JpZF9pZCI6bnVsbCwiYXV0b21hdGljX2NoZWNrX2NyZWRpdCI6MCwidHlwZSI6ImFwaSIsInRva2VuX2lkIjoiMTQ2LTI0OS0xNjA5NzY1ODUyMjkxIiwiZW52aXJvbm1lbnQiOiJzYW5kYm94IiwiaWF0IjoxNjA5NzY1ODUyfQ.NCEQ44S3ployLB-SHoPRGNZM9VmPI0XJiInO5GXZw0s"
+            },
+            "json": [
+                {
+                    "partner_loan_id": "LT_329",
+                    "partner_borrower_id": "LT_-",
+                    "kudos_loan_id": "{lender_api.LoanRequest.data.preparedbiTmpl.0.kudos_loan_id}}",
+                    "kudos_borrower_id": "ABCDEKFIPM",
+                    "sanction_amount": "50000.000000",
+                    "net_disbur_amt": "49500.0000000000",
+                    "int_type": "Declining Balance",
+                    "intr_rate": "26.000000",
+                    "emi_count": "12",
+                    "repayment_type": "1 Month",
+                    "first_inst_date": "",
+                    "disburse_date": "",
+                    "pro_fee_amt": "0",
+                    "insurance_amt": "0",
+                    "app_charges": "0",
+                    "stamp_charges": " ",
+                    "pre_emi_interest": "0",
+                    "total_charges": "0",
+                    "advance_emi": "0"
+                }
+            ]
+        },
+        "response": {
+            "message": "Few fields have invalid data",
+            "errorCode": "02",
+            "data": {
+                "exactErrorRows": [
+                    {
+                        "first_inst_date": "Please fill in EMI start date in correct format (YYYY-MM-DD).",
+                        "disburse_date": "Please fill in disbursement date in correct format (YYYY-MM-DD).",
+                        "stamp_charges": "Please fill in stamp charges in correct format."
+                    }
+                ],
+                "errorRows": [
+                    {
+                        "partner_loan_id": "LT_329",
+                        "partner_borrower_id": "LT_-",
+                        "kudos_loan_id": "{lender_api.LoanRequest.data.preparedbiTmpl.0.kudos_loan_id}}",
+                        "kudos_borrower_id": "ABCDEKFIPM",
+                        "sanction_amount": "50000.000000",
+                        "net_disbur_amt": "49500.0000000000",
+                        "int_type": "Declining Balance",
+                        "intr_rate": "26.000000",
+                        "emi_count": "12",
+                        "repayment_type": "1 Month",
+                        "first_inst_date": "Please fill in EMI start date in correct format (YYYY-MM-DD).",
+                        "disburse_date": "Please fill in disbursement date in correct format (YYYY-MM-DD).",
+                        "pro_fee_amt": "0",
+                        "insurance_amt": "0",
+                        "app_charges": "0",
+                        "stamp_charges": "Please fill in stamp charges in correct format.",
+                        "pre_emi_interest": "0",
+                        "total_charges": "0",
+                        "advance_emi": "0"
+                    }
+                ]
+            }
+        },
+        "response_code": 400
+    }
+},
+{
+    "model": "lenders.loandata",
+    "pk": "13985b80-2d06-4f09-9d92-358a54a0d8eb",
+    "fields": {
+        "created": "2021-03-16T08:35:51.403Z",
+        "modified": "2021-03-16T08:35:51.403Z",
+        "status": 1,
+        "activate_date": "2021-03-16T08:35:51.402Z",
+        "deactivate_date": null,
+        "loan": "2276ec2c-5b0d-42d5-b2d1-c13e24a386e9",
+        "app": "093a1cd2-75bc-4fe4-b0c5-d9e3ff58259e",
+        "lender_api": "4efcb308-421d-4f39-bd8c-61a6adb952e4",
+        "request": {
+            "headers": {
+                "company_code": "MAY0137",
+                "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjb21wYW55X2lkIjoxNDYsImNvbXBhbnlfY29kZSI6Ik1BWTAxMzciLCJwcm9kdWN0X2lkIjoyNDksImxvYW5fc2NoZW1hX2lkIjoiMjY3IiwiY3JlZGl0X3J1bGVfZ3JpZF9pZCI6bnVsbCwiYXV0b21hdGljX2NoZWNrX2NyZWRpdCI6MCwidHlwZSI6ImFwaSIsInRva2VuX2lkIjoiMTQ2LTI0OS0xNjA5NzY1ODUyMjkxIiwiZW52aXJvbm1lbnQiOiJzYW5kYm94IiwiaWF0IjoxNjA5NzY1ODUyfQ.NCEQ44S3ployLB-SHoPRGNZM9VmPI0XJiInO5GXZw0s"
+            },
+            "json": [
+                {
+                    "partner_loan_id": "LT_329",
+                    "partner_borrower_id": "LT_-",
+                    "kudos_loan_id": "9266344427229",
+                    "kudos_borrower_id": "ABCDEKFIPM",
+                    "loan_app_date": "2021-03-09",
+                    "age": "27",
+                    "marital_status": "Married",
+                    "sanction_amount": "22500.0000",
+                    "cgst_on_pf_amt": "22500.0000",
+                    "sgst_on_pf_amt": "0",
+                    "igst_on_pf_amt": "0",
+                    "repayment_type": "Month",
+                    "insurance_amt": "0",
+                    "stamp_charges": "0",
+                    "pre_emi_interest": "0",
+                    "first_inst_date": "2021-04-15",
+                    "disburse_date": "2021-03-15",
+                    "foir": "",
+                    "total_charges": "295000.0000000000000000",
+                    "net_disbur_amt": "4500.0000000000",
+                    "final_approve_status": "Approved",
+                    "final_approved_by": "Akshatha M",
+                    "final_approve_date": "2021-03-09",
+                    "employment_name": "Lets Transport",
+                    "designation": "Driver Partner",
+                    "employment_city": "Bangalore",
+                    "employment_pincode": "560091",
+                    "employment_addr_ln_1": "Worklife Desk, Ground Floor, Plot 740, Phase 5, Udyog Vihar",
+                    "employment_state": "New Delhi",
+                    "bureau_name": "CIBIL",
+                    "monthly_income_of_the_borro": "",
+                    "annual_income_of_the_borro": ""
+                }
+            ]
+        },
+        "response": {
+            "message": "Few fields have invalid data",
+            "errorCode": "02",
+            "data": {
+                "exactErrorRows": [
+                    {
+                        "monthly_income_of_the_borro": "Please fill in Monthly income of the borrower in correct format",
+                        "annual_income_of_the_borro": "Please fill in Annual income of the borrower in correct format"
+                    }
+                ],
+                "errorRows": [
+                    {
+                        "partner_loan_id": "LT_329",
+                        "partner_borrower_id": "LT_-",
+                        "kudos_loan_id": "9266344427229",
+                        "kudos_borrower_id": "ABCDEKFIPM",
+                        "loan_app_date": "2021-03-09",
+                        "age": "27",
+                        "marital_status": "Married",
+                        "sanction_amount": "22500.0000",
+                        "cgst_on_pf_amt": "22500.0000",
+                        "sgst_on_pf_amt": "0",
+                        "igst_on_pf_amt": "0",
+                        "repayment_type": "Month",
+                        "insurance_amt": "0",
+                        "stamp_charges": "0",
+                        "pre_emi_interest": "0",
+                        "first_inst_date": "2021-04-15",
+                        "disburse_date": "2021-03-15",
+                        "foir": "",
+                        "total_charges": "295000.0000000000000000",
+                        "net_disbur_amt": "4500.0000000000",
+                        "final_approve_status": "Approved",
+                        "final_approved_by": "Akshatha M",
+                        "final_approve_date": "2021-03-09",
+                        "employment_name": "Lets Transport",
+                        "designation": "Driver Partner",
+                        "employment_city": "Bangalore",
+                        "employment_pincode": "560091",
+                        "employment_addr_ln_1": "Worklife Desk, Ground Floor, Plot 740, Phase 5, Udyog Vihar",
+                        "employment_state": "New Delhi",
+                        "bureau_name": "CIBIL",
+                        "monthly_income_of_the_borro": "Please fill in Monthly income of the borrower in correct format",
+                        "annual_income_of_the_borro": "Please fill in Annual income of the borrower in correct format"
+                    }
+                ]
+            }
+        },
+        "response_code": 400
+    }
+},
+{
+    "model": "lenders.loandata",
+    "pk": "1ce869bc-cab7-4f6f-a687-bc38816f50c3",
+    "fields": {
+        "created": "2021-03-16T08:36:35.988Z",
+        "modified": "2021-03-16T08:36:35.988Z",
+        "status": 1,
+        "activate_date": "2021-03-16T08:36:35.988Z",
+        "deactivate_date": null,
+        "loan": "2276ec2c-5b0d-42d5-b2d1-c13e24a386e9",
+        "app": "093a1cd2-75bc-4fe4-b0c5-d9e3ff58259e",
+        "lender_api": "4efcb308-421d-4f39-bd8c-61a6adb952e4",
+        "request": {
+            "headers": {
+                "company_code": "MAY0137",
+                "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjb21wYW55X2lkIjoxNDYsImNvbXBhbnlfY29kZSI6Ik1BWTAxMzciLCJwcm9kdWN0X2lkIjoyNDksImxvYW5fc2NoZW1hX2lkIjoiMjY3IiwiY3JlZGl0X3J1bGVfZ3JpZF9pZCI6bnVsbCwiYXV0b21hdGljX2NoZWNrX2NyZWRpdCI6MCwidHlwZSI6ImFwaSIsInRva2VuX2lkIjoiMTQ2LTI0OS0xNjA5NzY1ODUyMjkxIiwiZW52aXJvbm1lbnQiOiJzYW5kYm94IiwiaWF0IjoxNjA5NzY1ODUyfQ.NCEQ44S3ployLB-SHoPRGNZM9VmPI0XJiInO5GXZw0s"
+            },
+            "json": [
+                {
+                    "partner_loan_id": "LT_329",
+                    "partner_borrower_id": "LT_-",
+                    "kudos_loan_id": "9266344427229",
+                    "kudos_borrower_id": "ABCDEKFIPM",
+                    "loan_app_date": "2021-03-09",
+                    "age": "27",
+                    "marital_status": "Married",
+                    "sanction_amount": "22500.0000",
+                    "cgst_on_pf_amt": "22500.0000",
+                    "sgst_on_pf_amt": "0",
+                    "igst_on_pf_amt": "0",
+                    "repayment_type": "Month",
+                    "insurance_amt": "0",
+                    "stamp_charges": "0",
+                    "pre_emi_interest": "0",
+                    "first_inst_date": "2021-04-15",
+                    "disburse_date": "2021-03-15",
+                    "foir": "",
+                    "total_charges": "295000.0000000000000000",
+                    "net_disbur_amt": "4500.0000000000",
+                    "final_approve_status": "Approved",
+                    "final_approved_by": "Akshatha M",
+                    "final_approve_date": "2021-03-09",
+                    "employment_name": "Lets Transport",
+                    "designation": "Driver Partner",
+                    "employment_city": "Bangalore",
+                    "employment_pincode": "560091",
+                    "employment_addr_ln_1": "Worklife Desk, Ground Floor, Plot 740, Phase 5, Udyog Vihar",
+                    "employment_state": "New Delhi",
+                    "bureau_name": "CIBIL",
+                    "monthly_income_of_the_borro": "0",
+                    "annual_income_of_the_borro": "0"
+                }
+            ]
+        },
+        "response": {
+            "data": {
+                "preparedRepaySchTmpl": [
+                    {
+                        "partner_loan_id": "LT_329",
+                        "partner_borrower_id": "LT_-",
+                        "kudos_loan_id": "9266344427229",
+                        "kudos_borrower_id": "ABCDEKFIPM",
+                        "sanction_amount": "22500.0000",
+                        "net_disbur_amt": "4500.0000000000",
+                        "int_type": "",
+                        "intr_rate": "",
+                        "emi_count": "",
+                        "repayment_type": "Month",
+                        "first_inst_date": "2021-04-15T00:00:00.000Z",
+                        "disburse_date": "2021-03-15T00:00:00.000Z",
+                        "pro_fee_amt": "",
+                        "insurance_amt": "0",
+                        "app_charges": "",
+                        "stamp_charges": "0",
+                        "pre_emi_interest": "0",
+                        "total_charges": "295000.0000000000000000",
+                        "advance_emi": ""
+                    }
+                ]
+            }
+        },
+        "response_code": 200
+    }
+},
+{
+    "model": "lenders.loandata",
+    "pk": "6e069947-1d94-4fd9-844b-3e91fdc7256f",
+    "fields": {
+        "created": "2021-03-16T08:27:01.843Z",
+        "modified": "2021-03-16T08:27:01.843Z",
+        "status": 1,
+        "activate_date": "2021-03-16T08:27:01.843Z",
+        "deactivate_date": null,
+        "loan": "2276ec2c-5b0d-42d5-b2d1-c13e24a386e9",
+        "app": "093a1cd2-75bc-4fe4-b0c5-d9e3ff58259e",
+        "lender_api": "4efcb308-421d-4f39-bd8c-61a6adb952e4",
+        "request": {
+            "headers": {
+                "company_code": "MAY0137",
+                "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjb21wYW55X2lkIjoxNDYsImNvbXBhbnlfY29kZSI6Ik1BWTAxMzciLCJwcm9kdWN0X2lkIjoyNDksImxvYW5fc2NoZW1hX2lkIjoiMjY3IiwiY3JlZGl0X3J1bGVfZ3JpZF9pZCI6bnVsbCwiYXV0b21hdGljX2NoZWNrX2NyZWRpdCI6MCwidHlwZSI6ImFwaSIsInRva2VuX2lkIjoiMTQ2LTI0OS0xNjA5NzY1ODUyMjkxIiwiZW52aXJvbm1lbnQiOiJzYW5kYm94IiwiaWF0IjoxNjA5NzY1ODUyfQ.NCEQ44S3ployLB-SHoPRGNZM9VmPI0XJiInO5GXZw0s"
+            },
+            "json": [
+                {
+                    "partner_loan_id": "LT_329",
+                    "partner_borrower_id": "LT_-",
+                    "kudos_loan_id": "9266344427229",
+                    "kudos_borrower_id": "ABCDEKFIPM",
+                    "loan_app_date": "2021-03-09",
+                    "age": "27",
+                    "marital_status": "Married",
+                    "sanction_amount": "22500.0000",
+                    "cgst_on_pf_amt": "22500.0000",
+                    "sgst_on_pf_amt": "0",
+                    "igst_on_pf_amt": "0",
+                    "repayment_type": "Month",
+                    "insurance_amt": "0",
+                    "stamp_charges": "",
+                    "pre_emi_interest": "",
+                    "first_inst_date": "2021-04-15",
+                    "disburse_date": "2021-03-15",
+                    "foir": "",
+                    "total_charges": "295000.0000000000000000",
+                    "net_disbur_amt": "4500.0000000000",
+                    "final_approve_status": "",
+                    "final_approved_by": "Akshatha M",
+                    "final_approve_date": "2021-03-09",
+                    "employment_name": "Lets Transport",
+                    "designation": "Driver Partner",
+                    "employment_city": "Bangalore",
+                    "employment_pincode": "560091",
+                    "employment_addr_ln_1": "",
+                    "employment_state": "",
+                    "bureau_name": "CIBIL",
+                    "monthly_income_of_the_borro": "",
+                    "annual_income_of_the_borro": ""
+                }
+            ]
+        },
+        "response": {
+            "message": "Few fields have invalid data",
+            "errorCode": "02",
+            "data": {
+                "exactErrorRows": [
+                    {
+                        "stamp_charges": "Please fill in Stamp charges in correct format",
+                        "pre_emi_interest": "Please fill in Pre-EMI interest in correct format",
+                        "final_approve_status": "Please fill in Final approval status in correct format",
+                        "employment_addr_ln_1": "Please fill in Office address line 1 in correct format",
+                        "employment_state": "Please fill in Office state in correct format",
+                        "monthly_income_of_the_borro": "Please fill in Monthly income of the borrower in correct format",
+                        "annual_income_of_the_borro": "Please fill in Annual income of the borrower in correct format"
+                    }
+                ],
+                "errorRows": [
+                    {
+                        "partner_loan_id": "LT_329",
+                        "partner_borrower_id": "LT_-",
+                        "kudos_loan_id": "9266344427229",
+                        "kudos_borrower_id": "ABCDEKFIPM",
+                        "loan_app_date": "2021-03-09",
+                        "age": "27",
+                        "marital_status": "Married",
+                        "sanction_amount": "22500.0000",
+                        "cgst_on_pf_amt": "22500.0000",
+                        "sgst_on_pf_amt": "0",
+                        "igst_on_pf_amt": "0",
+                        "repayment_type": "Month",
+                        "insurance_amt": "0",
+                        "stamp_charges": "Please fill in Stamp charges in correct format",
+                        "pre_emi_interest": "Please fill in Pre-EMI interest in correct format",
+                        "first_inst_date": "2021-04-15",
+                        "disburse_date": "2021-03-15",
+                        "foir": "",
+                        "total_charges": "295000.0000000000000000",
+                        "net_disbur_amt": "4500.0000000000",
+                        "final_approve_status": "Please fill in Final approval status in correct format",
+                        "final_approved_by": "Akshatha M",
+                        "final_approve_date": "2021-03-09",
+                        "employment_name": "Lets Transport",
+                        "designation": "Driver Partner",
+                        "employment_city": "Bangalore",
+                        "employment_pincode": "560091",
+                        "employment_addr_ln_1": "Please fill in Office address line 1 in correct format",
+                        "employment_state": "Please fill in Office state in correct format",
+                        "bureau_name": "CIBIL",
+                        "monthly_income_of_the_borro": "Please fill in Monthly income of the borrower in correct format",
+                        "annual_income_of_the_borro": "Please fill in Annual income of the borrower in correct format"
+                    }
+                ]
+            }
+        },
+        "response_code": 400
+    }
+},
+{
+    "model": "lenders.loandata",
+    "pk": "76ca3f2e-4842-4c85-a478-a5bedd72e9dd",
+    "fields": {
+        "created": "2021-03-16T06:29:23.596Z",
+        "modified": "2021-03-16T06:29:23.596Z",
+        "status": 1,
+        "activate_date": "2021-03-16T06:29:23.595Z",
+        "deactivate_date": null,
+        "loan": "2276ec2c-5b0d-42d5-b2d1-c13e24a386e9",
+        "app": "093a1cd2-75bc-4fe4-b0c5-d9e3ff58259e",
+        "lender_api": "037afaa7-1b11-4d8e-8b9d-b1c17d8d2cb7",
+        "request": {
+            "headers": {
+                "company_code": "MAY0137",
+                "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjb21wYW55X2lkIjoxNDYsImNvbXBhbnlfY29kZSI6Ik1BWTAxMzciLCJwcm9kdWN0X2lkIjoyNDksImxvYW5fc2NoZW1hX2lkIjoiMjY3IiwiY3JlZGl0X3J1bGVfZ3JpZF9pZCI6bnVsbCwiYXV0b21hdGljX2NoZWNrX2NyZWRpdCI6MCwidHlwZSI6ImFwaSIsInRva2VuX2lkIjoiMTQ2LTI0OS0xNjA5NzY1ODUyMjkxIiwiZW52aXJvbm1lbnQiOiJzYW5kYm94IiwiaWF0IjoxNjA5NzY1ODUyfQ.NCEQ44S3ployLB-SHoPRGNZM9VmPI0XJiInO5GXZw0s"
+            },
+            "json": [
+                {
+                    "partner_loan_id": "LT_329",
+                    "partner_borrower_id": "LT_-",
+                    "first_name": "Ram",
+                    "last_name": "Reddy5",
+                    "type_of_addr": "Rented",
+                    "resi_addr_ln1": "Flat 2B-G1, Models Millennium Vistas, Caranzalem",
+                    "city": "Panzam",
+                    "state": "GOA",
+                    "pincode": "403002",
+                    "per_addr_ln1": "Flat 2B-G1, Models Millennium Vistas, Caranzalem",
+                    "per_city": "Panzam",
+                    "per_state": "GOA",
+                    "per_pincode": "403002",
+                    "appl_phone": "9502161157",
+                    "appl_pan": "ABCDE1234M",
+                    "email_id": "vinnie@j.com",
+                    "dob": "1993-08-11",
+                    "gender": "Male",
+                    "photo_id_type": "Aadhaar",
+                    "photo_id_num": "123078893938",
+                    "addr_id_type": "Aadhaar",
+                    "addr_id_num": "123078893938",
+                    "total_experience": "0",
+                    "cibil_score_borro": "0",
+                    "purpose_of_loan": "Business Funding",
+                    "borro_bank_name": "HDFC Bank",
+                    "borro_bank_acc_num": "5020203939366",
+                    "applied_amount": "50000.000000",
+                    "int_rate_reducing_perc": "26.000000",
+                    "loan_tenure": "12",
+                    "emi_amt": "1304024.7678018576",
+                    "processing_fees_perc": "1",
+                    "processing_fees_amt": "500.0000000000",
+                    "borro_bank_ifsc": "HDFC0004848",
+                    "partner_system_score": "0"
+                }
+            ]
+        },
+        "response": {
+            "data": {
+                "preparedbiTmpl": [
+                    {
+                        "partner_loan_id": "LT_329",
+                        "partner_borrower_id": "LT_-",
+                        "kudos_loan_id": 9266344427229,
+                        "kudos_borrower_id": "ABCDEKFIPM",
+                        "loan_app_date": "",
+                        "age": "",
+                        "marital_status": "",
+                        "sanction_amount": "",
+                        "cgst_on_pf_amt": "",
+                        "sgst_on_pf_amt": "",
+                        "igst_on_pf_amt": "",
+                        "repayment_type": "",
+                        "stamp_charges": "",
+                        "pre_emi_interest": "",
+                        "first_inst_date": "",
+                        "disburse_date": "",
+                        "total_charges": "",
+                        "net_disbur_amt": "",
+                        "final_approve_status": "",
+                        "final_approved_by": "",
+                        "final_approve_date": "",
+                        "employment_name": "",
+                        "designation": "",
+                        "employment_addr_ln_1": "",
+                        "employment_city": "",
+                        "employment_state": "",
+                        "employment_pincode": "",
+                        "bureau_name": "",
+                        "monthly_income_of_the_borro": "",
+                        "annual_income_of_the_borro": ""
+                    }
+                ]
+            }
+        },
+        "response_code": 200
+    }
+},
+{
+    "model": "lenders.loandata",
+    "pk": "77536616-c3ff-48cd-9846-22a2d999ef70",
+    "fields": {
+        "created": "2021-03-16T06:00:57.731Z",
+        "modified": "2021-03-16T06:00:57.731Z",
+        "status": 1,
+        "activate_date": "2021-03-16T06:00:57.730Z",
+        "deactivate_date": null,
+        "loan": "2276ec2c-5b0d-42d5-b2d1-c13e24a386e9",
+        "app": "093a1cd2-75bc-4fe4-b0c5-d9e3ff58259e",
+        "lender_api": "037afaa7-1b11-4d8e-8b9d-b1c17d8d2cb7",
+        "request": {
+            "headers": {
+                "company_code": "MAY0137",
+                "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjb21wYW55X2lkIjoxNDYsImNvbXBhbnlfY29kZSI6Ik1BWTAxMzciLCJwcm9kdWN0X2lkIjoyNDksImxvYW5fc2NoZW1hX2lkIjoiMjY3IiwiY3JlZGl0X3J1bGVfZ3JpZF9pZCI6bnVsbCwiYXV0b21hdGljX2NoZWNrX2NyZWRpdCI6MCwidHlwZSI6ImFwaSIsInRva2VuX2lkIjoiMTQ2LTI0OS0xNjA5NzY1ODUyMjkxIiwiZW52aXJvbm1lbnQiOiJzYW5kYm94IiwiaWF0IjoxNjA5NzY1ODUyfQ.NCEQ44S3ployLB-SHoPRGNZM9VmPI0XJiInO5GXZw0s"
+            },
+            "json": [
+                {
+                    "partner_loan_id": "LT_329",
+                    "partner_borrower_id": "LT_-",
+                    "first_name": "Ram",
+                    "last_name": "Reddy5",
+                    "type_of_addr": "Rented",
+                    "resi_addr_ln1": "Flat 2B-G1, Models Millennium Vistas, Caranzalem",
+                    "city": "Panzam",
+                    "state": "GOA",
+                    "pincode": "403002",
+                    "per_addr_ln1": "Flat 2B-G1, Models Millennium Vistas, Caranzalem",
+                    "per_city": "Panzam",
+                    "per_state": "GOA",
+                    "per_pincode": "403002",
+                    "appl_phone": "9502161157",
+                    "appl_pan": "ABCDE1234M",
+                    "email_id": "vinnie@j.com",
+                    "dob": "1993-08-11",
+                    "gender": "Male",
+                    "photo_id_type": "Aadhaar",
+                    "photo_id_num": "123078893938",
+                    "addr_id_type": "Aadhaar",
+                    "addr_id_num": "123078893938",
+                    "total_experience": " ",
+                    "cibil_score_borro": "",
+                    "purpose_of_loan": "Business Funding",
+                    "borro_bank_name": "HDFC Bank",
+                    "borro_bank_acc_num": "5020203939366",
+                    "applied_amount": "50000.000000",
+                    "int_rate_reducing_perc": "26.000000",
+                    "loan_tenure": "12",
+                    "emi_amt": " ",
+                    "processing_fees_perc": "1",
+                    "processing_fees_amt": "500.0000000000",
+                    "borro_bank_ifsc": "HDFC0004848",
+                    "partner_system_score": " "
+                }
+            ]
+        },
+        "response": {
+            "message": "Few fields have invalid data",
+            "errorCode": "02",
+            "data": {
+                "exactErrorRows": [
+                    {
+                        "total_experience": "Total work experience",
+                        "cibil_score_borro": "CIBIL score of the borrower",
+                        "emi_amt": "EMI amount",
+                        "partner_system_score": "Partner system score"
+                    }
+                ],
+                "errorRows": [
+                    {
+                        "partner_loan_id": "LT_329",
+                        "partner_borrower_id": "LT_-",
+                        "first_name": "Ram",
+                        "last_name": "Reddy5",
+                        "type_of_addr": "Rented",
+                        "resi_addr_ln1": "Flat 2B-G1, Models Millennium Vistas, Caranzalem",
+                        "city": "Panzam",
+                        "state": "GOA",
+                        "pincode": "403002",
+                        "per_addr_ln1": "Flat 2B-G1, Models Millennium Vistas, Caranzalem",
+                        "per_city": "Panzam",
+                        "per_state": "GOA",
+                        "per_pincode": "403002",
+                        "appl_phone": "9502161157",
+                        "appl_pan": "ABCDE1234M",
+                        "email_id": "vinnie@j.com",
+                        "dob": "1993-08-11",
+                        "gender": "Male",
+                        "photo_id_type": "Aadhaar",
+                        "photo_id_num": "123078893938",
+                        "addr_id_type": "Aadhaar",
+                        "addr_id_num": "123078893938",
+                        "total_experience": "Total work experience",
+                        "cibil_score_borro": "CIBIL score of the borrower",
+                        "purpose_of_loan": "Business Funding",
+                        "borro_bank_name": "HDFC Bank",
+                        "borro_bank_acc_num": "5020203939366",
+                        "applied_amount": "50000.000000",
+                        "int_rate_reducing_perc": "26.000000",
+                        "loan_tenure": "12",
+                        "emi_amt": "EMI amount",
+                        "processing_fees_perc": "1",
+                        "processing_fees_amt": "500.0000000000",
+                        "borro_bank_ifsc": "HDFC0004848",
+                        "partner_system_score": "Partner system score"
+                    }
+                ]
+            }
+        },
+        "response_code": 400
+    }
+},
+{
+    "model": "lenders.loandata",
+    "pk": "807edb09-9d0b-474d-af79-4a8b7768bc1e",
+    "fields": {
+        "created": "2021-03-16T05:14:39.946Z",
+        "modified": "2021-03-16T05:14:39.946Z",
+        "status": 1,
+        "activate_date": "2021-03-16T05:14:39.941Z",
+        "deactivate_date": null,
+        "loan": "2276ec2c-5b0d-42d5-b2d1-c13e24a386e9",
+        "app": "093a1cd2-75bc-4fe4-b0c5-d9e3ff58259e",
+        "lender_api": "037afaa7-1b11-4d8e-8b9d-b1c17d8d2cb7",
+        "request": {
+            "headers": {
+                "company_code": "MAY0137",
+                "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjb21wYW55X2lkIjoxNDYsImNvbXBhbnlfY29kZSI6Ik1BWTAxMzciLCJwcm9kdWN0X2lkIjoyNDksImxvYW5fc2NoZW1hX2lkIjoiMjY3IiwiY3JlZGl0X3J1bGVfZ3JpZF9pZCI6bnVsbCwiYXV0b21hdGljX2NoZWNrX2NyZWRpdCI6MCwidHlwZSI6ImFwaSIsInRva2VuX2lkIjoiMTQ2LTI0OS0xNjA5NzY1ODUyMjkxIiwiZW52aXJvbm1lbnQiOiJzYW5kYm94IiwiaWF0IjoxNjA5NzY1ODUyfQ.NCEQ44S3ployLB-SHoPRGNZM9VmPI0XJiInO5GXZw0s"
+            },
+            "json": [
+                {
+                    "partner_loan_id": "LT_329",
+                    "partner_borrower_id": "LT_-",
+                    "first_name": "Ram",
+                    "last_name": "Reddy5",
+                    "type_of_addr": "Rented",
+                    "resi_addr_ln1": "Flat 2B-G1, Models Millennium Vistas, Caranzalem",
+                    "city": "Panzam",
+                    "state": "GOA",
+                    "pincode": "403002",
+                    "per_addr_ln1": "",
+                    "per_city": "",
+                    "per_state": "",
+                    "per_pincode": "",
+                    "appl_phone": "9502161157",
+                    "appl_pan": "ABCDE1234M",
+                    "email_id": "vinnie@j.com",
+                    "dob": "1993-08-11",
+                    "gender": "Male",
+                    "photo_id_type": "Aadhaar",
+                    "photo_id_num": "123078893938",
+                    "addr_id_type": "Aadhaar",
+                    "addr_id_num": "123078893938",
+                    "total_experience": " ",
+                    "cibil_score_borro": "",
+                    "purpose_of_loan": "Business Funding",
+                    "borro_bank_name": "HDFC Bank",
+                    "borro_bank_acc_num": "5020203939366",
+                    "applied_amount": "50000.000000",
+                    "int_rate_reducing_perc": "26.000000",
+                    "loan_tenure": "12",
+                    "emi_amt": " ",
+                    "processing_fees_perc": "1",
+                    "processing_fees_amt": "",
+                    "borro_bank_ifsc": "HDFC0004848",
+                    "partner_system_score": " "
+                }
+            ]
+        },
+        "response": {
+            "message": "Few fields have invalid data",
+            "errorCode": "02",
+            "data": {
+                "exactErrorRows": [
+                    {
+                        "per_addr_ln1": "Permanent address line 1",
+                        "per_city": "Permanent City of the borrower",
+                        "per_state": "Permanent State of the borrower",
+                        "per_pincode": "Permanent Pincode of the borrower",
+                        "total_experience": "Total work experience",
+                        "cibil_score_borro": "CIBIL score of the borrower",
+                        "emi_amt": "EMI amount",
+                        "processing_fees_amt": "Processing fees on loan amount in amount",
+                        "partner_system_score": "Partner system score"
+                    }
+                ],
+                "errorRows": [
+                    {
+                        "partner_loan_id": "LT_329",
+                        "partner_borrower_id": "LT_-",
+                        "first_name": "Ram",
+                        "last_name": "Reddy5",
+                        "type_of_addr": "Rented",
+                        "resi_addr_ln1": "Flat 2B-G1, Models Millennium Vistas, Caranzalem",
+                        "city": "Panzam",
+                        "state": "GOA",
+                        "pincode": "403002",
+                        "per_addr_ln1": "Permanent address line 1",
+                        "per_city": "Permanent City of the borrower",
+                        "per_state": "Permanent State of the borrower",
+                        "per_pincode": "Permanent Pincode of the borrower",
+                        "appl_phone": "9502161157",
+                        "appl_pan": "ABCDE1234M",
+                        "email_id": "vinnie@j.com",
+                        "dob": "1993-08-11",
+                        "gender": "Male",
+                        "photo_id_type": "Aadhaar",
+                        "photo_id_num": "123078893938",
+                        "addr_id_type": "Aadhaar",
+                        "addr_id_num": "123078893938",
+                        "total_experience": "Total work experience",
+                        "cibil_score_borro": "CIBIL score of the borrower",
+                        "purpose_of_loan": "Business Funding",
+                        "borro_bank_name": "HDFC Bank",
+                        "borro_bank_acc_num": "5020203939366",
+                        "applied_amount": "50000.000000",
+                        "int_rate_reducing_perc": "26.000000",
+                        "loan_tenure": "12",
+                        "emi_amt": "EMI amount",
+                        "processing_fees_perc": "1",
+                        "processing_fees_amt": "Processing fees on loan amount in amount",
+                        "borro_bank_ifsc": "HDFC0004848",
+                        "partner_system_score": "Partner system score"
+                    }
+                ]
+            }
+        },
+        "response_code": 400
     }
 }
 ]
