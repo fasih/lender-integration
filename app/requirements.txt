@@ -1,6 +1,7 @@
 Django==3.1.7
 
 celery
+dictor
 
 django-cors-headers
 django-debug-toolbar
@@ -14,6 +15,8 @@ django-structlog
 djangorestframework
 drf_yasg2
 
+img2pdf
 jsonfield
+python-dateutil
 requests
 stringcase

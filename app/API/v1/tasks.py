@@ -1,10 +1,13 @@
 import tempfile
 import structlog as logging
 
+from collections import defaultdict
 from celery.decorators import task
 from dictor import dictor
 from django.core.files import File
+from rest_framework import status
 
+from base.models import *
 from base.utils import *
 from borrowers.models import *
 from lenders.models import *
@@ -17,9 +20,9 @@ logger = logging.getLogger(__name__)
 
 
 def fetch_from_lms(app):
-    app_data = LoanApplicationData.objects.filter(app=app,
-                        response_code__gte=200, response_code__lte=299
-                    ).select_related('lms_api', 'svc_api').order_by('created')
+    app_data = LoanApplicationData.objects.filter(is_success, app=app
+                                    ).select_related('lms_api', 'svc_api'
+                                    ).order_by('created')
 
     context = {'loanId': app.lmsid, 'lms_api': {}, 'svc_api': {}}
 
@@ -67,11 +70,22 @@ def fetch_from_lms(app):
     else:
         body = {}
 
+    continue_status = True
+    previous_priority = None
+
     for api in lms_api:
 
-        app_data = LoanApplicationData.objects.filter(app=app,
-                            response_code__gte=200, response_code__lte=299
-                        ).select_related('lms_api', 'svc_api').order_by('created')
+        if continue_status or previous_priority == None:
+            #init or continue the workflow
+            previous_priority = api.priority
+        else:
+            #break the workflow
+            break
+
+        app_data = LoanApplicationData.objects.filter(is_success, app=app,
+                                ).select_related('lms_api', 'svc_api'
+                                ).order_by('created')
+
         already_called_non_idempotent_api = False
         for each in app_data:
             if each.lms_api == api and api.method == api.METHOD.POST:
@@ -85,10 +99,27 @@ def fetch_from_lms(app):
 
         if api.iterable:
             iterable_data = dictor(context, api.iterable_data) or [{}]
-        else:
-            iterable_data = [{}]
+            iterable_filter_keys = api.iterable_filters.keys()
+            iterable_filter_data = defaultdict(list)
 
-        for each in iterable_data:
+            for item in iterable_data:
+                for k in iterable_filter_keys:
+                    if item.get(k) in api.iterable_filters[k]:
+                        key = item.get(k)
+                        if isinstance(api.iterable_filters[k][key], list):
+                            iterable_filter_data[key].append(item)
+                        else:
+                            iterable_filter_data[key] = item
+            iterable_data_list = []
+            for each in iterable_filter_data.values():
+                if isinstance(each, list):
+                    iterable_data_list.extend(each)
+                else:
+                    iterable_data_list.append(each)
+        else:
+            iterable_data_list = [{}]
+
+        for each in iterable_data_list:
             if isinstance(each, dict):
                 context.update(**each)
                 iterable_context = each
@@ -126,7 +157,6 @@ def fetch_from_lms(app):
             request_json.update(url=url)
 
             data = LoanApplicationData(app=app, lms_api=api,
-                                        request=request_json,
                                         response_code=response.status_code)
 
             filename = get_filename(response.headers.get('content-disposition'))
@@ -138,10 +168,16 @@ def fetch_from_lms(app):
                     lf.write(block)
                 data.response_file.save(filename, File(lf), save=False)
                 data.response = {'headers': dict(response.headers),
-                                 'iterable_context': iterable_context}
+                                 'filename': data.response_file.name}
             else:
                 data.response = response.response_json
+
+            if iterable_context:
+                request_json.update(iterable_context=iterable_context)
+            data.request = request_json
+
             data.save()
+            continue_status = status.is_success(response.status_code)
 
 
 
@@ -151,18 +187,29 @@ def fetch_from_svc(app):
 
 
 def push_to_lender(app):
-    app_data = LoanApplicationData.objects.filter(app=app,
-                        response_code__gte=200, response_code__lte=299
-                    ).select_related('lms_api', 'svc_api').order_by('created')
+    app_data = LoanApplicationData.objects.filter(is_success, app=app,
+                                    ).select_related('lms_api', 'svc_api'
+                                    ).order_by('created')
     loan, _ = Loan.objects.get_or_create(app=app, lender=app.lender)
 
-    context = {'loanId': app.lmsid, 'lms_api': {}, 'svc_api': {}, 'lender_api': {}}
+    context = {'loanId': app.lmsid, 'lms_api': defaultdict(list),
+                'svc_api': defaultdict(list), 'lender_api': defaultdict(list)}
 
     for each in app_data:
        if each.lms_api:
-            context['lms_api'].update({each.lms_api.name: each.response})
+            if each.lms_api.iterable:
+                iterable_response = each.response
+                iterable_response.update(**each.request.get('iterable_context', {}))
+                context['lms_api'][each.lms_api.name].append(iterable_response)
+            else:
+                context['lms_api'].update({each.lms_api.name: each.response})
        elif each.svc_api:
-            context['svc_api'].update({each.svc_api.name: each.response})
+            if each.lms_api.iterable:
+                iterable_response = each.response
+                iterable_response.update(**each.request.get('iterable_context', {}))
+                context['svc_api'][each.svc_api.name].append(iterable_response)
+            else:
+                context['svc_api'].update({each.svc_api.name: each.response})
 
     cp = app.cp
     lms = app.lms
@@ -203,11 +250,22 @@ def push_to_lender(app):
     else:
         body = {}
 
+    continue_status = True
+    previous_priority = None
+
     for api in lender_api:
 
-        loan_data = LoanData.objects.filter(app=app,
-                            response_code__gte=200, response_code__lte=299
-                        ).select_related('lender_api').order_by('created')
+        if continue_status or previous_priority == None:
+            #init or continue the workflow
+            previous_priority = api.priority
+        else:
+            #break the workflow
+            break
+
+        loan_data = LoanData.objects.filter(is_success, app=app,
+                                        ).select_related('lender_api'
+                                        ).order_by('created')
+
         already_called_non_idempotent_api = False
         for each in loan_data:
             if each.lender_api == api and api.method == api.METHOD.POST:
@@ -219,37 +277,74 @@ def push_to_lender(app):
         if already_called_non_idempotent_api:
             continue
 
-        url = render_from_string(f'{lender.base_url}{api.path}', context)
-        request = getattr(Request, api.method)
-        kwargs = dict(headers=headers)
+        if api.iterable:
+            iterable_data = dictor(context, api.iterable_data) or [{}]
+            iterable_filter_keys = api.iterable_filters.keys()
+            iterable_filter_data = defaultdict(list)
 
-        if api.params:
-            api_query_params = render_from_string(api.params, context)
-            query_params.update(**api_query_params)
-            kwargs.update(params=query_params)
+            for item in iterable_data:
+                for k in iterable_filter_keys:
+                    if item.get(k) in api.iterable_filters[k]:
+                        key = item.get(k)
+                        key_config = api.iterable_filters[k][key]
+                        item[k] = key_config[0]
 
-        if api.headers:
-            api_headers = render_from_string(api.headers, context)
-            headers.update(**api_headers)
-            kwargs["headers"].update(headers)
+                        if isinstance(key_config[1], list):
+                            iterable_filter_data[key].append(item)
+                        else:
+                            iterable_filter_data[key] = item
 
-        if api.body:
-            api_body = render_from_string(api.body, context)
-            if isinstance(api_body, dict):
-                body.update(**api_body)
-                kwargs.update(json=body)
+            iterable_data_list = []
+            for each in iterable_filter_data.values():
+                if isinstance(each, list):
+                    _item = {'items': each}
+                    _item.update(**each[0])
+                else:
+                    _item = {'items': [each]}
+                    _item.update(**each)
+                iterable_data_list.append(_item)
+        else:
+            iterable_data_list = [{}]
+
+        for each in iterable_data_list:
+            if isinstance(each, dict):
+                context.update(**each)
+                iterable_context = each
             else:
-                kwargs.update(json=api_body)
+                iterable_context = {}
 
-        if api.auth_scheme:
-            kwargs["headers"].update({"Authorization":
-                                f"{api.auth_scheme} {lender.auth_token}"})
+            url = render_from_string(f'{lender.base_url}{api.path}', context)
+            request = getattr(Request, api.method)
+            kwargs = dict(headers=headers)
 
-        response = request.send(url, **kwargs)
-        data = LoanData(app=app, loan=loan, lender_api=api, request=kwargs,
-                            response=response.response_json,
-                            response_code=response.status_code)
-        data.save()
+            if api.params:
+                api_query_params = render_from_string(api.params, context)
+                query_params.update(**api_query_params)
+                kwargs.update(params=query_params)
+
+            if api.headers:
+                api_headers = render_from_string(api.headers, context)
+                headers.update(**api_headers)
+                kwargs["headers"].update(headers)
+
+            if api.body:
+                api_body = render_from_string(api.body, context)
+                if isinstance(api_body, dict):
+                    body.update(**api_body)
+                    kwargs.update(json=body)
+                else:
+                    kwargs.update(json=api_body)
+
+            if api.auth_scheme:
+                kwargs["headers"].update({"Authorization":
+                                    f"{api.auth_scheme} {lender.auth_token}"})
+
+            response = request.send(url, **kwargs)
+            data = LoanData(app=app, loan=loan, lender_api=api, request=kwargs,
+                                response=response.response_json,
+                                response_code=response.status_code)
+            data.save()
+            continue_status = status.is_success(response.status_code)
 
 
 

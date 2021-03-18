@@ -322,6 +322,7 @@ MATERIAL_ADMIN_SITE = {
         'platformserviceapi': 'import_export',
 
         'loan': 'monetization_on',
+        'loandata': 'attach_money',
         'lendersystem': 'account_balance',
         'lendersystemapi': 'import_export',
     },
@@ -333,6 +334,15 @@ ADMIN_REORDER = (
         'models': (
             'borrowers.LoanApplication',
             'borrowers.LoanApplicationData',
+            'lenders.LoanData',
+            'lenders.Loan',
+        )
+    },
+    {
+        'app': 'lenders',
+        'models': (
+            'lenders.LenderSystem',
+            'lenders.LenderSystemAPI',
         )
     },
     'API',
@@ -344,14 +354,6 @@ ADMIN_REORDER = (
             'platforms.ChannelPartners',
             'platforms.PlatformService',
             'platforms.PlatformServiceAPI',
-        )
-    },
-    {
-        'app': 'lenders',
-        'models': (
-            'lenders.Loan',
-            'lenders.LenderSystem',
-            'lenders.LenderSystemAPI',
         )
     },
 )

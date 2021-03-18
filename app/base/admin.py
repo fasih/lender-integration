@@ -98,7 +98,7 @@ class APIBaseAdmin(object):
             }),
             ('Iterable Data Settings', {
                 'classes': ('collapse',),
-                'fields': ('iterable_data',)
+                'fields': ('iterable_data', 'iterable_filters')
             }),
         )
         return fieldsets
@@ -106,8 +106,8 @@ class APIBaseAdmin(object):
 
 
 class APIBaseInlineAdmin(object):
-    exclude = ('params', 'headers', 'body', 'iterable', 'iterable_data') + \
-                BaseAdmin.exclude
+    exclude = ('params', 'headers', 'body', 'iterable', 'iterable_data',
+                'iterable_filters') + BaseAdmin.exclude
     ordering = ('priority',)
     extra = 0
 

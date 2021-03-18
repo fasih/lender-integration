@@ -114,7 +114,7 @@ class LoanApplicationAPIView(MFAPIView):
         return Response(data)
 
     @swagger_auto_schema(request_body=serializers.Serializer,
-        responses={200: LoanApplicationTaskSerializer()})
+        responses={status.HTTP_200_OK: LoanApplicationTaskSerializer()})
     def put(self, request, *args, **kwargs):
         """Loan Application Lender API
 

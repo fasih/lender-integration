@@ -1,10 +1,15 @@
 import uuid
 
 from django.db import models
+from django.db.models import Q
 from django_extensions.db.models import ActivatorModel, TimeStampedModel
 
 from .managers import MFModelManager
 # Create your models here.
+
+
+
+is_success = Q(response_code__gte=200) & Q(response_code__lte=299)
 
 
 
@@ -69,13 +74,17 @@ class APIBaseModel(BaseModel):
     iterable_data = models.TextField(null=True, blank=True,
                         verbose_name='Iterable Data Path')
 
+    iterable_filters = models.JSONField(null=True, blank=True, default=dict,
+                        verbose_name='Iterable Data Filters')
+
     method = models.CharField(max_length=10, choices=METHOD_CHOICES,
                         verbose_name='HTTP Method')
 
     auth_scheme = models.CharField(max_length=10, choices=AUTH_SCHEME_CHOICES,
                         verbose_name='HTTP Auth Scheme')
 
-    priority = models.PositiveSmallIntegerField(null=True, blank=True)
+    priority = models.PositiveSmallIntegerField(null=True, blank=True,
+                        verbose_name='Workflow Priority')
 
     class Meta:
         abstract = True

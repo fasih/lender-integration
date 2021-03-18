@@ -3,14 +3,15 @@ from django_json_widget.widgets import JSONEditorWidget
 
 from .models import *
 from base.admin import *
+from base.models import *
 # Register your models here.
 
 
 
 class LoanDataAdmin(JSONBaseAdmin, BaseAdmin, admin.ModelAdmin):
-    search_fields = ('app__lmsid',)
     list_display = ('app', 'lender_api', 'response_code')
     list_filter = ('lender_api', 'lender_api__lender')
+    search_fields = ('app__lmsid',)
 
     fields = (('loan', 'lender_api', 'response_code'), ('request', 'response'))
 
@@ -24,12 +25,18 @@ class LoanDataInlineAdmin(JSONBaseAdmin, BaseAdmin, admin.TabularInline):
     max_num = 0
     extra = 0
 
+    def get_queryset(self, request):
+        queryset = super().get_queryset(request).filter(is_success
+                                        ).order_by('lender_api__priority')
+        return queryset
+
     def has_delete_permission(self, request, obj=None):
         return False
 
 
 
 class LoanAdmin(BaseAdmin, admin.ModelAdmin):
+    list_display = ('app', 'lender')
     list_filter = ('lender', 'app__lms')
     search_fields = ('app__lmsid',)
 

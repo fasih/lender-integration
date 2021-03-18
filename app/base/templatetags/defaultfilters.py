@@ -1,5 +1,12 @@
+import base64
+import img2pdf
 import json
+import os
 
+from datetime import date, datetime
+from dateutil import relativedelta
+
+from django.conf import settings
 from django.template.defaultfilters import register
 
 
@@ -42,4 +49,74 @@ def calculate_emi(context):
         P = n = r = 0
 
     EMI = P * r * (1 + r)*n/((1 + r)*n - 1)
-    return EMI
+    return abs(EMI)
+
+
+
+@register.filter
+def calculate_delta(from_date, delta='months'):
+    try:
+        TODAY = date.today()
+        delta_list = ['months', 'days']
+        delta = delta if delta in delta_list else 'months'
+        from_date = datetime.strptime(from_date, '%Y-%m-%d')
+        relative_delta = relativedelta.relativedelta(TODAY, from_date)
+        return getattr(relative_delta, delta)
+    except:
+        return '0'
+
+
+
+@register.filter
+def calculate_emi_date(disburse_date, cycle_date):
+    try:
+        EMI_CYCLE_DUE_DATE = int(cycle_date)
+        disburse_date = datetime.strptime(disburse_date, '%Y-%m-%d')
+    except:
+        return ''
+    if disburse_date.day >= EMI_CYCLE_DUE_DATE:
+        emi_date = disburse_date + relativedelta.relativedelta(months=1)
+    else:
+        emi_date = disburse_date
+    return emi_date.strftime(f'%Y-%m-{EMI_CYCLE_DUE_DATE}')
+
+
+
+@register.filter
+def generate_base64pdf(items, key):
+    filename = []
+    already_pdf = False
+    for item in items:
+        name = item.get(key)
+        filename.append("{}/{}".format(settings.MEDIA_ROOT, item['filename']))
+        _, ext = os.path.splitext(item['filename'])
+        if ext.lower() == '.pdf':
+            already_pdf = True
+
+    if not already_pdf:
+        final_filename = f"/tmp/{name}.pdf"
+        with open(final_filename, "wb") as f:
+            f.write(img2pdf.convert(filename))
+    else:
+        final_filename = filename[0]
+
+    data = open(final_filename, "rb").read()
+    encoded = base64.b64encode(data)
+    return encoded
+
+
+
+@register.filter
+def force(item, value):
+    return value
+
+
+
+@register.filter
+def default_today(date_str):
+    try:
+        date_obj = datetime.strptime(date_str, '%Y-%m-%d')
+    except:
+        date_str = None
+        TODAY = date.today()
+    return date_str or TODAY.strftime('%Y-%m-%d')
