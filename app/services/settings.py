@@ -322,7 +322,7 @@ MATERIAL_ADMIN_SITE = {
         'platformserviceapi': 'import_export',
 
         'loan': 'monetization_on',
-        'loandata': 'attach_money',
+        'loandata': 'monetization_on',
         'lendersystem': 'account_balance',
         'lendersystemapi': 'import_export',
 
