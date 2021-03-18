@@ -63,6 +63,7 @@ INSTALLED_APPS = [
     'borrowers',
     'lenders',
     'API',
+    'IAM',
 ]
 
 MIDDLEWARE = [
@@ -76,7 +77,7 @@ MIDDLEWARE = [
 ]
 
 MIDDLEWARE += ('django_structlog.middlewares.RequestMiddleware',)
-MIDDLEWARE += ('admin_reorder.middleware.ModelAdminReorder',)
+MIDDLEWARE += ('base.middleware.ModelAdminReorder',)
 
 ROOT_URLCONF = 'services.urls'
 
@@ -128,6 +129,7 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+AUTH_USER_MODEL = 'IAM.User'
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.1/topics/i18n/
@@ -304,14 +306,12 @@ MATERIAL_ADMIN_SITE = {
     'NAVBAR_REVERSE': False,  # Hide side navbar by default
     'SHOW_COUNTS': False,
     'APP_ICONS': {
-        'authtoken': 'vpn_key',
-        'borrowers': 'person',
-        'platforms': 'settings_system_daydream',
+        'borrowers': 'account_box',
+        'platforms': 'device_hub',
         'lenders': 'account_balance',
+        'IAM': 'group',
     },
     'MODEL_ICONS': {
-        'tokenproxy': 'vpn_key',
-
         'loanapplication': 'account_box',
         'loanapplicationdata': 'perm_contact_calendar',
 
@@ -325,6 +325,8 @@ MATERIAL_ADMIN_SITE = {
         'loandata': 'attach_money',
         'lendersystem': 'account_balance',
         'lendersystemapi': 'import_export',
+
+        'tokenproxy': 'vpn_key',
     },
 }
 
@@ -345,7 +347,6 @@ ADMIN_REORDER = (
             'lenders.LenderSystemAPI',
         )
     },
-    'API',
     {
         'app': 'platforms',
         'models': (
@@ -356,7 +357,20 @@ ADMIN_REORDER = (
             'platforms.PlatformServiceAPI',
         )
     },
+    {
+        'app': 'IAM',
+        'models': (
+            'IAM.User', 
+            'auth.Group',
+            'authtoken.TokenProxy',
+        )
+    },
+    'API',
 )
+
+ADMIN_REORDER_INDEX = ('borrowers', 'lenders', 'platforms', 'IAM')
+
+
 
 
 

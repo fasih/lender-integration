@@ -13,6 +13,7 @@ class LoanDataAdmin(JSONBaseAdmin, BaseAdmin, admin.ModelAdmin):
     list_filter = ('lender_api', 'lender_api__lender')
     search_fields = ('app__lmsid',)
 
+    autocomplete_fields = ('loan', 'lender_api')
     fields = (('loan', 'lender_api', 'response_code'), ('request', 'response'))
 
 
@@ -40,12 +41,14 @@ class LoanAdmin(BaseAdmin, admin.ModelAdmin):
     list_filter = ('lender', 'app__lms')
     search_fields = ('app__lmsid',)
 
+    autocomplete_fields = ('app', 'lender')
     fields = (('app', 'lender',),)
     inlines = (LoanDataInlineAdmin,)
 
 
 
 class LenderSystemAPIAdmin(APIBaseAdmin, JSONBaseAdmin, BaseAdmin, admin.ModelAdmin):
+    autocomplete_fields = ('lender',)
     towhom = 'lender'
 
 

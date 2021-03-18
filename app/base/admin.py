@@ -41,6 +41,7 @@ class BaseAdmin(object):
 
 
 class ServiceBaseAdmin(object):
+    search_fields = ('name',)
     fieldsets = (
         (None, {
             'classes': ('wide',),
@@ -70,6 +71,7 @@ class JSONBaseAdmin(object):
 
 class APIBaseAdmin(object):
     exclude = ('activate_date', 'deactivate_date')
+    search_fields = ('name',)
     towhom = 'name'
 
     def get_list_filter(self, request, obj=None):

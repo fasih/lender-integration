@@ -9,14 +9,10 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         User = get_user_model()
+
         if User.objects.count() == 0:
-            admin = User.objects.create_superuser(username='admin',
-                        email="admin@mayafin.in",
-                        password='google@123')
-            admin.is_active = True
-            admin.is_admin = True
-            admin.is_staff = True
-            admin.save()
+            admin = User.objects.create_superuser(email="admin@mayafin.in",
+                                                    password='google@123')
 
             management.call_command('loaddata', 'initproject', verbosity=1)
 

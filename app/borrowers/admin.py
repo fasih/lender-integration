@@ -15,6 +15,8 @@ class LoanApplicationDataAdmin(JSONBaseAdmin, BaseAdmin, admin.ModelAdmin):
     list_filter = ('lms_api', 'lms_api__lms', 'svc_api', 'svc_api__svc')
     list_select_related = ('app', 'lms_api', 'svc_api')
 
+    autocomplete_fields = ('app', 'lms_api', 'svc_api')
+
     def get_fields(self, request, obj=None):
         if obj and obj.lms_api:
             API = ('lms_api',)
@@ -51,7 +53,7 @@ class LoanApplicationAdmin(BaseAdmin, admin.ModelAdmin):
     list_select_related = ('lms',)
     search_fields = ('pk', 'lmsid',)
 
-    autocomplete_fields = ('svc',)
+    autocomplete_fields = ('svc', 'cp', 'lms', 'lender')
     fields = (('lmsid', 'cp'), ('lms', 'lender'), 'svc')
     inlines = (LoanApplicationDataInlineAdmin,)
 

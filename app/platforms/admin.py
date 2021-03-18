@@ -12,6 +12,7 @@ class LoanManagementSystemAPIInlineAdmin(APIBaseInlineAdmin, BaseAdmin, admin.Ta
 
 
 class LoanManagementSystemAPIAdmin(APIBaseAdmin, JSONBaseAdmin, BaseAdmin, admin.ModelAdmin):
+    autocomplete_fields = ('lms',)
     towhom = 'lms'
 
 
@@ -22,7 +23,7 @@ class LoanManagementSystemAdmin(ServiceBaseAdmin, JSONBaseAdmin, BaseAdmin, admi
 
 
 class ChannelPartnersAdmin(BaseAdmin, admin.ModelAdmin):
-    pass
+    search_fields = ('name',)
 
 
 
@@ -32,11 +33,11 @@ class PlatformServiceAPIInlineAdmin(APIBaseInlineAdmin, BaseAdmin, admin.Tabular
 
 
 class PlatformServiceAPIAdmin(APIBaseAdmin, JSONBaseAdmin, BaseAdmin, admin.ModelAdmin):
+    autocomplete_fields = ('svc',)
     towhom = 'svc'
 
 
 class PlatformServiceAdmin(ServiceBaseAdmin, JSONBaseAdmin, BaseAdmin, admin.ModelAdmin):
-    search_fields = ('name',)
     inlines = (PlatformServiceAPIInlineAdmin,)
 
 

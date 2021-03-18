@@ -1,15 +1,5 @@
 [
 {
-    "model": "authtoken.token",
-    "pk": "c82d73dce1bc746e8a22d2c918d4d04dd77bbc9a",
-    "fields": {
-        "user": [
-            "admin"
-        ],
-        "created": "2021-03-11T17:02:03.070Z"
-    }
-},
-{
     "model": "platforms.loanmanagementsystem",
     "pk": "6d4f1b36-6c95-4f6c-aca3-7c6503ca62d7",
     "fields": {
