@@ -70,7 +70,7 @@ class JSONBaseAdmin(object):
 
 
 class APIBaseAdmin(object):
-    exclude = ('activate_date', 'deactivate_date')
+    exclude = BaseAdmin.exclude
     search_fields = ('name',)
     towhom = 'name'
 
@@ -91,7 +91,7 @@ class APIBaseAdmin(object):
         fieldsets = (
             (None, {
                 'classes': ('wide',),
-                'fields': (('path', self.towhom), ('name', 'status', 'priority'),
+                'fields': (('path',), ('name', self.towhom, 'priority'),
                             ('method', 'auth_scheme', 'iterable'))
             }),
             ('HTTP Request Settings', {
