@@ -1,16 +1,18 @@
 from django.contrib import admin
 from django_json_widget.widgets import JSONEditorWidget
 
+from .filters import *
 from .models import *
 from base.admin import *
 from base.models import *
+from borrowers.filters import *
 # Register your models here.
 
 
 
 class LoanDataAdmin(JSONBaseAdmin, BaseAdmin, admin.ModelAdmin):
     list_display = ('app', 'lender_api', 'response_code')
-    list_filter = ('lender_api', 'lender_api__lender')
+    list_filter = (LenderAPIFilter, LenderNestedFilter)
     search_fields = ('app__lmsid',)
 
     autocomplete_fields = ('loan', 'lender_api')
@@ -38,7 +40,7 @@ class LoanDataInlineAdmin(JSONBaseAdmin, BaseAdmin, admin.TabularInline):
 
 class LoanAdmin(BaseAdmin, admin.ModelAdmin):
     list_display = ('app', 'lender')
-    list_filter = ('lender', 'app__lms')
+    list_filter = (LenderFilter, LMSNestedFilter)
     search_fields = ('app__lmsid',)
 
     autocomplete_fields = ('app', 'lender')
@@ -49,6 +51,7 @@ class LoanAdmin(BaseAdmin, admin.ModelAdmin):
 
 class LenderSystemAPIAdmin(APIBaseAdmin, JSONBaseAdmin, BaseAdmin, admin.ModelAdmin):
     autocomplete_fields = ('lender',)
+    towhom_filter = LenderFilter
     towhom = 'lender'
 
 

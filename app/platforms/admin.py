@@ -1,5 +1,6 @@
 from django.contrib import admin
 
+from .filters import *
 from .models import *
 from base.admin import *
 # Register your models here.
@@ -13,6 +14,7 @@ class LoanManagementSystemAPIInlineAdmin(APIBaseInlineAdmin, BaseAdmin, admin.Ta
 
 class LoanManagementSystemAPIAdmin(APIBaseAdmin, JSONBaseAdmin, BaseAdmin, admin.ModelAdmin):
     autocomplete_fields = ('lms',)
+    towhom_filter = LMSFilter
     towhom = 'lms'
 
 
@@ -34,6 +36,7 @@ class PlatformServiceAPIInlineAdmin(APIBaseInlineAdmin, BaseAdmin, admin.Tabular
 
 class PlatformServiceAPIAdmin(APIBaseAdmin, JSONBaseAdmin, BaseAdmin, admin.ModelAdmin):
     autocomplete_fields = ('svc',)
+    towhom_filter = SVCFilter
     towhom = 'svc'
 
 

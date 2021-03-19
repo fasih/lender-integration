@@ -75,7 +75,7 @@ class APIBaseAdmin(object):
     towhom = 'name'
 
     def get_list_filter(self, request, obj=None):
-        return (self.towhom, 'method')
+        return (self.towhom_filter, 'method')
 
     def get_list_select_related(self, request, obj=None):
        return (self.towhom,)

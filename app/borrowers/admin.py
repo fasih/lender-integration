@@ -4,6 +4,8 @@ from django_json_widget.widgets import JSONEditorWidget
 from .models import *
 from base.admin import *
 from base.models import *
+from lenders.filters import *
+from platforms.filters import *
 # Register your models here.
 
 
@@ -12,7 +14,7 @@ class LoanApplicationDataAdmin(JSONBaseAdmin, BaseAdmin, admin.ModelAdmin):
     model = LoanApplicationData
     search_fields = ('app__lmsid',)
     list_display = ('app', 'lms_api', 'svc_api', 'response_code')
-    list_filter = ('lms_api', 'lms_api__lms', 'svc_api', 'svc_api__svc')
+    list_filter = (LMSAPIFilter, LMSNestedFilter, SVCAPIFilter, SVCNestedFilter)
     list_select_related = ('app', 'lms_api', 'svc_api')
 
     autocomplete_fields = ('app', 'lms_api', 'svc_api')
@@ -49,7 +51,7 @@ class LoanApplicationDataInlineAdmin(JSONBaseAdmin, BaseAdmin, admin.TabularInli
 
 class LoanApplicationAdmin(BaseAdmin, admin.ModelAdmin):
     list_display = ('lmsid', 'lms', 'lender')
-    list_filter = ('lms',)
+    list_filter = (LMSFilter, LenderFilter)
     list_select_related = ('lms',)
     search_fields = ('pk', 'lmsid',)
 
