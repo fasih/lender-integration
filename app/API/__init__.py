@@ -1,6 +1,6 @@
 default_app_config = 'API.apps.APIConfig'
 
-version = '0.1.0'
+version = '0.1.2'
 
 title = 'MayaFin Services API'
 
@@ -12,4 +12,3 @@ description = '''
         ### ReDoc
         #### [API Documentation](/api/#tag/account)
 '''
-

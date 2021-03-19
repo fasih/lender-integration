@@ -6,7 +6,7 @@ from platforms.models import ChannelPartners, LoanManagementSystem, PlatformServ
 
 
 
-class LoanApplicationRequestSerializer(serializers.ModelSerializer):
+class LoanApplicationCreateSerializer(serializers.ModelSerializer):
 
     loan_id = serializers.CharField(max_length=255, label='Loan ID',
                         help_text='Loan Application Reference No. at LMS')
@@ -33,18 +33,6 @@ class LoanApplicationRequestSerializer(serializers.ModelSerializer):
     class Meta:
         model = LoanApplication
         fields = ('loan_id', 'lms_code', 'lender_code', 'svc_code', 'cp_code')
-
-
-
-class LoanApplicationResponseSerializer(serializers.ModelSerializer):
-
-    application_id = serializers.CharField(source='pk')
-    task_name = serializers.CharField()
-    task_status = serializers.CharField()
-
-    class Meta:
-        model = LoanApplication
-        fields = ('application_id', 'task_name', 'task_status')
 
 
 
@@ -82,5 +70,6 @@ class LoanApplicationStatusSerializer(serializers.ModelSerializer):
 
 class LoanApplicationTaskSerializer(serializers.Serializer):
 
+    application_id = serializers.CharField(source='pk')
     task_name = serializers.CharField()
     task_status = serializers.CharField()

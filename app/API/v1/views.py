@@ -22,10 +22,10 @@ logger = logging.getLogger(__name__)
 
 
 class LoanApplicationCreateAPIView(MFAPIView):
-    serializer_class = LoanApplicationRequestSerializer
+    serializer_class = LoanApplicationCreateSerializer
 
     @swagger_auto_schema(responses={status.HTTP_201_CREATED: 
-        LoanApplicationResponseSerializer()})
+        LoanApplicationTaskSerializer()})
     def post(self, request, *args, **kwargs):
         """Loan Application Create API
 
@@ -41,12 +41,12 @@ class LoanApplicationCreateAPIView(MFAPIView):
         instance = self.perform_create(serializer)
 
         from .tasks import loans_post
-        apply_task(loans_post.s(instance.pk), True)
+        apply_task(loans_post.s(instance.pk))
         instance.task_name = loans_post.name
         instance.task_status = "Submitted"
-        application = LoanApplicationResponseSerializer(instance)
+        app = LoanApplicationTaskSerializer(instance)
 
-        return Response(application.data, status=status.HTTP_201_CREATED)
+        return Response(app.data, status=status.HTTP_201_CREATED)
 
     def perform_create(self, serializer):
         lms = generics.get_object_or_404(LoanManagementSystem.objects,
@@ -105,13 +105,12 @@ class LoanApplicationAPIView(MFAPIView):
         """        
         instance = self.get_object()
         from .tasks import loans_patch
-        apply_task(loans_patch.s(instance.pk), True)
+        apply_task(loans_patch.s(instance.pk))
         instance.task_name = loans_patch.name
         instance.task_status = "Submitted"
+        app = LoanApplicationTaskSerializer(instance)
 
-        data = dict(task_name=instance.task_name, task_status=instance.task_status)
-
-        return Response(data)
+        return Response(app.data)
 
     @swagger_auto_schema(request_body=serializers.Serializer,
         responses={status.HTTP_200_OK: LoanApplicationTaskSerializer()})
@@ -124,13 +123,12 @@ class LoanApplicationAPIView(MFAPIView):
 
         instance = self.get_object()
         from .tasks import loans_put
-        apply_task(loans_put.s(instance.pk), True)
+        apply_task(loans_put.s(instance.pk))
         instance.task_name = loans_put.name
         instance.task_status = "Submitted"
+        app = LoanApplicationTaskSerializer(instance)
 
-        data = dict(task_name=instance.task_name, task_status=instance.task_status)
-
-        return Response(data)
+        return Response(app.data)
 
     def get_status(self, instance):
         instance.lms_data = LoanApplicationData.objects.filter(app=instance
