@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  namespace: production
+  name: mf-django-config
+data:
+  DB_NAME: services
+  DB_PORT: '5432'
+  DB_HOST: rc-psql-postgresql.deployment
+  RABBITMQ_SVC: rc-rmq-rabbitmq.deployment:5672

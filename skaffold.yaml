@@ -1,0 +1,24 @@
+apiVersion: skaffold/v2beta5
+kind: Config
+metadata:
+  name: mf-services
+build:
+  artifacts:
+  - image: gcr.io/mayafin-in/github.com/mayafin/services.mayafin.in
+    context: .
+    docker:
+      dockerfile: ./build/Dockerfile
+deploy:
+  kubectl:
+    manifests:
+    - deploy/k8s/pvc.yaml
+    - deploy/k8s/config.yaml
+    - deploy/k8s/nginx.yaml
+    - deploy/k8s/django.yaml
+    - deploy/k8s/ingress.yaml
+    - deploy/k8s/service.yaml
+    - deploy/k8s/celery.yaml
+profiles:
+- name: cloud-build
+  build:
+    googleCloudBuild: {}
