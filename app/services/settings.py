@@ -10,7 +10,10 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 
+from os import environ
 from pathlib import Path
+
+_ = environ.get
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -20,7 +23,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'pjid#&u(2)bz@)8=5daqtt4+a&ym(q*f!vcxrjw(_9$+#y2poj'
+SECRET_KEY = _("SECRET_KEY") or '+ad+2_=98762)123(y76-8%m9_q23233'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
@@ -55,6 +58,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'drf_yasg2',
 
+    'admin_auto_filters',
     'admin_reorder',
     'django_json_widget',
 
@@ -107,6 +111,19 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
+    }
+}
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': _("DB_NAME", "services"),
+
+        'HOST': _("DB_HOST", "localhost"),
+        'PORT': _("DB_PORT", '5432'),
+
+        'USER': _("postgresql-username", 'postgres'),
+        'PASSWORD': _("postgresql-password", "root"),
     }
 }
 
@@ -369,6 +386,13 @@ ADMIN_REORDER = (
 )
 
 ADMIN_REORDER_INDEX = ('borrowers', 'lenders', 'platforms', 'IAM')
+
+
+# CELERY CONFIGURATIONS
+CELERY_BROKER_URL = 'amqp://%s:%s@%s//'%(_("rabbitmq-username"),_("rabbitmq-password"),_("RABBITMQ_SVC"))
+
+CELERY_TIMEZONE = 'Asia/Kolkata'
+
 
 
 

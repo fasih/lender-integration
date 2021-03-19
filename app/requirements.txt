@@ -3,6 +3,7 @@ Django==3.1.7
 celery
 dictor
 
+django-admin-autocomplete-filter
 django-cors-headers
 django-debug-toolbar
 django-extensions
@@ -17,6 +18,8 @@ drf_yasg2
 
 img2pdf
 jsonfield
+psycopg2
 python-dateutil
 requests
 stringcase
+#uWSGI
