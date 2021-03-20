@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: celery
-        image: gcr.io/mayafin-in/github.com/mayafin/services.mayafin.in
+        image: gcr.io/mayafin/gitlab.com/mayafin/services.mayafin.in
         imagePullPolicy: Always
         envFrom:
           - configMapRef:
@@ -26,7 +26,7 @@ spec:
           - secretRef:
               name: rc-psql-secret
           - secretRef:
-              name: rc-rmq-secret
+              name: rc-rbmq-secret
         command: ["/bin/bash", "-c"]
         args: ["python manage.py collectstatic --noinput; celery --app services worker --concurrency 2 --loglevel INFO --max-tasks-per-child 100"]
         volumeMounts:

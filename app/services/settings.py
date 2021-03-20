@@ -385,7 +385,7 @@ ADMIN_REORDER = (
     'API',
 )
 
-ADMIN_REORDER_INDEX = ('borrowers', 'lenders', 'platforms', 'IAM')
+ADMIN_REORDER_INDEX = ('borrowers', 'lenders', 'platforms',)
 
 
 # CELERY CONFIGURATIONS
