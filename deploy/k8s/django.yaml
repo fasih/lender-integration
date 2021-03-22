@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: django
-        image: gcr.io/mayafin/gitlab.com/mayafin/services.mayafin.in
+        image: CONTAINER_IMAGE
         imagePullPolicy: Always
         envFrom:
           - configMapRef:
