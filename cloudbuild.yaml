@@ -1,0 +1,10 @@
+steps:
+- name: 'gcr.io/k8s-skaffold/skaffold'
+  args: ['gcloud', 'container', 'clusters',
+         'get-credentials', '$_CLOUDSDK_CONTAINER_CLUSTER', 
+         '--region', '$_CLOUDSDK_COMPUTE_REGION', 
+         '--project', '$PROJECT_ID']
+
+- name: 'gcr.io/k8s-skaffold/skaffold'
+  args: ['skaffold', 'run']
+

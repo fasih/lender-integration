@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: Service
+metadata:
+    namespace: production
+    name: mf-services-svc
+spec:
+    type: NodePort
+    ports:
+        - port: 8000
+          targetPort: 8000
+          protocol: TCP
+          name: django
+        - port: 8001
+          targetPort: 80
+          protocol: TCP
+          name: nginx
+    selector:
+        run: mf-services-deploy

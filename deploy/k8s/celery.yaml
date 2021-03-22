@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: production
+  name: mf-celery-deploy
+spec:
+  selector:
+    matchLabels:
+      run: mf-celery-deploy
+  replicas: 1
+  revisionHistoryLimit: 1 
+  template:
+    metadata:
+      labels:
+        run: mf-celery-deploy
+    spec:
+      containers:
+      - name: celery
+        image: CONTAINER_IMAGE
+        imagePullPolicy: Always
+        envFrom:
+          - configMapRef:
+              name: mf-django-config
+          - secretRef:
+              name: mf-django-secret
+          - secretRef:
+              name: rc-psql-secret
+          - secretRef:
+              name: rc-rbmq-secret
+        command: ["/bin/bash", "-c"]
+        args: ["python manage.py collectstatic --noinput; celery --app services worker --concurrency 2 --loglevel INFO --max-tasks-per-child 100"]
+        volumeMounts:
+          - name: django-static-dir
+            mountPath: /src/app/static
+          - name: django-media-dir
+            mountPath: /src/app/media
+      volumes:
+        - name: django-static-dir
+          emptyDir: {}
+        - name: django-media-dir
+          persistentVolumeClaim:
+            claimName: django-media-pvc
+

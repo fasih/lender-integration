@@ -1,0 +1,12 @@
+version: "3"
+services:
+  django:
+    build:
+      context: .
+      dockerfile: ./build/Dockerfile
+    tty: true
+    command: python manage.py runserver --insecure 0:8000
+    volumes:
+      - ./app:/src/app
+    ports:
+      - "8000:8000"

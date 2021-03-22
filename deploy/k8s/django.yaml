@@ -1,0 +1,58 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: production
+  name: mf-services-deploy
+spec:
+  selector:
+    matchLabels:
+      run: mf-services-deploy
+  replicas: 1
+  revisionHistoryLimit: 1 
+  template:
+    metadata:
+      labels:
+        run: mf-services-deploy
+    spec:
+      containers:
+      - name: django
+        image: CONTAINER_IMAGE
+        imagePullPolicy: Always
+        envFrom:
+          - configMapRef:
+              name: cc-django-config
+          - secretRef:
+              name: cc-django-secret
+          - secretRef:
+              name: rc-psql-secret
+          - secretRef:
+              name: rc-rbmq-secret
+        ports:
+          - containerPort: 8000
+        volumeMounts:
+          - name: django-static-dir
+            mountPath: /src/app/static
+          - name: django-media-dir
+            mountPath: /src/app/media
+      - name: nginx
+        image: nginx
+        ports:
+          - containerPort: 80
+        volumeMounts:
+          - name: nginx-config
+            mountPath: /etc/nginx/nginx.conf
+            subPath: nginx.conf
+          - name: django-static-dir
+            mountPath: /usr/share/nginx/html/static
+          - name: django-media-dir
+            mountPath: /usr/share/nginx/html/media
+      volumes:
+        - name: nginx-config
+          configMap:
+            name: nginx-config
+        - name: django-static-dir
+          emptyDir: {}
+        - name: django-media-dir
+          persistentVolumeClaim:
+            claimName: django-media-pvc
+

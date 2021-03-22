@@ -1,0 +1,454 @@
+[
+{
+    "model": "platforms.loanmanagementsystem",
+    "pk": "6d4f1b36-6c95-4f6c-aca3-7c6503ca62d7",
+    "fields": {
+        "created": "2021-03-11T07:43:58.278Z",
+        "modified": "2021-03-18T10:25:35.339Z",
+        "status": 1,
+        "activate_date": "2021-03-11T07:43:58.277Z",
+        "deactivate_date": null,
+        "base_url": "https://mayafinuat.finflux.io/fineract-provider/api/v1",
+        "api_key": "",
+        "username": "adminapi",
+        "password": "mayafulx@api2021",
+        "params": {},
+        "headers": {
+            "Fineract-Platform-TenantId": "mayafinuat"
+        },
+        "body": {},
+        "oauth_url": "https://mayafinuat.finflux.io/fineract-provider/api/oauth/token?tenantIdentifier=mayafinuat",
+        "oauth_headers": {
+            "Content-Type": "application/x-www-form-urlencoded"
+        },
+        "oauth_body": {
+            "username": "{{username}}",
+            "password": "{{password}}",
+            "grant_type": "password",
+            "client_id": "community-app",
+            "client_secret": 123
+        },
+        "name": "FinFlux",
+        "code": "FF"
+    }
+},
+{
+    "model": "platforms.loanmanagementsystemapi",
+    "pk": "7cd7706c-555a-4f11-ba7e-21f63e11f272",
+    "fields": {
+        "created": "2021-03-11T09:46:53.893Z",
+        "modified": "2021-03-18T07:35:48.971Z",
+        "status": 1,
+        "activate_date": "2021-03-11T09:46:53.892Z",
+        "deactivate_date": null,
+        "name": "BorrowerInfo",
+        "path": "/runreports/Borrower%20Info?R_loanId={{loanId}}",
+        "params": {},
+        "headers": {},
+        "body": {},
+        "iterable": false,
+        "iterable_data": "[]",
+        "iterable_filters": {},
+        "method": "GET",
+        "auth_scheme": "Bearer",
+        "priority": 2,
+        "lms": "6d4f1b36-6c95-4f6c-aca3-7c6503ca62d7"
+    }
+},
+{
+    "model": "platforms.loanmanagementsystemapi",
+    "pk": "826ea086-0784-4c26-849a-00c435584054",
+    "fields": {
+        "created": "2021-03-15T18:18:10.543Z",
+        "modified": "2021-03-18T06:12:33.040Z",
+        "status": 1,
+        "activate_date": "2021-03-15T18:18:10.542Z",
+        "deactivate_date": null,
+        "name": "FetchDocumentList",
+        "path": "/clients/{{lms_api.LoanRequest.data.0.row.0|to_python:'client_id'}}/documents/",
+        "params": {},
+        "headers": {},
+        "body": {},
+        "iterable": false,
+        "iterable_data": "[]",
+        "iterable_filters": {},
+        "method": "GET",
+        "auth_scheme": "Bearer",
+        "priority": 4,
+        "lms": "6d4f1b36-6c95-4f6c-aca3-7c6503ca62d7"
+    }
+},
+{
+    "model": "platforms.loanmanagementsystemapi",
+    "pk": "9f01cf23-9510-48bd-ab15-fe1c34d35517",
+    "fields": {
+        "created": "2021-03-11T09:46:53.900Z",
+        "modified": "2021-03-18T07:35:57.550Z",
+        "status": 1,
+        "activate_date": "2021-03-11T09:46:53.900Z",
+        "deactivate_date": null,
+        "name": "RepaymentSchedule",
+        "path": "/runreports/Repayments%20Schedule?R_loanId={{loanId}}",
+        "params": {},
+        "headers": {},
+        "body": {},
+        "iterable": false,
+        "iterable_data": "[]",
+        "iterable_filters": {},
+        "method": "GET",
+        "auth_scheme": "Bearer",
+        "priority": 3,
+        "lms": "6d4f1b36-6c95-4f6c-aca3-7c6503ca62d7"
+    }
+},
+{
+    "model": "platforms.loanmanagementsystemapi",
+    "pk": "bf2f2707-cf50-4e34-9b6b-b12f7526153d",
+    "fields": {
+        "created": "2021-03-16T10:16:30.622Z",
+        "modified": "2021-03-18T09:16:18.745Z",
+        "status": 1,
+        "activate_date": "2021-03-16T10:16:30.622Z",
+        "deactivate_date": null,
+        "name": "FetchDocument",
+        "path": "/clients/{{lms_api.LoanRequest.data.0.row.0|to_python:'client_id'}}/documents/{{id}}/attachment",
+        "params": {},
+        "headers": {},
+        "body": {},
+        "iterable": true,
+        "iterable_data": "lms_api.FetchDocumentList",
+        "iterable_filters": {
+            "name": {
+                "\"Aadhaar Front\"": {},
+                "\"Aadhaar Back\"": {},
+                "\"Selfie\"": {},
+                "\"bank_statement\"": {}
+            }
+        },
+        "method": "GET",
+        "auth_scheme": "Bearer",
+        "priority": 5,
+        "lms": "6d4f1b36-6c95-4f6c-aca3-7c6503ca62d7"
+    }
+},
+{
+    "model": "platforms.loanmanagementsystemapi",
+    "pk": "d29ab26d-7f5e-4dd4-a8ad-b3fded9d86ff",
+    "fields": {
+        "created": "2021-03-11T08:34:18.488Z",
+        "modified": "2021-03-16T12:20:05.723Z",
+        "status": 1,
+        "activate_date": "2021-03-11T08:34:18.487Z",
+        "deactivate_date": null,
+        "name": "LoanRequest",
+        "path": "/runreports/Loan%20Request?R_loanId={{loanId}}",
+        "params": {},
+        "headers": {},
+        "body": {},
+        "iterable": false,
+        "iterable_data": "[]",
+        "iterable_filters": {},
+        "method": "GET",
+        "auth_scheme": "Bearer",
+        "priority": 1,
+        "lms": "6d4f1b36-6c95-4f6c-aca3-7c6503ca62d7"
+    }
+},
+{
+    "model": "platforms.channelpartners",
+    "pk": "a5f57397-0ad1-4a88-b54d-b05f38290128",
+    "fields": {
+        "created": "2021-03-11T07:42:55.604Z",
+        "modified": "2021-03-16T08:04:22.154Z",
+        "status": 1,
+        "activate_date": "2021-03-11T07:42:55.604Z",
+        "deactivate_date": null,
+        "name": "Lets Transport",
+        "code": "LT"
+    }
+},
+{
+    "model": "platforms.platformservice",
+    "pk": "edc5fab8-2a06-4b7b-8d7a-ad363b421190",
+    "fields": {
+        "created": "2021-03-13T08:09:27.907Z",
+        "modified": "2021-03-13T08:09:27.907Z",
+        "status": 1,
+        "activate_date": "2021-03-13T08:09:27.907Z",
+        "deactivate_date": null,
+        "base_url": null,
+        "api_key": null,
+        "username": null,
+        "password": null,
+        "params": {},
+        "headers": {},
+        "body": {},
+        "oauth_url": null,
+        "oauth_headers": {},
+        "oauth_body": {},
+        "name": "PennyDrop",
+        "code": "PD"
+    }
+},
+{
+    "model": "platforms.platformserviceapi",
+    "pk": "efe9f194-0ae8-4217-9593-314f0a6c97ba",
+    "fields": {
+        "created": "2021-03-13T08:10:11.517Z",
+        "modified": "2021-03-13T08:10:11.517Z",
+        "status": 1,
+        "activate_date": "2021-03-13T08:10:11.516Z",
+        "deactivate_date": null,
+        "name": "PennyDrop",
+        "path": "/api/pennydrop",
+        "params": {},
+        "headers": {},
+        "body": {},
+        "iterable": false,
+        "iterable_data": "[]",
+        "iterable_filters": {},
+        "method": "POST",
+        "auth_scheme": "Token",
+        "priority": null,
+        "svc": "edc5fab8-2a06-4b7b-8d7a-ad363b421190"
+    }
+},
+{
+    "model": "lenders.lendersystem",
+    "pk": "0262fab4-0f8a-4037-89f4-71ca10010db1",
+    "fields": {
+        "created": "2021-03-11T08:41:49.963Z",
+        "modified": "2021-03-15T10:09:20.141Z",
+        "status": 1,
+        "activate_date": "2021-03-11T08:41:49.961Z",
+        "deactivate_date": null,
+        "base_url": "https://stagingplatformapi.kudosfinance.in/v3/api",
+        "api_key": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjb21wYW55X2lkIjoxNDYsImNvbXBhbnlfY29kZSI6Ik1BWTAxMzciLCJwcm9kdWN0X2lkIjoyNDksImxvYW5fc2NoZW1hX2lkIjoiMjY3IiwiY3JlZGl0X3J1bGVfZ3JpZF9pZCI6bnVsbCwiYXV0b21hdGljX2NoZWNrX2NyZWRpdCI6MCwidHlwZSI6ImFwaSIsInRva2VuX2lkIjoiMTQ2LTI0OS0xNjA5NzY1ODUyMjkxIiwiZW52aXJvbm1lbnQiOiJzYW5kYm94IiwiaWF0IjoxNjA5NzY1ODUyfQ.NCEQ44S3ployLB-SHoPRGNZM9VmPI0XJiInO5GXZw0s",
+        "username": null,
+        "password": null,
+        "params": {},
+        "headers": {
+            "company_code": "MAY0137"
+        },
+        "body": {},
+        "oauth_url": null,
+        "oauth_headers": {},
+        "oauth_body": {},
+        "name": "Kudos",
+        "code": "KU"
+    }
+},
+{
+    "model": "lenders.lendersystemapi",
+    "pk": "037afaa7-1b11-4d8e-8b9d-b1c17d8d2cb7",
+    "fields": {
+        "created": "2021-03-11T08:42:12.153Z",
+        "modified": "2021-03-18T12:53:51.684Z",
+        "status": 1,
+        "activate_date": "2021-03-11T08:42:12.147Z",
+        "deactivate_date": null,
+        "name": "LoanRequest",
+        "path": "/loanrequest",
+        "params": {},
+        "headers": {},
+        "body": [
+            {
+                "partner_loan_id": "{{cp.code}}_{{lms_api.LoanRequest.data.0.row.0|to_python:'partner_loan_id'}}",
+                "partner_borrower_id": "{{cp.code}}_{{lms_api.LoanRequest.data.0.row.0|to_python:'partner_borrower_id'}}",
+                "first_name": "{{lms_api.LoanRequest.data.0.row.0|to_python:'first_name'}}",
+                "last_name": "{{lms_api.LoanRequest.data.0.row.0|to_python:'last_name'}}",
+                "type_of_addr": "{{lms_api.LoanRequest.data.0.row.0|to_python:'type_of_addr'}}",
+                "resi_addr_ln1": "{{lms_api.LoanRequest.data.0.row.0|to_python:'resi_addr_ln1'}}",
+                "city": "{{lms_api.LoanRequest.data.0.row.0|to_python:'city'}}",
+                "state": "{{lms_api.LoanRequest.data.0.row.0|to_python:'state'}}",
+                "pincode": "{{lms_api.LoanRequest.data.0.row.0|to_python:'pincode'}}",
+                "per_addr_ln1": "{{lms_api.LoanRequest.data.0.row.0|to_python:'resi_addr_ln1'}}",
+                "per_city": "{{lms_api.LoanRequest.data.0.row.0|to_python:'city'}}",
+                "per_state": "{{lms_api.LoanRequest.data.0.row.0|to_python:'state'}}",
+                "per_pincode": "{{lms_api.LoanRequest.data.0.row.0|to_python:'pincode'}}",
+                "appl_phone": "{{lms_api.LoanRequest.data.0.row.0|to_python:'appl_phone'}}",
+                "appl_pan": "{{lms_api.LoanRequest.data.0.row.0|to_python:'appl_pan'}}",
+                "email_id": "{{lms_api.LoanRequest.data.0.row.0|to_python:'email_id'}}",
+                "dob": "{{lms_api.LoanRequest.data.0.row.0|to_python:'dob'}}",
+                "gender": "{{lms_api.LoanRequest.data.0.row.0|to_python:'gender'}}",
+                "photo_id_type": "{{lms_api.LoanRequest.data.0.row.0|to_python:'photo_id_type'}}",
+                "photo_id_num": "{{lms_api.LoanRequest.data.0.row.0|to_python:'photo_id_num'}}",
+                "addr_id_type": "{{lms_api.LoanRequest.data.0.row.0|to_python:'addr_id_type'}}",
+                "addr_id_num": "{{lms_api.LoanRequest.data.0.row.0|to_python:'addr_id_num'}}",
+                "total_experience": "{{lms_api.LoanRequest.data.0.row.0|to_python:'total_experience'|calculate_delta}}",
+                "cibil_score_borro": "{{lms_api.LoanRequest.data.0.row.0|to_python:'cibil_score_borro'|default_if_blank:'-1'|force:'-1'}}",
+                "purpose_of_loan": "{{lms_api.LoanRequest.data.0.row.0|to_python:'purpose_of_loan'}}",
+                "borro_bank_name": "{{lms_api.LoanRequest.data.0.row.0|to_python:'borro_bank_name'}}",
+                "borro_bank_acc_num": "{{lms_api.LoanRequest.data.0.row.0|to_python:'borro_bank_acc_num'}}",
+                "applied_amount": "{{lms_api.LoanRequest.data.0.row.0|to_python:'applied_amount'}}",
+                "int_rate_reducing_perc": "{{lms_api.LoanRequest.data.0.row.0|to_python:'int_rate_reducing_perc'|default_if_blank:'0'}}",
+                "loan_tenure": "{{lms_api.LoanRequest.data.0.row.0|to_python:'loan_tenure'}}",
+                "emi_amt": "{{lms_api.LoanRequest.data.0.row.0|to_python|calculate_emi}}",
+                "processing_fees_perc": "{{lms_api.LoanRequest.data.0.row.0|to_python:'processing_fees_perc'|default_if_blank:'0'}}",
+                "processing_fees_amt": "{{lms_api.LoanRequest.data.0.row.0|to_python:'partner'|default_if_blank:'0'}}",
+                "borro_bank_ifsc": "{{lms_api.LoanRequest.data.0.row.0|to_python:'borro_bank_ifsc'|force:'HDFC0004848'}}",
+                "partner_system_score": "{{lms_api.LoanRequest.data.0.row.0|to_python:'partner_system_score'|default_if_blank:'0'}}"
+            }
+        ],
+        "iterable": false,
+        "iterable_data": "[]",
+        "iterable_filters": {},
+        "method": "POST",
+        "auth_scheme": "Bearer",
+        "priority": 1,
+        "lender": "0262fab4-0f8a-4037-89f4-71ca10010db1"
+    }
+},
+{
+    "model": "lenders.lendersystemapi",
+    "pk": "230c598a-4d29-47ce-9022-920612370fb8",
+    "fields": {
+        "created": "2021-03-11T10:02:07.173Z",
+        "modified": "2021-03-18T15:28:17.170Z",
+        "status": 1,
+        "activate_date": "2021-03-11T10:02:07.173Z",
+        "deactivate_date": null,
+        "name": "RepaymentSchedule",
+        "path": "/repaymentschedule",
+        "params": {},
+        "headers": {},
+        "body": [
+            {
+                "partner_loan_id": "{{lender_api.LoanRequest.data.preparedbiTmpl.0.partner_loan_id}}",
+                "partner_borrower_id": "{{lender_api.LoanRequest.data.preparedbiTmpl.0.partner_borrower_id}}",
+                "kudos_loan_id": "{{lender_api.LoanRequest.data.preparedbiTmpl.0.kudos_loan_id}}",
+                "kudos_borrower_id": "{{lender_api.LoanRequest.data.preparedbiTmpl.0.kudos_borrower_id}}",
+                "sanction_amount": "{{lms_api.RepaymentSchedule.data.0.row.0|to_python:'sanction_amount'|default_if_blank:'0'}}",
+                "net_disbur_amt": "{{lms_api.RepaymentSchedule.data.0.row.0|to_python:'net_disbur_amt'|default_if_blank:'0'}}",
+                "int_type": "reducing",
+                "intr_rate": "{{lms_api.RepaymentSchedule.data.0.row.0|to_python:'intr_rate'|default_if_blank:'26'}}",
+                "emi_count": "{{lms_api.RepaymentSchedule.data.0.row.0|to_python:'emi_count'|default_if_blank:'0'}}",
+                "repayment_type": "monthly",
+                "first_inst_date": "{{lms_api.RepaymentSchedule.data.0.row.0|to_python:'disburse_date'|default_today|calculate_emi_date:'18'}}",
+                "disburse_date": "{{lms_api.RepaymentSchedule.data.0.row.0|to_python:'disburse_date'|default_today}}",
+                "pro_fee_amt": "{{lms_api.RepaymentSchedule.data.0.row.0|to_python:'pro_fee_amt'|default_if_blank:'0'}}",
+                "insurance_amt": "{{lms_api.RepaymentSchedule.data.0.row.0|to_python:'insurance_amt'|default_if_blank:'0'}}",
+                "app_charges": "{{lms_api.RepaymentSchedule.data.0.row.0|to_python:'app_charges'|default_if_blank:'0'}}",
+                "stamp_charges": "{{lms_api.RepaymentSchedule.data.0.row.0|to_python:'stamp_charges'|default_if_blank:'0'}}",
+                "pre_emi_interest": "{{lms_api.RepaymentSchedule.data.0.row.0|to_python:'pre_emi_interest'|default_if_blank:'0'}}",
+                "total_charges": "{{lms_api.RepaymentSchedule.data.0.row.0|to_python:'total_charges'|default_if_blank:'0'}}",
+                "advance_emi": "{{lms_api.RepaymentSchedule.data.0.row.0|to_python:'advance_emi'|default_if_blank:'0'}}"
+            }
+        ],
+        "iterable": false,
+        "iterable_data": "[]",
+        "iterable_filters": {},
+        "method": "POST",
+        "auth_scheme": "Bearer",
+        "priority": 3,
+        "lender": "0262fab4-0f8a-4037-89f4-71ca10010db1"
+    }
+},
+{
+    "model": "lenders.lendersystemapi",
+    "pk": "4efcb308-421d-4f39-bd8c-61a6adb952e4",
+    "fields": {
+        "created": "2021-03-11T10:02:07.157Z",
+        "modified": "2021-03-16T08:36:29.499Z",
+        "status": 1,
+        "activate_date": "2021-03-11T10:02:07.156Z",
+        "deactivate_date": null,
+        "name": "BorrowerInfo",
+        "path": "/borrowerinfo",
+        "params": {},
+        "headers": {},
+        "body": [
+            {
+                "partner_loan_id": "{{lender_api.LoanRequest.data.preparedbiTmpl.0.partner_loan_id}}",
+                "partner_borrower_id": "{{lender_api.LoanRequest.data.preparedbiTmpl.0.partner_borrower_id}}",
+                "kudos_loan_id": "{{lender_api.LoanRequest.data.preparedbiTmpl.0.kudos_loan_id}}",
+                "kudos_borrower_id": "{{lender_api.LoanRequest.data.preparedbiTmpl.0.kudos_borrower_id}}",
+                "loan_app_date": "{{lms_api.BorrowerInfo.data.0.row.0|to_python:'loan_app_date'}}",
+                "age": "{{lms_api.BorrowerInfo.data.0.row.0|to_python:'age'}}",
+                "marital_status": "{{lms_api.BorrowerInfo.data.0.row.0|to_python:'marital_status'}}",
+                "sanction_amount": "{{lms_api.BorrowerInfo.data.0.row.0|to_python:'sanction_amount'|default_if_blank:'0'}}",
+                "cgst_on_pf_amt": "{{lms_api.BorrowerInfo.data.0.row.0|to_python:'cgst_on_pf_amt'|default_if_blank:'0'}}",
+                "sgst_on_pf_amt": "{{lms_api.BorrowerInfo.data.0.row.0|to_python:'sgst_on_pf_amt'|default_if_blank:'0'}}",
+                "igst_on_pf_amt": "{{lms_api.BorrowerInfo.data.0.row.0|to_python:'igst_on_pf_amt'|default_if_blank:'0'}}",
+                "repayment_type": "{{lms_api.BorrowerInfo.data.0.row.0|to_python:'repayment_type'}}",
+                "insurance_amt": "{{lms_api.BorrowerInfo.data.0.row.0|to_python:'insurance_amt'|default_if_blank:'0'}}",
+                "stamp_charges": "{{lms_api.BorrowerInfo.data.0.row.0|to_python:'stamp_charges'|default_if_blank:'0'}}",
+                "pre_emi_interest": "{{lms_api.BorrowerInfo.data.0.row.0|to_python:'pre_emi_interest'|default_if_blank:'0'}}",
+                "first_inst_date": "{{lms_api.BorrowerInfo.data.0.row.0|to_python:'first_inst_date'}}",
+                "disburse_date": "{{lms_api.BorrowerInfo.data.0.row.0|to_python:'disburse_date'}}",
+                "foir": "{{lms_api.BorrowerInfo.data.0.row.0|to_python:'foir'}}",
+                "total_charges": "{{lms_api.BorrowerInfo.data.0.row.0|to_python:'total_charges'}}",
+                "net_disbur_amt": "{{lms_api.BorrowerInfo.data.0.row.0|to_python:'net_disbur_amt'|default_if_blank:'0'}}",
+                "final_approve_status": "{{lms_api.BorrowerInfo.data.0.row.0|to_python:'final_approve_status'|default_if_blank:'Approved'}}",
+                "final_approved_by": "{{lms_api.BorrowerInfo.data.0.row.0|to_python:'final_approved_by'}}",
+                "final_approve_date": "{{lms_api.BorrowerInfo.data.0.row.0|to_python:'final_approve_date'}}",
+                "employment_name": "{{lms_api.BorrowerInfo.data.0.row.0|to_python:'employment_name'}}",
+                "designation": "{{lms_api.BorrowerInfo.data.0.row.0|to_python:'designation'}}",
+                "employment_city": "{{lms_api.BorrowerInfo.data.0.row.0|to_python:'employment_city'}}",
+                "employment_pincode": "{{lms_api.BorrowerInfo.data.0.row.0|to_python:'employment_pincode'}}",
+                "employment_addr_ln_1": "{{lms_api.BorrowerInfo.data.0.row.0|to_python:'business_addr_ln_1'}}",
+                "employment_state": "{{lms_api.BorrowerInfo.data.0.row.0|to_python:'business_state'}}",
+                "bureau_name": "{{lms_api.BorrowerInfo.data.0.row.0|to_python:'bureau_name'}}",
+                "monthly_income_of_the_borro": "{{lms_api.BorrowerInfo.data.0.row.0|to_python:'monthly_income_of_the_borro'|default_if_blank:'0'}}",
+                "annual_income_of_the_borro": "{{lms_api.BorrowerInfo.data.0.row.0|to_python:'annual_income_of_the_borro'|default_if_blank:'0'}}"
+            }
+        ],
+        "iterable": false,
+        "iterable_data": "[]",
+        "iterable_filters": {},
+        "method": "POST",
+        "auth_scheme": "Bearer",
+        "priority": 2,
+        "lender": "0262fab4-0f8a-4037-89f4-71ca10010db1"
+    }
+},
+{
+    "model": "lenders.lendersystemapi",
+    "pk": "9c0ad848-6fdd-4bfd-8560-ab3b5868e498",
+    "fields": {
+        "created": "2021-03-11T10:02:07.180Z",
+        "modified": "2021-03-18T15:15:21.719Z",
+        "status": 1,
+        "activate_date": "2021-03-11T10:02:07.179Z",
+        "deactivate_date": null,
+        "name": "LoanDocument",
+        "path": "/loandocument",
+        "params": {},
+        "headers": {},
+        "body": {
+            "partner_loan_id": "{{lender_api.LoanRequest.data.preparedbiTmpl.0.partner_loan_id}}",
+            "partner_borrower_id": "{{lender_api.LoanRequest.data.preparedbiTmpl.0.partner_borrower_id}}",
+            "kudos_loan_id": "{{lender_api.LoanRequest.data.preparedbiTmpl.0.kudos_loan_id}}",
+            "kudos_borrower_id": "{{lender_api.LoanRequest.data.preparedbiTmpl.0.kudos_borrower_id}}",
+            "fileType": "{% autoescape off %}{{name}}{% endautoescape %}",
+            "base64pdfencodedfile": "{% autoescape off %}{{items|generate_base64pdf:'name'}}{% endautoescape %}"
+        },
+        "iterable": true,
+        "iterable_data": "lms_api.FetchDocument",
+        "iterable_filters": {
+            "name": {
+                "\"Aadhaar Front\"": [
+                    "aadhar_card",
+                    {}
+                ],
+                "\"Aadhaar Back\"": [
+                    "address_proof",
+                    {}
+                ],
+                "\"Selfie\"": [
+                    "selfie",
+                    {}
+                ],
+                "\"bank_statement\"": [
+                    "borro_bank_stmt",
+                    []
+                ]
+            }
+        },
+        "method": "POST",
+        "auth_scheme": "Bearer",
+        "priority": 4,
+        "lender": "0262fab4-0f8a-4037-89f4-71ca10010db1"
+    }
+}
+]
