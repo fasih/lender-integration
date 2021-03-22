@@ -44,6 +44,7 @@ phases:
       - aws eks update-kubeconfig --name $EKS_CLUSTER_NAME
       # Apply changes to our Application using kubectl
       - echo "Apply changes to kube manifests"            
+      - kubectl apply -f deploy/k8s/sc.yaml
       - kubectl apply -f deploy/k8s/pvc.yaml
       - kubectl apply -f deploy/k8s/config.yaml
       - kubectl apply -f deploy/k8s/nginx.yaml
