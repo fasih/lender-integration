@@ -4,7 +4,7 @@ metadata:
   name: mf-services
 build:
   artifacts:
-  - image: gcr.io/mayafin/gitlab.com/mayafin/services.mayafin.in
+  - image: CONTAINER_IMAGE
     context: .
     docker:
       dockerfile: ./build/Dockerfile
