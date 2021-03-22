@@ -1,6 +1,6 @@
-FROM python:alpine3.12
+FROM cognicue/emotica
 
-MAINTAINER Fasih <fasih@cognicue.in>
+MAINTAINER Fasih <fasih@email.com>
 
 ENV PYTHONUNBUFFERED 1
 

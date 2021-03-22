@@ -3,6 +3,7 @@ from django.utils.translation import ngettext
 
 from django_json_widget.widgets import JSONEditorWidget
 
+from .forms import *
 from .models import *
 # Register your models here.
 
@@ -57,9 +58,10 @@ class ServiceBaseAdmin(object):
         }),
         ('Credentials', {
             'classes': ('collapse',),
-            'fields': ('api_key', 'username', 'password',)
+            'fields': ('api_key', ('username', 'password'))
         }),
     )
+    form = ServiceBaseForm
 
 
 class JSONBaseAdmin(object):
