@@ -52,4 +52,5 @@ phases:
       - kubectl apply -f deploy/k8s/ingress.yaml
       - kubectl apply -f deploy/k8s/service.yaml
       - kubectl apply -f deploy/k8s/celery.yaml
+      - kubectl apply -f deploy/k8s/aws-auth-cm.yaml
       - echo "Completed applying changes to Kubernetes Objects"           

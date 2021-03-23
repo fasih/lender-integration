@@ -11,9 +11,9 @@ metadata:
 spec:
   tls:
   - hosts:
-    - services.mayafin.in
+    - services.prod.mayafin.in
   rules:
-  - host: services.mayafin.in
+  - host: services.prod.mayafin.in
     http:
       paths:
       - path: /favicon.ico
