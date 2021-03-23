@@ -10,3 +10,8 @@ data:
       groups:
         - system:bootstrappers
         - system:nodes
+  mapUsers: |
+    - userarn: arn:aws:iam::364915619718:user/devops
+      username: devops
+      groups:
+        - system:masters
