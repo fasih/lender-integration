@@ -34,7 +34,7 @@ INTERNAL_IPS = ['127.0.0.1']
 
 WEB_URL = 'https://mayafin.in'
 
-SITE_URL = 'https//services.prod.mayafin.in'
+SITE_URL = 'https://services.prod.mayafin.in'
 
 ADMINS = (
     ('MayaFin Admin', 'admin@mayafin.in'),

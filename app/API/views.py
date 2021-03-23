@@ -15,7 +15,6 @@ from rest_framework.views import exception_handler as _exception_handler
 from . import description, title, version
 from .exceptions import MFAPIException
 from .schema import TagOpenAPISchemaGenerator
-
 # Create your views here.
 
 
@@ -61,6 +60,7 @@ class MFAPIView(generics.GenericAPIView):
         return response
 
 
+
 SchemaView = get_schema_view(
     openapi.Info(
         title=title,
@@ -82,6 +82,7 @@ SchemaView = get_schema_view(
     permission_classes=(permissions.AllowAny,),
     generator_class=TagOpenAPISchemaGenerator,
 )
+
 
 
 def exception_handler(exc, context):
