@@ -28,7 +28,7 @@ SECRET_KEY = _("SECRET_KEY") or '+ad+2_=98762)123(y76-8%m9_q23233'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['.mayafin.in']
+ALLOWED_HOSTS = ['*']
 
 INTERNAL_IPS = ['127.0.0.1']
 
