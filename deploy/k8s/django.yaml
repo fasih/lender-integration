@@ -20,9 +20,9 @@ spec:
         imagePullPolicy: Always
         envFrom:
           - configMapRef:
-              name: cc-django-config
+              name: mf-django-config
           - secretRef:
-              name: cc-django-secret
+              name: mf-django-secret
           - secretRef:
               name: rc-psql-secret
           - secretRef:
