@@ -110,11 +110,11 @@ WSGI_APPLICATION = 'services.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'NAME': BASE_DIR / 'media/db.sqlite3',
     }
 }
 
-DATABASES = {
+PGDATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': _("DB_NAME", "services"),
@@ -126,6 +126,10 @@ DATABASES = {
         'PASSWORD': _("postgresql-password", "root"),
     }
 }
+
+print('*'*50)
+print(PGDATABASES)
+print('*'*50)
 
 
 # Password validation
