@@ -61,7 +61,7 @@ class ServiceBaseAdmin(object):
             'fields': ('api_key', ('username', 'password'))
         }),
     )
-    form = ServiceBaseForm
+    #form = ServiceBaseForm
 
 
 class JSONBaseAdmin(object):

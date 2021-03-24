@@ -120,3 +120,10 @@ def default_today(date_str):
         date_str = None
         TODAY = date.today()
     return date_str or TODAY.strftime('%Y-%m-%d')
+
+
+
+@register.filter
+def strip(string):
+    data = str(string)
+    return data.strip()
