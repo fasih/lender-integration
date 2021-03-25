@@ -6,9 +6,12 @@ metadata:
   annotations:
     kubernetes.io/ingress.class: alb
     alb.ingress.kubernetes.io/scheme: internet-facing
-    alb.ingress.kubernetes.io/load-balancer-attributes: idle_timeout.timeout_seconds=6000
+    alb.ingress.kubernetes.io/load-balancer-attributes: idle_timeout.timeout_seconds=4000
     alb.ingress.kubernetes.io/healthcheck-interval-seconds: '30'
     alb.ingress.kubernetes.io/healthcheck-path: /healthz/
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTPS":443}, {"HTTP":80}]'
+    alb.ingress.kubernetes.io/actions.ssl-redirect: '{"Type": "redirect", "RedirectConfig": { "Protocol": "HTTPS", "Port": "443", "StatusCode": "HTTP_301"}}'
+    alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:ap-south-1:364915619718:certificate/92a54972-35b7-473f-aa4c-1564aed1172d
 spec:
   tls:
   - hosts:
@@ -17,6 +20,10 @@ spec:
   - host: services.prod.mayafin.in
     http:
       paths:
+      - path: /* # SSL Redirect Setting
+        backend:
+          serviceName: ssl-redirect
+          servicePort: use-annotation 
       - path: /favicon.ico
         backend:
           serviceName: mf-services-svc
@@ -25,15 +32,15 @@ spec:
         backend:
           serviceName: mf-services-svc
           servicePort: 8001
-      - path: /static/
+      - path: /static/*
         backend:
           serviceName: mf-services-svc
           servicePort: 8001
-      - path: /media/
+      - path: /media/*
         backend:
           serviceName: mf-services-svc
           servicePort: 8001
-      - path: /
+      - path: /*
         backend:
           serviceName: mf-services-svc
           servicePort: 8000
