@@ -124,8 +124,8 @@ DATABASES = {
         'HOST': env.get("DB_HOST", "localhost"),
         'PORT': env.get("DB_PORT", '5432'),
 
-        'USER': env.get("postgresql-username", 'postgres'),
-        'PASSWORD': env.get("postgresql-password", "root"),
+        'USER': env.get("DB_USERNAME", 'postgres'),
+        'PASSWORD': env.get("DB_PASSWORD", "root"),
     }
 }
 
@@ -391,8 +391,8 @@ ADMIN_REORDER_INDEX = ('borrowers', 'lenders', 'platforms',)
 
 
 # CELERY CONFIGURATIONS
-CELERY_BROKER_URL = 'amqp://%s:%s@%s//' %(env.get("rabbitmq-username"), \
-                    env.get("rabbitmq-password"),env.get("RABBITMQ_SVC"))
+CELERY_BROKER_URL = 'amqp://%s:%s@%s//' %(env.get("RBMQ_USERNAME"), \
+                    env.get("RBMQ_PASSWORD"), env.get("RABBITMQ_SVC"))
 
 CELERY_TIMEZONE = 'Asia/Kolkata'
 
