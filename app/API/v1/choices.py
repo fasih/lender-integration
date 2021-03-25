@@ -8,7 +8,6 @@ from platforms.models import (ChannelPartners, LoanManagementSystem,
 
 
 try:
-    raise
     CP_CHOICES = ChannelPartners.objects.values_list('code', 'name')
     LENDER_CHOICES = LenderSystem.objects.values_list('code', 'name')
     LMS_CHOICES = LoanManagementSystem.objects.values_list('code', 'name')
