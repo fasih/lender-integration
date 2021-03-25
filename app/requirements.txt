@@ -17,6 +17,7 @@ django-structlog
 djangorestframework
 drf_yasg2
 
+furl
 img2pdf
 jsonfield
 psycopg2

@@ -5,6 +5,7 @@ import os
 
 from datetime import date, datetime
 from dateutil import relativedelta
+from furl import furl
 
 from django.conf import settings
 from django.template.defaultfilters import register
@@ -40,15 +41,27 @@ def default_if_blank(value, default):
 
 
 @register.filter
-def calculate_emi(context):
+def calculate_emi(context, query_string):
     try:
-        P = float(context.get('applied_amount'))
-        n = float(context.get('loan_tenure'))
-        r = float(context.get('int_rate_reducing_perc'))
-    except ValueError:
-        P = n = r = 0
+        f = furl(f'?{query_string}')
+        params_list = f.query.asdict()['params']
+        params_dict = dict(params_list)
 
-    EMI = P * r * (1 + r)*n/((1 + r)*n - 1)
+        P_key = params_list[0][0]
+        N_key = params_list[1][0]
+        R_key = params_list[2][0]
+
+        P_value = params_dict[P_key] or 0
+        N_value = params_dict[N_key] or 0
+        R_value = params_dict[R_key] or 0
+
+        P = float(context.get(P_key) or P_value)
+        N = float(context.get(N_key) or N_value)
+        R = float(context.get(R_key) or R_value)
+    except:
+        P = N = R = 0
+
+    EMI = P * R * (1 + R)*N/((1 + R)*N - 1)
     return abs(EMI)
 
 

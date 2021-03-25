@@ -14,10 +14,9 @@ from API.views import MFAPIView
 from base.utils import apply_task
 from lenders.models import *
 from platforms.models import *
+from services.settings import TASK_SYNC
 
 logger = logging.getLogger(__name__)
-
-SYNC = False
 
 
 
@@ -41,7 +40,7 @@ class LoanApplicationCreateAPIView(MFAPIView):
         instance = self.perform_create(serializer)
 
         from .tasks import loans_post
-        apply_task(loans_post.s(instance.pk), SYNC)
+        apply_task(loans_post.s(instance.pk), TASK_SYNC)
         instance.task_name = loans_post.name
         instance.task_status = "Submitted"
         app = LoanApplicationTaskSerializer(instance)
@@ -105,7 +104,7 @@ class LoanApplicationAPIView(MFAPIView):
         """        
         instance = self.get_object()
         from .tasks import loans_patch
-        apply_task(loans_patch.s(instance.pk), SYNC)
+        apply_task(loans_patch.s(instance.pk), TASK_SYNC)
         instance.task_name = loans_patch.name
         instance.task_status = "Submitted"
         app = LoanApplicationTaskSerializer(instance)
@@ -123,7 +122,7 @@ class LoanApplicationAPIView(MFAPIView):
 
         instance = self.get_object()
         from .tasks import loans_put
-        apply_task(loans_put.s(instance.pk), SYNC)
+        apply_task(loans_put.s(instance.pk), TASK_SYNC)
         instance.task_name = loans_put.name
         instance.task_status = "Submitted"
         app = LoanApplicationTaskSerializer(instance)
