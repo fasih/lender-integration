@@ -39,7 +39,7 @@ data:
             # what file to server as index
             index index.html index.htm;
 
-            location = / {return 200 "ELB-HealthChecker/2.0";}
+            location ~ ^\/healthz\/$ {return 200 "ELB-HealthChecker/2.0";}
             location ~ ^\/robots\.txt$ {return 200 "User-agent: *\nDisallow: /\n";}
             location ~ ^\/favicon\.ico$ {alias /usr/share/nginx/html/static/CC/images/favicon.ico;}
 

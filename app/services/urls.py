@@ -17,11 +17,13 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include, reverse
-from django.views.generic.base import RedirectView
+from django.views.generic import RedirectView, View
 
 urlpatterns = [
     path(settings.ADMIN, admin.site.urls),
     path(settings.API, include('API.urls')),
+    path('health/', include('health_check.urls')),
+    path('healthz/', View().options),
 ]
 
 if settings.DEBUG:

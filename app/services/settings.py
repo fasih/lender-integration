@@ -68,6 +68,9 @@ INSTALLED_APPS = [
     'lenders',
     'API',
     'IAM',
+
+    'health_check',
+    'health_check.db',
 ]
 
 MIDDLEWARE = [
