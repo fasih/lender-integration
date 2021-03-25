@@ -11,7 +11,7 @@ from .models import *
 
 class BaseAdmin(object):
     exclude = ('status', 'activate_date', 'deactivate_date')
-    _list_display = ('created', 'status', 'modified')
+    _list_display = ('status', 'created', 'modified')
     ordering = ('-status', '-modified')
     list_per_page = 10
 
@@ -83,7 +83,7 @@ class APIBaseAdmin(object):
        return (self.towhom,)
 
     def get_list_display(self, request, obj=None):
-       return (self.towhom, 'name', 'method', 'priority', 'iterable') + \
+       return (self.towhom, 'name', 'method', 'priority',) + \
                 BaseAdmin._list_display
 
     def get_ordering(self, request, obj=None):
