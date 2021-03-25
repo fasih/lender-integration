@@ -10,10 +10,9 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 
-from os import environ
+from os import environ as env
 from pathlib import Path
 
-_ = environ.get
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -23,7 +22,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = _("SECRET_KEY") or '+ad+2_=98762)123(y76-8%m9_q23233'
+SECRET_KEY = env.get("SECRET_KEY") or '+ad+2_=98762)123(y76-8%m9_q23233'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
@@ -117,22 +116,19 @@ DATABASES = {
     }
 }
 
-PGDATABASES = {
+DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': _("DB_NAME", "services"),
+        'NAME': env.get("DB_NAME", "services"),
 
-        'HOST': _("DB_HOST", "localhost"),
-        'PORT': _("DB_PORT", '5432'),
+        'HOST': env.get("DB_HOST", "localhost"),
+        'PORT': env.get("DB_PORT", '5432'),
 
-        'USER': _("postgresql-username", 'postgres'),
-        'PASSWORD': _("postgresql-password", "root"),
+        'USER': env.get("postgresql-username", 'postgres'),
+        'PASSWORD': env.get("postgresql-password", "root"),
     }
 }
 
-print('*'*50)
-print(PGDATABASES)
-print('*'*50)
 
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
@@ -395,7 +391,8 @@ ADMIN_REORDER_INDEX = ('borrowers', 'lenders', 'platforms',)
 
 
 # CELERY CONFIGURATIONS
-CELERY_BROKER_URL = 'amqp://%s:%s@%s//'%(_("rabbitmq-username"),_("rabbitmq-password"),_("RABBITMQ_SVC"))
+CELERY_BROKER_URL = 'amqp://%s:%s@%s//' %(env.get("rabbitmq-username"), \
+                    env.get("rabbitmq-password"),env.get("RABBITMQ_SVC"))
 
 CELERY_TIMEZONE = 'Asia/Kolkata'
 
