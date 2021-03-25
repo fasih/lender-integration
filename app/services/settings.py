@@ -117,7 +117,7 @@ DATABASES = {
     }
 }
 
-PGDATABASES = {
+DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': _("DB_NAME", "services"),
@@ -130,9 +130,6 @@ PGDATABASES = {
     }
 }
 
-print('*'*50)
-print(PGDATABASES)
-print('*'*50)
 
 
 # Password validation

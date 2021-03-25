@@ -11,13 +11,8 @@ class Command(BaseCommand):
         User = get_user_model()
 
         if User.objects.count() == 0:
-            admin = User.objects.create_superuser(email="admin@mayafin.in",
-                                                    password='google@123')
-
             management.call_command('loaddata', 'initproject', verbosity=1)
-
             self.stdout.write(self.style.SUCCESS('Created superuser and loaded module fixtures.'))
             self.stdout.write(self.style.SUCCESS('Project initialization completed :)'))
-
         else:
             self.stdout.write(self.style.SUCCESS('Project is already initialized :)'))

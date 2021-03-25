@@ -1,8 +1,8 @@
 import tempfile
 import structlog as logging
 
-from collections import defaultdict
 from celery.decorators import task
+from collections import defaultdict
 from dictor import dictor
 from django.core.files import File
 from rest_framework import status
