@@ -51,17 +51,22 @@ def calculate_emi(context, query_string):
         N_key = params_list[1][0]
         R_key = params_list[2][0]
 
-        P_value = params_dict[P_key] or 0
-        N_value = params_dict[N_key] or 0
-        R_value = params_dict[R_key] or 0
+        P_default = params_dict[P_key] or 0
+        N_default = params_dict[N_key] or 0
+        R_default = params_dict[R_key] or 0
 
-        P = float(context.get(P_key) or P_value)
-        N = float(context.get(N_key) or N_value)
-        R = float(context.get(R_key) or R_value)
+        P_value = context.get(P_key) and str(context.get(P_key)).strip()
+        N_value = context.get(N_key) and str(context.get(N_key)).strip()
+        R_value = context.get(R_key) and str(context.get(R_key)).strip()
+
+        P = float(P_value or P_default)
+        N = float(N_value or N_default)
+        R = float(R_value or R_default)
     except:
         P = N = R = 0
 
-    EMI = P * R * (1 + R)*N/((1 + R)*N - 1)
+    R = R/(12*100)
+    EMI = (P*R*pow(1+R, N))/(pow(1+R,N)-1)
     return abs(EMI)
 
 
