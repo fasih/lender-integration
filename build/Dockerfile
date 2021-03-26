@@ -2,6 +2,11 @@ FROM cognicue/emotica
 
 MAINTAINER Fasih <fasih@email.com>
 
+RUN apt-get update
+
+RUN apt-get -o APT::Immediate-Configure=0 --no-install-recommends -y install \
+    ghostscript
+
 ENV PYTHONUNBUFFERED 1
 
 #Copy over application files

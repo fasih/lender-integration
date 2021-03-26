@@ -2,6 +2,8 @@ import base64
 import img2pdf
 import json
 import os
+import shutil
+import tempfile
 
 from datetime import date, datetime
 from dateutil import relativedelta
@@ -9,6 +11,8 @@ from furl import furl
 
 from django.conf import settings
 from django.template.defaultfilters import register
+
+from services.pdf_compressor import compress
 
 
 
@@ -103,24 +107,40 @@ def calculate_emi_date(disburse_date, cycle_date):
 @register.filter
 def generate_base64pdf(items, key):
     filename = []
-    already_pdf = False
+
+    pdf_ext = False
+    no_ext = False
+
     for item in items:
         name = item.get(key)
         filename.append("{}/{}".format(settings.MEDIA_ROOT, item['filename']))
         _, ext = os.path.splitext(item['filename'])
-        if ext.lower() == '.pdf':
-            already_pdf = True
 
-    if not already_pdf:
-        final_filename = f"/tmp/{name}.pdf"
+        if ext.lower() == '.pdf':
+            pdf_ext = True
+        elif ext == '':
+            no_ext = True
+
+    if pdf_ext:
+        final_filename = filename[0]
+    elif no_ext:
+        src_filename = filename[0]
+        final_filename = f'{src_filename}.pdf'
+        shutil.copy(src_filename, final_filename)
+    else:
+        final_filename = tempfile.NamedTemporaryFile(suffix='.pdf').name
         with open(final_filename, "wb") as f:
             f.write(img2pdf.convert(filename))
-    else:
-        final_filename = filename[0]
+    try:
+        compressed_filename = tempfile.NamedTemporaryFile(suffix='.pdf').name
+        compress(final_filename, compressed_filename, power=3)
+    except:
+        compressed_filename = final_filename
 
-    data = open(final_filename, "rb").read()
+    data = open(compressed_filename, "rb").read()
     encoded = base64.b64encode(data)
-    return encoded
+    base64_string = encoded.decode('utf-8')
+    return base64_string
 
 
 
