@@ -128,6 +128,10 @@ def fetch_from_lms(app):
             request = getattr(Request, api.method)
             kwargs = dict(headers=headers)
 
+            if api.auth_scheme:
+                kwargs["headers"].update({"Authorization":
+                                    f"{api.auth_scheme} {lms.auth_token}"})
+
             if api.params:
                 api_query_params = render_from_string(api.params, context)
                 query_params.update(**api_query_params)
@@ -145,10 +149,6 @@ def fetch_from_lms(app):
                     kwargs.update(json=body)
                 else:
                     kwargs.update(json=api_body)
-
-            if api.auth_scheme:
-                kwargs["headers"].update({"Authorization":
-                                    f"{api.auth_scheme} {lms.auth_token}"})
 
             response = request.send(url, **kwargs)
             request_json = kwargs.copy()
@@ -316,6 +316,10 @@ def push_to_lender(app):
             request = getattr(Request, api.method)
             kwargs = dict(headers=headers)
 
+            if api.auth_scheme:
+                kwargs["headers"].update({"Authorization":
+                                    f"{api.auth_scheme} {lender.auth_token}"})
+
             if api.params:
                 api_query_params = render_from_string(api.params, context)
                 query_params.update(**api_query_params)
@@ -333,10 +337,6 @@ def push_to_lender(app):
                     kwargs.update(json=body)
                 else:
                     kwargs.update(json=api_body)
-
-            if api.auth_scheme:
-                kwargs["headers"].update({"Authorization":
-                                    f"{api.auth_scheme} {lender.auth_token}"})
 
             response = request.send(url, **kwargs)
             data = LoanData(app=app, loan=loan, lender_api=api, request=kwargs,

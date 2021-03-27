@@ -110,7 +110,7 @@ class Request(object):
             except Exception as e:
                 logger.exception('Request', args=args, kwargs=kwargs, msg=str(e))
 
-            return Response(e)
+            return Request.ErrorResponse(e)
 
 
     GET = Method(requests.get)

@@ -3,6 +3,7 @@ import img2pdf
 import json
 import os
 import shutil
+import structlog as logging
 import tempfile
 
 from datetime import date, datetime
@@ -13,6 +14,8 @@ from django.conf import settings
 from django.template.defaultfilters import register
 
 from services.pdf_compressor import compress
+
+logger = logging.getLogger(__name__)
 
 
 
@@ -128,7 +131,7 @@ def generate_base64pdf(items, key):
             elif 'image' in file_type:
                 is_pdf = False
                 file_renamed = f'{abs_file_path}.png'
-            shutil.copy(abs_file_path, file_renamed)
+            shutil.copyfile(abs_file_path, file_renamed)
             file_path = file_renamed
 
         else:
@@ -142,9 +145,13 @@ def generate_base64pdf(items, key):
     else:
         pdf_filename = tempfile.NamedTemporaryFile(suffix='.pdf').name
         with open(pdf_filename, "wb") as f:
-            f.write(img2pdf.convert(file_list))
+            try:
+                f.write(img2pdf.convert(file_list))
+            except Exception as e:
+                logger.exception('generate_base64pdf', msg=str(e), items=items)
     try:
-        if compress_level == -1:raise
+        if compress_level == -1:
+            raise Exception('File compress switch does not exist')
         compressed_filename = tempfile.NamedTemporaryFile(suffix='.pdf').name
         compress(pdf_filename, compressed_filename, power=compress_level)
     except:
