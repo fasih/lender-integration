@@ -69,7 +69,10 @@ class APIBaseModel(BaseModel):
     body = models.JSONField(null=True, blank=True, default=dict,
                         verbose_name='Request Body')
 
-    iterable = models.BooleanField(null=True, blank=True, default=False)
+    iterable = models.BooleanField(null=True, blank=True, default=False,
+                        help_text='Yes if the API is going to be called \
+                            multiple times then also configure Iterable Data \
+                            Settings')
 
     iterable_data = models.TextField(null=True, blank=True,
                         verbose_name='Iterable Data Path')

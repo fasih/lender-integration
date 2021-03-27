@@ -106,36 +106,49 @@ def calculate_emi_date(disburse_date, cycle_date):
 
 @register.filter
 def generate_base64pdf(items, key):
-    filename = []
-
-    pdf_ext = False
-    no_ext = False
+    compress_level = -1
+    file_list = []
+    is_pdf = False
 
     for item in items:
-        name = item.get(key)
-        filename.append("{}/{}".format(settings.MEDIA_ROOT, item['filename']))
-        _, ext = os.path.splitext(item['filename'])
+        compress_level = item['compress']
+        file_type = item.get(key)
+        file_name = item['filename']
+        _, ext = os.path.splitext(file_name)
+        abs_file_path = "{}/{}".format(settings.MEDIA_ROOT, file_name)
 
         if ext.lower() == '.pdf':
-            pdf_ext = True
-        elif ext == '':
-            no_ext = True
+            is_pdf = True
+            file_path = abs_file_path
 
-    if pdf_ext:
-        final_filename = filename[0]
-    elif no_ext:
-        src_filename = filename[0]
-        final_filename = f'{src_filename}.pdf'
-        shutil.copy(src_filename, final_filename)
+        elif ext == '':
+            if 'pdf' in file_type:
+                is_pdf = True
+                file_renamed = f'{abs_file_path}.pdf'
+            elif 'image' in file_type:
+                is_pdf = False
+                file_renamed = f'{abs_file_path}.png'
+            shutil.copy(abs_file_path, file_renamed)
+            file_path = file_renamed
+
+        else:
+            is_pdf = False
+            file_path = abs_file_path
+
+        file_list.append(file_path)
+
+    if is_pdf:
+        pdf_filename = file_list[-1]
     else:
-        final_filename = tempfile.NamedTemporaryFile(suffix='.pdf').name
-        with open(final_filename, "wb") as f:
-            f.write(img2pdf.convert(filename))
+        pdf_filename = tempfile.NamedTemporaryFile(suffix='.pdf').name
+        with open(pdf_filename, "wb") as f:
+            f.write(img2pdf.convert(file_list))
     try:
+        if compress_level == -1:raise
         compressed_filename = tempfile.NamedTemporaryFile(suffix='.pdf').name
-        compress(final_filename, compressed_filename, power=3)
+        compress(pdf_filename, compressed_filename, power=compress_level)
     except:
-        compressed_filename = final_filename
+        compressed_filename = pdf_filename
 
     data = open(compressed_filename, "rb").read()
     encoded = base64.b64encode(data)

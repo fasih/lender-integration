@@ -13,8 +13,6 @@ from borrowers.models import *
 from lenders.models import *
 from platforms.models import *
 
-
-
 logger = logging.getLogger(__name__)
 
 
@@ -286,10 +284,11 @@ def push_to_lender(app):
                 for k in iterable_filter_keys:
                     if item.get(k) in api.iterable_filters[k]:
                         key = item.get(k)
-                        key_config = api.iterable_filters[k][key]
-                        item[k] = key_config[0]
+                        item_config = api.iterable_filters[k][key]
+                        item[k] = item_config['name']
+                        item['compress'] = item_config.get('compress') or -1
 
-                        if isinstance(key_config[1], list):
+                        if isinstance(item_config['type'], list):
                             iterable_filter_data[key].append(item)
                         else:
                             iterable_filter_data[key] = item

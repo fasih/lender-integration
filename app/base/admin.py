@@ -83,7 +83,7 @@ class APIBaseAdmin(object):
        return (self.towhom,)
 
     def get_list_display(self, request, obj=None):
-       return (self.towhom, 'name', 'method', 'priority',) + \
+       return (self.towhom, 'name', 'method', 'priority', 'api_calls') + \
                 BaseAdmin._list_display
 
     def get_ordering(self, request, obj=None):
@@ -106,6 +106,11 @@ class APIBaseAdmin(object):
             }),
         )
         return fieldsets
+
+    def api_calls(self, obj):
+        return obj.iterable and 'Multiple' or 'Single'
+    api_calls.short_description = 'API Calls'
+    api_calls.admin_order_field = 'iterable'
 
 
 
