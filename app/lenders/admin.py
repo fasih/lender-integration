@@ -13,7 +13,7 @@ from borrowers.filters import *
 class LoanDataAdmin(JSONBaseAdmin, BaseAdmin, admin.ModelAdmin):
     list_display = ('app', 'lender_api', 'response_code')
     list_filter = (LenderAPIFilter, LenderNestedFilter)
-    search_fields = ('app__lmsid',)
+    search_fields = ('app__lmsid', 'request', 'response')
 
     autocomplete_fields = ('loan', 'lender_api')
     fields = (('loan', 'lender_api', 'response_code'), ('request', 'response'))
