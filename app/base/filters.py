@@ -1,7 +1,12 @@
 from admin_auto_filters.filters import AutocompleteFilter
+
+from django.contrib import admin
 from django.db.models import ManyToOneRel, ManyToManyRel
-from django.db.models.fields.related_descriptors import (
-    ReverseManyToOneDescriptor, ManyToManyDescriptor)
+from django.db.models.fields.related_descriptors import (ManyToManyDescriptor,
+    ReverseManyToOneDescriptor
+)
+
+from base.models import is_success
 
 
 
@@ -26,4 +31,36 @@ class BaseAutocompleteFilter(AutocompleteFilter):
             related_model = field_desc.related_model
         else:
             return field_desc.get_queryset()
-        return related_model.objects.get_queryset()    
+        return related_model.objects.get_queryset()
+
+
+
+class SuccessFilter(admin.SimpleListFilter):
+    title = 'Response Status'
+    parameter_name = 'is_success'
+
+    def lookups(self, request, model_admin):
+        return (
+            ('1', 'SUCCESS'),
+            ('0', 'NOT SUCCESS'),
+        )
+
+    def queryset(self, request, queryset):
+        if self.value() == '0':
+            return queryset.exclude(is_success)
+        elif self.value() == '1':
+            return queryset.filter(is_success)
+
+
+    def choices(self, changelist):
+        yield {
+            'selected': self.value() is None,
+            'query_string': changelist.get_query_string(remove=[self.parameter_name]),
+            'display': 'All',
+        }
+        for lookup, title in self.lookup_choices:
+            yield {
+                'selected': self.value() == str(lookup),
+                'query_string': changelist.get_query_string({self.parameter_name: lookup}),
+                'display': title,
+            }

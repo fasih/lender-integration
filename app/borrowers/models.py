@@ -8,8 +8,8 @@ from base.utils import *
 
 class LoanApplication(BaseModel):
     lmsid = models.CharField(max_length=255, null=True,
-                    verbose_name='Loan Application Reference No.',
-                    help_text='LoanID at LMS')
+                    verbose_name='LoanID', help_text='Loan Application '
+                            'Reference No. at LMS')
 
     lms = models.ForeignKey('platforms.LoanManagementSystem', null=True,
                     on_delete=models.SET_NULL, verbose_name='LMS')
@@ -35,7 +35,7 @@ class LoanApplication(BaseModel):
 
 class LoanApplicationData(BaseModel):
     app = models.ForeignKey('borrowers.LoanApplication', null=True,
-                        on_delete=models.SET_NULL, verbose_name='Application')
+                        on_delete=models.SET_NULL, verbose_name='LoanID')
 
     lms_api = models.ForeignKey('platforms.LoanManagementSystemAPI', null=True,
                         blank=True, on_delete=models.SET_NULL,

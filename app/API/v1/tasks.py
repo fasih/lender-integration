@@ -20,7 +20,7 @@ logger = logging.getLogger(__name__)
 def fetch_from_lms(app):
     app_data = LoanApplicationData.objects.filter(is_success, app=app
                                     ).select_related('lms_api', 'svc_api'
-                                    ).order_by('created')
+                                    ).active().order_by('created')
 
     context = {'loanId': app.lmsid, 'lms_api': {}, 'svc_api': {}}
 
@@ -82,7 +82,7 @@ def fetch_from_lms(app):
 
         app_data = LoanApplicationData.objects.filter(is_success, app=app,
                                 ).select_related('lms_api', 'svc_api'
-                                ).order_by('created')
+                                ).active().order_by('created')
 
         already_called_non_idempotent_api = False
         for each in app_data:
@@ -187,7 +187,7 @@ def fetch_from_svc(app):
 def push_to_lender(app):
     app_data = LoanApplicationData.objects.filter(is_success, app=app,
                                     ).select_related('lms_api', 'svc_api'
-                                    ).order_by('created')
+                                    ).active().order_by('created')
     loan, _ = Loan.objects.get_or_create(app=app, lender=app.lender)
 
     context = {'loanId': app.lmsid, 'lms_api': defaultdict(list),
@@ -262,7 +262,7 @@ def push_to_lender(app):
 
         loan_data = LoanData.objects.filter(is_success, app=app,
                                         ).select_related('lender_api'
-                                        ).order_by('created')
+                                        ).active().order_by('created')
 
         already_called_non_idempotent_api = False
         for each in loan_data:

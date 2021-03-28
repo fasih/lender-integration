@@ -15,6 +15,9 @@ class BaseAdmin(object):
     list_per_page = 20
     ordering = ('-status', '-modified')
 
+    class Media:
+        js = ('base/javascripts/django-admin.js',)
+
     def get_list_display(self, request):
         list_display = tuple(super().get_list_display(request))
         return list_display + self._list_display

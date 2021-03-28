@@ -130,24 +130,34 @@ class LoanApplicationAPIView(MFAPIView):
         return Response(app.data)
 
     def get_status(self, instance):
-        instance.lms_data = LoanApplicationData.objects.filter(app=instance
-                                ).select_related('lms_api'
+        instance.lms_data = []
+        instance.lender_data = []
+
+        lms_data = LoanApplicationData.objects.filter(app=instance
+                                ).select_related('lms_api').active(
                                 ).order_by('lms_api__priority', '-created')
 
-        instance.lender_data = LoanData.objects.filter(app=instance
-                                ).select_related('lender_api'
+        lender_data = LoanData.objects.filter(app=instance
+                                ).select_related('lender_api').active(
                                 ).order_by('lender_api__priority', '-created')
 
-        lms_api = LoanManagementSystemAPI.objects.filter(lms=instance.lms)
-        lender_api = LenderSystemAPI.objects.filter(lender=instance.lender)
+        lms_api = LoanManagementSystemAPI.objects.filter(lms=instance.lms).active()
+        lender_api = LenderSystemAPI.objects.filter(lender=instance.lender).active()
 
+        lms_api_list = []
         lms_api_success = {}
         lms_api_failure = {}
 
         for each in lms_api:
             lms_api_success.update({each.pk: False})
+            lms_api_list.append(each)
 
-        for each in instance.lms_data:
+        for each in lms_data:
+            if each.lms_api not in lms_api_list:
+                continue
+            else:
+                instance.lms_data.append(each)
+
             if status.is_success(each.response_code):
                 lms_api_success.update({each.lms_api.pk: True})
                 lms_api_failure.pop(each.lms_api.pk, None)
@@ -155,13 +165,20 @@ class LoanApplicationAPIView(MFAPIView):
             elif not lms_api_success.get(each.lms_api.pk):
                 lms_api_failure.update({each.lms_api.pk: True})
 
+        lender_api_list = []
         lender_api_success = {}
         lender_api_failure = {}
 
         for each in lender_api:
             lender_api_success.update({each.pk: False})
+            lender_api_list.append(each)
 
-        for each in instance.lender_data:
+        for each in lender_data:
+            if each.lender_api not in lender_api_list:
+                continue
+            else:
+                instance.lender_data.append(each)
+
             if status.is_success(each.response_code):
                 lender_api_success.update({each.lender_api.pk: True})
                 lender_api_failure.pop(each.lender_api.pk, None)
@@ -170,14 +187,14 @@ class LoanApplicationAPIView(MFAPIView):
                 lender_api_failure.update({each.lender_api.pk: True})
 
         if all(lms_api_success.values()) and all(lender_api_success.values()):
-            instance.status = 'SUBMITTED'
+            instance.workflow_status = 'COMPLETED'
 
         elif all(lms_api_success.values()) and not len(instance.lender_data):
-            instance.status = 'FETCHED'
+            instance.workflow_status = 'LMS FETCHED'
 
         elif len(lms_api_failure) or len(lender_api_failure):
-            instance.status = 'FAILED'
+            instance.workflow_status = 'FAILED'
         else:
-            instance.status = 'PENDING'
+            instance.workflow_status = 'NOT COMPLETED'
 
         return instance

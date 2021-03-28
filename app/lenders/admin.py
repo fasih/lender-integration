@@ -4,6 +4,7 @@ from django_json_widget.widgets import JSONEditorWidget
 from .filters import *
 from .models import *
 from base.admin import *
+from base.filters import *
 from base.models import *
 from borrowers.filters import *
 # Register your models here.
@@ -12,7 +13,7 @@ from borrowers.filters import *
 
 class LoanDataAdmin(JSONBaseAdmin, BaseAdmin, admin.ModelAdmin):
     list_display = ('app', 'lender_api', 'response_code')
-    list_filter = (LenderAPIFilter, LenderNestedFilter)
+    list_filter = (SuccessFilter, AppFilter, LenderAPIFilter, LenderNestedFilter)
     search_fields = ('app__lmsid', 'request', 'response')
 
     autocomplete_fields = ('loan', 'lender_api')
@@ -29,7 +30,7 @@ class LoanDataInlineAdmin(JSONBaseAdmin, BaseAdmin, admin.TabularInline):
     extra = 0
 
     def get_queryset(self, request):
-        queryset = super().get_queryset(request).filter(is_success
+        queryset = super().get_queryset(request).filter(is_success).active(
                                         ).order_by('lender_api__priority')
         return queryset
 

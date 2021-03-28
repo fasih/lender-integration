@@ -1,6 +1,6 @@
 default_app_config = 'API.apps.APIConfig'
 
-version = '0.1.2'
+version = '0.2.0'
 
 title = 'MayaFin Services API'
 

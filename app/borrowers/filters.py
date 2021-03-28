@@ -9,3 +9,8 @@ class LMSNestedFilter(BaseAutocompleteFilter):
     parameter_name = 'app__lms'
     nested_model = LoanApplication
 
+
+
+class AppFilter(BaseAutocompleteFilter):
+    title = 'Application'
+    field_name = 'app'

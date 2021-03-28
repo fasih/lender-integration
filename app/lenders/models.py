@@ -40,7 +40,7 @@ class LenderSystemAPI(APIBaseModel):
 
 class Loan(BaseModel):
     app = models.ForeignKey('borrowers.LoanApplication', null=True,
-                    on_delete=models.SET_NULL, verbose_name='Application')
+                    on_delete=models.SET_NULL, verbose_name='LoanID')
     lender = models.ForeignKey('lenders.LenderSystem', null=True,
                             on_delete=models.SET_NULL)
     loanid = models.CharField(max_length=255, null=True,
@@ -61,7 +61,7 @@ class LoanData(BaseModel):
                         on_delete=models.SET_NULL)
 
     app = models.ForeignKey('borrowers.LoanApplication', null=True,
-                        on_delete=models.SET_NULL, verbose_name='Application')
+                        on_delete=models.SET_NULL, verbose_name='LoanID')
 
     lender_api = models.ForeignKey('lenders.LenderSystemAPI', null=True,
                         on_delete=models.SET_NULL, verbose_name='Lender API')
