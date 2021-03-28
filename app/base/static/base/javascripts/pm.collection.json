@@ -1,8 +1,7 @@
 {
 	"info": {
-		"_postman_id": "dc33d253-6a87-4096-9712-c1c3dfdcff40",
 		"name": "MayaFin Services API",
-		"description": "\n# MayaFin Services\n## OpenAPI\n### Swagger\n#### [API Explorer](/api/swagger/)\n### ReDoc\n#### [API Documentation](/api/#tag/account)\n\n\nContact Support:\n Name: MayaFin Admin\n Email: admin@mayafin.in",
+		"description": "\n# MayaFin Services\n### Postman\n### [API Collection](https://services.mayafin.in/postman)\n### Swagger\n### [API Explorer](https://services.mayafin.in/api/swagger/)\n### ReDoc\n### [API Documentation](https://services.mayafin.in/api/#tag/loans)\n\n\nContact Support:\n Name: MayaFin Admin\n Email: admin@mayafin.in",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
