@@ -6,9 +6,10 @@ title = 'MayaFin Services API'
 
 description = '''
         # MayaFin Services
-        ## OpenAPI
+        ### Postman
+        ### [API Collection](/postman)
         ### Swagger
-        #### [API Explorer](/api/swagger/)
+        ### [API Explorer](/api/swagger/)
         ### ReDoc
-        #### [API Documentation](/api/#tag/account)
+        ### [API Documentation](/api/#tag/loans)
 '''

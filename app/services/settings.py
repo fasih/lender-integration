@@ -406,6 +406,8 @@ CELERY_BROKER_URL = 'amqp://%s:%s@%s//' %(env.get("RBMQ_USERNAME"), \
 
 CELERY_TIMEZONE = 'Asia/Kolkata'
 
+BROKER_URL = CELERY_BROKER_URL # For 'health_check.contrib.rabbitmq'
+
 
 TASK_SYNC = False
 
