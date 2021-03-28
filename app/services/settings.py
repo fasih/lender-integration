@@ -323,7 +323,7 @@ X_FRAME_OPTIONS = 'SAMEORIGIN'
 MATERIAL_ADMIN_SITE = {
     'HEADER':  ('MayaFin Services Admin'),  # Admin site header
     'TITLE':  ('MayaFin Services Admin'),  # Admin site title
-    'FAVICON':  'API/images/favicon.ico',  # Admin site favicon (path to static should be specified)
+    'FAVICON':  'base/images/favicon.ico',  # Admin site favicon (path to static should be specified)
     'MAIN_BG_COLOR':  '#2b5d83',  # Admin site main color, css color should be specified
     'MAIN_HOVER_COLOR':  '#2b5d83',  # Admin site main hover color, css color should be specified
     'PROFILE_PICTURE':  'material/admin/images/login-logo-default.jpg',  # Admin site profile picture (path to static should be specified)
