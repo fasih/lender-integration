@@ -69,11 +69,16 @@ def calculate_emi(context, query_string):
         P = float(P_value or P_default)
         N = float(N_value or N_default)
         R = float(R_value or R_default)
-    except:
+    except Exception as e:
+        logger.exception('calculate_emi', msg=str(e), local=locals())
         P = N = R = 0
 
-    R = R/(12*100)
-    EMI = (P*R*pow(1+R, N))/(pow(1+R,N)-1)
+    try:
+        R = R/(12*100)
+        EMI = (P*R*pow(1+R, N))/(pow(1+R,N)-1)
+    except Exception as e:
+        logger.exception('calculate_emi', msg=str(e), local=locals())
+        EMI = 0
     return abs(EMI)
 
 
@@ -87,7 +92,8 @@ def calculate_delta(from_date, delta='months'):
         from_date = datetime.strptime(from_date, '%Y-%m-%d')
         relative_delta = relativedelta.relativedelta(TODAY, from_date)
         return getattr(relative_delta, delta)
-    except:
+    except Exception as e:
+        logger.exception('calculate_delta', msg=str(e), local=locals())
         return '0'
 
 
@@ -97,7 +103,8 @@ def calculate_emi_date(disburse_date, cycle_date):
     try:
         EMI_CYCLE_DUE_DATE = int(cycle_date)
         disburse_date = datetime.strptime(disburse_date, '%Y-%m-%d')
-    except:
+    except Exception as e:
+        logger.exception('calculate_emi_date', msg=str(e), local=locals())
         return ''
     if disburse_date.day >= EMI_CYCLE_DUE_DATE:
         emi_date = disburse_date + relativedelta.relativedelta(months=1)

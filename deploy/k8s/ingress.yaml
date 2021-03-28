@@ -28,6 +28,10 @@ spec:
         backend:
           serviceName: mf-services-svc
           servicePort: 8001
+      - path: /postman
+        backend:
+          serviceName: mf-services-svc
+          servicePort: 8001
       - path: /robots.txt
         backend:
           serviceName: mf-services-svc

@@ -72,7 +72,9 @@ class LoanApplicationCreateAPIView(MFAPIView):
             instance.save()
             [instance.svc.add(i) for i in svc]
         except IntegrityError:
-            raise LoanApplicationAlreadyExist()
+            instance = LoanApplication.objects.get(lms=lms, lender=lender,
+                                    lmsid=serializer.data['loan_id'], cp=cp)
+            raise LoanApplicationAlreadyExist(application_id=instance.pk)
 
         return instance
 

@@ -41,7 +41,8 @@ data:
 
             location ~ ^\/healthz\/$ {return 200 "ELB-HealthChecker/2.0";}
             location ~ ^\/robots\.txt$ {return 200 "User-agent: *\nDisallow: /\n";}
-            location ~ ^\/favicon\.ico$ {alias /usr/share/nginx/html/static/CC/images/favicon.ico;}
+            location ~ ^\/favicon\.ico$ {alias /usr/share/nginx/html/static/base/images/favicon.ico;}
+            location ~ ^\/postman$ {alias /usr/share/nginx/html/static/base/javascripts/pm.collection.json;}
 
             location ~ ^(.*?)?$ {
                 # First attempt to serve request as file, then

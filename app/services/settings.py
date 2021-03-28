@@ -313,6 +313,8 @@ CORS_ALLOW_ALL_ORIGINS = True
 
 CORS_ORIGIN_ALLOW_ALL = True
 
+X_FRAME_OPTIONS = 'SAMEORIGIN'
+
 
 MATERIAL_ADMIN_SITE = {
     'HEADER':  ('MayaFin Services Admin'),  # Admin site header
