@@ -32,7 +32,7 @@ INTERNAL_IPS = ['127.0.0.1']
 
 WEB_URL = 'https://mayafin.in'
 
-SITE_URL = 'https://services.prod.mayafin.in'
+SITE_URL = 'https://services.mayafin.in'
 
 ADMINS = (
     ('MayaFin Admin', 'admin@mayafin.in'),
@@ -69,11 +69,15 @@ INSTALLED_APPS = [
 
     'health_check',
     'health_check.db',
+    'health_check.contrib.celery_ping',
+    'health_check.contrib.rabbitmq',
+    #'health_check.contrib.redis',
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
