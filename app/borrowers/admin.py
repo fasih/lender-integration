@@ -65,7 +65,8 @@ class LoanApplicationAdmin(BaseAdmin, admin.ModelAdmin):
 
     def application_id(self, obj):
         return SafeText(
-            '''<a class='copyClipboard' href='#' data-copy='{app_id}'>{app_id}
+            '''<span>{app_id}</span>
+            <a class='copyClipboard' href='javascript:void();' data-copy='{app_id}'>
             <i style="font-size:14px;" class="material-icons">content_copy</i>
             </a>'''.format(app_id=obj.pk))
     application_id.admin_order_field = 'lmsid'

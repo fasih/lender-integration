@@ -11,6 +11,7 @@
 			let dummy = $('<input>').val(data).appendTo('body').select();
 			document.execCommand('copy');
 			event.stopPropagation();
+            dummy.remove();
 			return false;
 		});
 	});
