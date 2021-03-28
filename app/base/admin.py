@@ -40,11 +40,25 @@ class BaseAdmin(object):
         ) % updated, messages.SUCCESS)
     set_inactive.short_description = 'Marked Selected as Inactive'
 
-    actions = [set_active, set_inactive]
+    def toggle_status(self, request, queryset):
+        for each in queryset:
+            each.status = not each.status
+            each.save()
+        updated = queryset.count()
+        self.message_user(request, ngettext(
+            '%d item\'s status was successfully toggled',
+            '%d item\'s status were successfully toggled',
+            updated,
+        ) % updated, messages.SUCCESS)
+    toggle_status.short_description = 'Toggle Selected Status'
+
+    actions = [toggle_status]
 
 
 
 class ServiceBaseAdmin(object):
+    list_display = ('name',)
+
     search_fields = ('name',)
     fieldsets = (
         (None, {

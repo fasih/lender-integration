@@ -25,6 +25,7 @@ class LoanManagementSystemAdmin(ServiceBaseAdmin, JSONBaseAdmin, BaseAdmin, admi
 
 
 class ChannelPartnersAdmin(BaseAdmin, admin.ModelAdmin):
+    list_display = ('name',)
     search_fields = ('name',)
 
 
