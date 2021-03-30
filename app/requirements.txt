@@ -18,7 +18,8 @@ djangorestframework
 drf_yasg2
 
 furl
-img2pdf
+#img2pdf
+https://github.com/fasih/img2pdf/archive/refs/tags/0.4.1.tar.gz
 jsonfield
 psycopg2
 python-dateutil
