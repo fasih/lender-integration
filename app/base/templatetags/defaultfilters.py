@@ -135,7 +135,8 @@ def generate_base64pdf(items, key):
             if 'pdf' in file_type:
                 is_pdf = True
                 file_renamed = f'{abs_file_path}.pdf'
-            elif 'image' in file_type:
+            else:
+                #All other file_type will be considered as image/png
                 is_pdf = False
                 file_renamed = f'{abs_file_path}.png'
             shutil.copyfile(abs_file_path, file_renamed)
