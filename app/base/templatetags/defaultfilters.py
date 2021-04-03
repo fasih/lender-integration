@@ -103,16 +103,17 @@ def calculate_delta(from_date, delta='M'):
 @register.filter
 def calculate_emi_date(disburse_date, cycle_date):
     try:
-        EMI_CYCLE_DUE_DATE = int(cycle_date)
+        CYCLE_DATE = int(cycle_date)
         disburse_date = datetime.strptime(disburse_date, '%Y-%m-%d')
+
+        if not (1 <= CYCLE_DATE <= 28):
+            raise Exception(f'EMI cycle cannot be {CYCLE_DATE}')
+
     except Exception as e:
         logger.exception('calculate_emi_date', msg=str(e), local=locals())
         return ''
-    if disburse_date.day >= EMI_CYCLE_DUE_DATE:
-        emi_date = disburse_date + relativedelta.relativedelta(months=1)
-    else:
-        emi_date = disburse_date
-    return emi_date.strftime(f'%Y-%m-{EMI_CYCLE_DUE_DATE}')
+    emi_date = disburse_date + relativedelta.relativedelta(months=1)
+    return emi_date.strftime(f'%Y-%m-{CYCLE_DATE}')
 
 
 
