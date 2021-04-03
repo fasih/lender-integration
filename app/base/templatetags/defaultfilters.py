@@ -2,6 +2,8 @@ import base64
 import img2pdf
 import json
 import os
+import numpy as np
+import pandas as pd
 import shutil
 import structlog as logging
 import tempfile
@@ -84,17 +86,17 @@ def calculate_emi(context, query_string):
 
 
 @register.filter
-def calculate_delta(from_date, delta='months'):
+def calculate_delta(from_date, delta='M'):
     try:
-        TODAY = date.today()
-        delta_list = ['months', 'days']
-        delta = delta if delta in delta_list else 'months'
+        TODAY = datetime.today()
+        delta_list = ['Y', 'M', 'D']
+        delta = delta if delta in delta_list else delta_list[1]
         from_date = datetime.strptime(from_date, '%Y-%m-%d')
-        relative_delta = relativedelta.relativedelta(TODAY, from_date)
-        return getattr(relative_delta, delta)
+        df = pd.DataFrame([[from_date, TODAY]], columns=['from_date', 'to_date'])
+        return int(round(((df['from_date'] - df['to_date'])/np.timedelta64(1, delta)).abs()))
     except Exception as e:
         logger.exception('calculate_delta', msg=str(e), local=locals())
-        return '0'
+        return 0
 
 
 
