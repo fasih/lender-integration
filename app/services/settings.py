@@ -41,8 +41,8 @@ ADMINS = (
 # Application definition
 
 INSTALLED_APPS = [
+    'material',
     'material.admin',
-    'material.admin.default',
 
     #'django.contrib.admin',
     'django.contrib.auth',

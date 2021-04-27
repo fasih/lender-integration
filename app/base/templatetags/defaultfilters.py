@@ -101,18 +101,37 @@ def calculate_delta(from_date, delta='M'):
 
 
 @register.filter
-def calculate_emi_date(disburse_date, cycle_date):
+def calculate_emi_date(disburse_date, data_csv):
     try:
-        CYCLE_DATE = int(cycle_date)
+        data = data_csv.split(',')
+        CYCLE_DATE = int(data[0])
+        THERSHOLD_DATE = 32
+
         disburse_date = datetime.strptime(disburse_date, '%Y-%m-%d')
 
         if not (1 <= CYCLE_DATE <= 28):
             raise Exception(f'EMI cycle cannot be {CYCLE_DATE}')
 
+        if len(data) == 2:
+            try:
+                threshold = int(data[1])
+            except ValueError:
+                threshold = 0
+            if threshold > CYCLE_DATE:
+                THERSHOLD_DATE = threshold
+            else:
+                logger.info('calculate_emi_date', local=locals(),
+                                msg='Threshold date is invalid')
+
+        if disburse_date.day >= THERSHOLD_DATE:
+            months_delta = 2
+        else:
+            months_delta = 1
+
     except Exception as e:
         logger.exception('calculate_emi_date', msg=str(e), local=locals())
         return ''
-    emi_date = disburse_date + relativedelta.relativedelta(months=1)
+    emi_date = disburse_date + relativedelta.relativedelta(months=months_delta)
     return emi_date.strftime(f'%Y-%m-{CYCLE_DATE}')
 
 
