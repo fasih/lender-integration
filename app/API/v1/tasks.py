@@ -6,6 +6,7 @@ from collections import defaultdict
 from dictor import dictor
 from django.core.files import File
 from rest_framework import status
+from urllib.parse import urlparse
 
 from base.models import *
 from base.utils import *
@@ -124,7 +125,9 @@ def fetch_from_lms(app):
             else:
                 iterable_context = {}
 
-            url = render_from_string(f'{lms.base_url}{api.path}', context)
+            external_api = bool(urlparse(api.path).scheme)
+            url_format = f'{api.path}' if external_api else f'{lms.base_url}{api.path}'
+            url = render_from_string(url_format, context)
             request = getattr(Request, api.method)
             kwargs = dict(headers=headers)
 
@@ -312,7 +315,9 @@ def push_to_lender(app):
             else:
                 iterable_context = {}
 
-            url = render_from_string(f'{lender.base_url}{api.path}', context)
+            external_api = bool(urlparse(api.path).scheme)
+            url_format = f'{api.path}' if external_api else f'{lender.base_url}{api.path}'
+            url = render_from_string(url_format, context)
             request = getattr(Request, api.method)
             kwargs = dict(headers=headers)
 
