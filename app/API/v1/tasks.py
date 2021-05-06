@@ -1,3 +1,4 @@
+import copy
 import tempfile
 import structlog as logging
 
@@ -327,19 +328,22 @@ def push_to_lender(app):
 
             if api.params:
                 api_query_params = render_from_string(api.params, context)
-                query_params.update(**api_query_params)
-                kwargs.update(params=query_params)
+                _query_params = copy.deepcopy(query_params)
+                _query_params.update(**api_query_params)
+                kwargs.update(params=_query_params)
 
             if api.headers:
                 api_headers = render_from_string(api.headers, context)
-                headers.update(**api_headers)
-                kwargs["headers"].update(headers)
+                _headers = copy.deepcopy(headers)
+                _headers.update(**api_headers)
+                kwargs["headers"].update(_headers)
 
             if api.body:
                 api_body = render_from_string(api.body, context)
                 if isinstance(api_body, dict):
-                    body.update(**api_body)
-                    kwargs.update(json=body)
+                    _body = copy.deepcopy(body)
+                    _body.update(**api_body)
+                    kwargs.update(json=_body)
                 else:
                     kwargs.update(json=api_body)
 
