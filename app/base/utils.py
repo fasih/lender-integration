@@ -80,6 +80,10 @@ class Request(object):
         def response_json(self):
             return {'exc': str(self.exc)}
 
+        @property
+        def status_code(self):
+            return 500
+
     class Method:
 
         TIMEOUT = 50
@@ -107,10 +111,12 @@ class Request(object):
 
             except requests.exceptions.Timeout as e:
                 logger.exception('Request', args=args, kwargs=kwargs, msg='requests.exceptions.Timeout')
+                error = str(e)
             except Exception as e:
+                error = str(e)
                 logger.exception('Request', args=args, kwargs=kwargs, msg=str(e))
 
-            return Request.ErrorResponse(e)
+            return Request.ErrorResponse(error)
 
 
     GET = Method(requests.get)

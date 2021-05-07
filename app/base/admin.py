@@ -92,6 +92,7 @@ class APIBaseAdmin(object):
     exclude = BaseAdmin.exclude
     search_fields = ('name',)
     towhom = 'name'
+    ordering = ('-status', 'priority')
 
     def get_list_filter(self, request, obj=None):
         return (self.towhom_filter, 'method')
