@@ -70,7 +70,7 @@ class APIBaseModel(BaseModel):
                         verbose_name='Request Body')
 
     iterable = models.BooleanField(null=True, blank=True, default=False,
-                        verbose_name='API Iterable',
+                        verbose_name='Iterable',
                         help_text='Yes if the API is going to be called \
                             multiple times then also configure Iterable Data \
                             Settings')

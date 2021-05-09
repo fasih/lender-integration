@@ -101,7 +101,7 @@ class APIBaseAdmin(object):
        return (self.towhom,)
 
     def get_list_display(self, request, obj=None):
-       return (self.towhom, 'name', 'method', 'priority', 'iterable') + \
+       return (self.towhom, 'name', 'method', 'priority', 'is_iterable') + \
                 BaseAdmin._list_display
 
     def get_ordering(self, request, obj=None):
@@ -129,10 +129,10 @@ class APIBaseAdmin(object):
         )
         return fieldsets
 
-    def api_calls(self, obj):
-        return obj.iterable and 'Iterable' or 'Non Iterbale'
-    api_calls.short_description = 'API Type'
-    api_calls.admin_order_field = 'iterable'
+    def is_iterable(self, obj):
+        return obj.iterable and 'Yes' or 'No'
+    is_iterable.short_description = 'Iterable'
+    is_iterable.admin_order_field = 'iterable'
 
 
 

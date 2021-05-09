@@ -12,7 +12,7 @@ from borrowers.filters import *
 
 
 class LoanDataAdmin(JSONBaseAdmin, BaseAdmin, admin.ModelAdmin):
-    list_display = ('app', 'lender_api', 'response_code', 'process_status')
+    list_display = ('app', 'lender_api', 'response_code', 'response_time', 'process_status')
     list_filter = (SuccessFilter, AppFilter, LenderAPIFilter, LenderNestedFilter)
     search_fields = ('app__lmsid', 'request', 'response')
 
@@ -24,7 +24,8 @@ class LoanDataAdmin(JSONBaseAdmin, BaseAdmin, admin.ModelAdmin):
 
 class LoanDataInlineAdmin(JSONBaseAdmin, BaseAdmin, admin.TabularInline):
     model = LoanData
-    exclude = ('app', 'request', 'response_code') + BaseAdmin.exclude
+    exclude = ('app', 'request', 'response_code', 'process_status',
+                'response_time') + BaseAdmin.exclude
     ordering = ('lender_api__priority',)
     max_num = 0
     extra = 0

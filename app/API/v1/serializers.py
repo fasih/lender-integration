@@ -17,18 +17,24 @@ class LoanApplicationCreateSerializer(serializers.ModelSerializer):
     lender_code = serializers.ChoiceField(choices=LENDER_CHOICES,
                         label='Lender Code', help_text='Lender System Code')
 
-    svc_code = serializers.MultipleChoiceField(choices=SVC_CHOICES,
-                        allow_blank=True, required=False, label='SVC Code',
-                        help_text='List of Services Code')
-
     cp_code = serializers.ChoiceField(choices=CP_CHOICES, allow_blank=True,
                         required=False, label='CP Code',
                         help_text='Channel Partner Code')
 
+    svc_code = serializers.MultipleChoiceField(choices=SVC_CHOICES,
+                        allow_blank=True, required=False, label='SVC Code',
+                        help_text='List of Services Code')
+
+    lms_actions = serializers.ListField(child=serializers.CharField(
+                        label='LMS Action Code'),
+                        allow_empty=True, required=False,
+                        help_text='List of actions performed at LMS')
+
 
     class Meta:
         model = LoanApplication
-        fields = ('loan_id', 'lms_code', 'lender_code', 'svc_code', 'cp_code')
+        fields = ('loan_id', 'lms_code', 'lender_code', 'cp_code', 'svc_code',
+                    'lms_actions')
 
 
 

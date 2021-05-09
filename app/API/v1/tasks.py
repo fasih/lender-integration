@@ -175,6 +175,7 @@ def fetch_from_lms(app):
 
             data = LoanApplicationData(app=app, lms_api=api,
                                         response_code=response.status_code,
+                                        response_time=response.response_time,
                                         process_status=process_status)
 
             filename = get_filename(response.headers.get('content-disposition'))
@@ -375,6 +376,7 @@ def push_to_lender(app):
             data = LoanData(app=app, loan=loan, lender_api=api, request=kwargs,
                                 response=response.response_json,
                                 response_code=response.status_code,
+                                response_time=response.response_time,
                                 process_status=process_status)
             data.save()
             continue_status = status.is_success(response.status_code)
