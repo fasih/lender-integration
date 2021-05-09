@@ -69,6 +69,7 @@ class LoanData(BaseModel):
     request = models.JSONField(null=True, default=dict, blank=True)
     response = models.JSONField(null=True, default=dict, blank=True)
     response_code = models.PositiveSmallIntegerField(null=True, blank=True)
+    process_status = models.BooleanField(default=True, verbose_name='Logic')
 
     def __str__(self):
         return self.app and self.app.lmsid or '-'

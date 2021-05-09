@@ -57,9 +57,9 @@ class BaseAdmin(object):
 
 
 class ServiceBaseAdmin(object):
-    list_display = ('name',)
+    list_display = ('name', 'code')
 
-    search_fields = ('name',)
+    search_fields = ('name', 'code')
     fieldsets = (
         (None, {
             'classes': ('wide',),
@@ -101,7 +101,7 @@ class APIBaseAdmin(object):
        return (self.towhom,)
 
     def get_list_display(self, request, obj=None):
-       return (self.towhom, 'name', 'method', 'priority', 'api_calls') + \
+       return (self.towhom, 'name', 'method', 'priority', 'iterable') + \
                 BaseAdmin._list_display
 
     def get_ordering(self, request, obj=None):
@@ -122,12 +122,16 @@ class APIBaseAdmin(object):
                 'classes': ('collapse',),
                 'fields': ('iterable_data', 'iterable_filters')
             }),
+            ('Process Logic Settings', {
+                'classes': ('collapse',),
+                'fields': ('process_status_logic',)
+            }),
         )
         return fieldsets
 
     def api_calls(self, obj):
-        return obj.iterable and 'Multiple' or 'Single'
-    api_calls.short_description = 'API Calls'
+        return obj.iterable and 'Iterable' or 'Non Iterbale'
+    api_calls.short_description = 'API Type'
     api_calls.admin_order_field = 'iterable'
 
 

@@ -11,6 +11,7 @@ import tempfile
 from datetime import date, datetime
 from dateutil import relativedelta
 from furl import furl
+from fuzzywuzzy import fuzz
 
 from django.conf import settings
 from django.template.defaultfilters import register
@@ -33,8 +34,17 @@ def to_python(value, key=None):
                 data = json.loads(value.replace('""', '"'))
             except:
                 data = {}
-    if key and isinstance(data, dict):
-        return data.get(key) or ""
+
+    keys = key and key.split(',') or []
+    response = []
+
+    if isinstance(data, dict):
+        for each in keys:
+            response.append(data.get(each) or "")
+        if len(response) == 1:
+            return response[0]
+        else:
+            return response
     return data
 
 
@@ -215,3 +225,45 @@ def default_today(date_str):
 def strip(string):
     data = str(string)
     return data.strip()
+
+
+
+@register.filter
+def fuzzymatch(name_list, match_with):
+    str_a = ' '.join(name_list) if isinstance(name_list, list) else name_list
+    str_b = match_with
+
+    # for invalid input
+    if not (len(str_a) or len(str_b)):
+        return 0
+    str_a = str_a.lower().strip()
+    str_b = str_b.lower().strip()
+    sub_str_a = str_a.split(" ")
+    sub_str_b = str_b.split(" ")
+
+    # for identical strings
+    if str_a == str_b:
+        return 100
+
+    # for similar male/female names
+    if abs(len(str_a) - len(str_b)) == 1:
+        if len(sub_str_a[0]) > len(sub_str_b[0]):
+            big, small = sub_str_a[0], sub_str_b[0]
+        else:
+            big, small = sub_str_b[0], sub_str_a[0]
+        last = list(big[-1])
+        meta = ["a", "e", "i", "o", "u"]
+        if last[0] in meta and big[:-1] == small:
+            return 0
+        return fuzz.ratio(str_a, str_b)
+
+    # for non identical string with equal sub parts
+    if len(sub_str_a) == len(sub_str_b):
+        if len(str_a) == len(str_b):
+            temp_res = fuzz.token_sort_ratio(str_a, str_b)
+            if temp_res == 100:
+                return temp_res
+        return fuzz.ratio(str_a, str_b)
+    else:
+        # non identical strings with unequal sub parts
+        return fuzz.ratio(str_a, str_b)

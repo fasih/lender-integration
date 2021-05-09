@@ -12,7 +12,7 @@ from borrowers.filters import *
 
 
 class LoanDataAdmin(JSONBaseAdmin, BaseAdmin, admin.ModelAdmin):
-    list_display = ('app', 'lender_api', 'response_code')
+    list_display = ('app', 'lender_api', 'response_code', 'process_status')
     list_filter = (SuccessFilter, AppFilter, LenderAPIFilter, LenderNestedFilter)
     search_fields = ('app__lmsid', 'request', 'response')
 

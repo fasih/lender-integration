@@ -70,6 +70,7 @@ class APIBaseModel(BaseModel):
                         verbose_name='Request Body')
 
     iterable = models.BooleanField(null=True, blank=True, default=False,
+                        verbose_name='API Iterable',
                         help_text='Yes if the API is going to be called \
                             multiple times then also configure Iterable Data \
                             Settings')
@@ -87,7 +88,10 @@ class APIBaseModel(BaseModel):
                         verbose_name='HTTP Auth Scheme')
 
     priority = models.PositiveSmallIntegerField(null=True, blank=True,
-                        verbose_name='Workflow Priority')
+                        verbose_name='Priority')
+
+    process_status_logic = models.TextField(null=True, blank=True,
+                        verbose_name='Process Status Logic')
 
     class Meta:
         abstract = True

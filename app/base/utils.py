@@ -77,8 +77,16 @@ class Request(object):
             return ''
 
         @property
+        def msg(self):
+            return str(self.exc)
+
+        @property
         def response_json(self):
             return {'exc': str(self.exc)}
+
+        @property
+        def response_time(self):
+            return 0
 
         @property
         def status_code(self):
@@ -92,7 +100,8 @@ class Request(object):
             self.method = method
 
         def send(self, *args, **kwargs):
-            kwargs.update(timeout=self.TIMEOUT)
+            timeout = kwargs.get('timeout') or self.TIMEOUT
+            kwargs.update(timeout=timeout)
             logger.info('Request', args=args, kwargs=kwargs)
 
             try:
@@ -104,17 +113,22 @@ class Request(object):
                     response_data = response.text
                     response_json = {'data': response_data}
 
+                response.msg = 'Executed'
                 response.response_json = response_json
-                logger.info('Response', args=args, kwargs=kwargs, data=response_data)
+                response.response_time = response.elapsed.microseconds/10**6
+
+                logger.info('Response', args=args, request_data=kwargs,
+                                        response_data=response_data,
+                                        response_time=response.response_time)
 
                 return response
 
             except requests.exceptions.Timeout as e:
-                logger.exception('Request', args=args, kwargs=kwargs, msg='requests.exceptions.Timeout')
-                error = str(e)
+                logger.exception('Request', args=args, request_data=kwargs, msg='Timeout')
+                error = e
             except Exception as e:
-                error = str(e)
-                logger.exception('Request', args=args, kwargs=kwargs, msg=str(e))
+                logger.exception('Request', args=args, request_data=kwargs, msg=str(e))
+                error = e
 
             return Request.ErrorResponse(error)
 

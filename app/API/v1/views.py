@@ -1,5 +1,6 @@
 import structlog as logging
 
+from django.core.cache import cache
 from django.db.utils import IntegrityError
 
 from rest_framework import generics
@@ -16,6 +17,7 @@ from lenders.models import *
 from platforms.models import *
 from services.settings import TASK_SYNC
 
+
 logger = logging.getLogger(__name__)
 
 
@@ -23,8 +25,11 @@ logger = logging.getLogger(__name__)
 class LoanApplicationCreateAPIView(MFAPIView):
     serializer_class = LoanApplicationCreateSerializer
 
-    @swagger_auto_schema(responses={status.HTTP_201_CREATED: 
-        LoanApplicationTaskSerializer()})
+    @swagger_auto_schema(responses={
+            status.HTTP_200_OK: LoanApplicationTaskSerializer,
+            status.HTTP_201_CREATED: LoanApplicationTaskSerializer,
+            status.HTTP_406_NOT_ACCEPTABLE: LoanApplicationTaskSerializer,
+    })
     def post(self, request, *args, **kwargs):
         """Loan Application Create API
 
@@ -37,15 +42,26 @@ class LoanApplicationCreateAPIView(MFAPIView):
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        instance = self.perform_create(serializer)
+        instance, created = self.perform_create(serializer)
 
         from .tasks import loans_post
-        apply_task(loans_post.s(instance.pk), TASK_SYNC)
-        instance.task_name = loans_post.name
-        instance.task_status = "Submitted"
+        running_task = cache.get(instance.pk)
+
+        if running_task:
+            status_code = status.HTTP_406_NOT_ACCEPTABLE
+            instance.task_name = running_task
+            instance.task_status = "RUNNING"
+        else:
+            apply_task(loans_post.s(instance.pk), TASK_SYNC)
+            status_code = created and status.HTTP_201_CREATED or status.HTTP_200_OK
+            instance.task_name = loans_post.name
+            instance.task_status = "SUBMITTED"
+
+            cache.set(instance.pk, instance.task_name)
+
         app = LoanApplicationTaskSerializer(instance)
 
-        return Response(app.data, status=status.HTTP_201_CREATED)
+        return Response(app.data, status=status_code)
 
     def perform_create(self, serializer):
         lms = generics.get_object_or_404(LoanManagementSystem.objects,
@@ -61,22 +77,27 @@ class LoanApplicationCreateAPIView(MFAPIView):
             cp = None
 
         if serializer.data.get('svc_code'):
-            svc = PlatformService.objects.filter(
-                        code__in=serializer.data['svc_code'])
+            svc = []
+            for each in serializer.data['svc_code']:
+                svc.append(generics.get_object_or_404(PlatformService.objects,
+                            code=each))
         else:
             svc = []
 
-        instance = LoanApplication(lmsid=serializer.data['loan_id'], lms=lms,
-                                    lender=lender, cp=cp)
         try:
-            instance.save()
-            [instance.svc.add(i) for i in svc]
-        except IntegrityError:
-            instance = LoanApplication.objects.get(lms=lms, lender=lender,
-                                    lmsid=serializer.data['loan_id'], cp=cp)
-            raise LoanApplicationAlreadyExist(application_id=instance.pk)
+            instance, created = LoanApplication.objects.get_or_create(
+                                        lmsid=serializer.data['loan_id'],
+                                        lms=lms, lender=lender, cp=cp)
+            existing_svc = instance.svc.all()
+            for each in svc:
+                if each not in existing_svc:
+                    instance.svc.add(each)
+            logger.info('perform_create', view_name=self.get_view_name(), created=created)
+        except Exception as e:
+            logger.info('perform_create', view_name=self.get_view_name(), msg=str(e))
+            raise LoanApplicationServerError()
 
-        return instance
+        return instance, created
 
 
 
@@ -96,8 +117,10 @@ class LoanApplicationAPIView(MFAPIView):
         serializer = self.get_serializer(instance)
         return Response(serializer.data)
 
-    @swagger_auto_schema(request_body=serializers.Serializer,
-        responses={status.HTTP_200_OK: LoanApplicationTaskSerializer()})
+    @swagger_auto_schema(responses={
+            status.HTTP_200_OK: LoanApplicationTaskSerializer,
+            status.HTTP_406_NOT_ACCEPTABLE: LoanApplicationTaskSerializer,
+    })
     def patch(self, request, *args, **kwargs):
         """Loan Application LMS API
 
@@ -105,31 +128,56 @@ class LoanApplicationAPIView(MFAPIView):
         by calling LMS APIs in the background.
         """        
         instance = self.get_object()
+
         from .tasks import loans_patch
-        apply_task(loans_patch.s(instance.pk), TASK_SYNC)
-        instance.task_name = loans_patch.name
-        instance.task_status = "Submitted"
+        running_task = cache.get(instance.pk)
+
+        if running_task:
+            status_code = status.HTTP_406_NOT_ACCEPTABLE
+            instance.task_name = running_task
+            instance.task_status = "RUNNING"
+        else:
+            apply_task(loans_patch.s(instance.pk), TASK_SYNC)
+            status_code = status.HTTP_200_OK
+            instance.task_name = loans_patch.name
+            instance.task_status = "SUBMITTED"
+
+            cache.set(instance.pk, instance.task_name)
+
         app = LoanApplicationTaskSerializer(instance)
 
-        return Response(app.data)
+        return Response(app.data, status=status_code)
 
-    @swagger_auto_schema(request_body=serializers.Serializer,
-        responses={status.HTTP_200_OK: LoanApplicationTaskSerializer()})
+    @swagger_auto_schema(responses={
+            status.HTTP_200_OK: LoanApplicationTaskSerializer,
+            status.HTTP_406_NOT_ACCEPTABLE: LoanApplicationTaskSerializer,
+    })
     def put(self, request, *args, **kwargs):
         """Loan Application Lender API
 
         API submits a task to create loan application at the Lender
         by calling Lender APIs in the background.
         """        
-
         instance = self.get_object()
+
         from .tasks import loans_put
-        apply_task(loans_put.s(instance.pk), TASK_SYNC)
-        instance.task_name = loans_put.name
-        instance.task_status = "Submitted"
+        running_task = cache.get(instance.pk)
+
+        if running_task:
+            status_code = status.HTTP_406_NOT_ACCEPTABLE
+            instance.task_name = running_task
+            instance.task_status = "RUNNING"
+        else:
+            apply_task(loans_put.s(instance.pk), TASK_SYNC)
+            status_code = status.HTTP_200_OK
+            instance.task_name = loans_put.name
+            instance.task_status = "SUBMITTED"
+
+            cache.set(instance.pk, instance.task_name)
+
         app = LoanApplicationTaskSerializer(instance)
 
-        return Response(app.data)
+        return Response(app.data, status=status_code)
 
     def get_status(self, instance):
         instance.lms_data = []
@@ -189,14 +237,21 @@ class LoanApplicationAPIView(MFAPIView):
                 lender_api_failure.update({each.lender_api.pk: True})
 
         if all(lms_api_success.values()) and all(lender_api_success.values()):
-            instance.workflow_status = 'COMPLETED'
+            workflow_status = 'COMPLETED'
 
         elif all(lms_api_success.values()) and not len(instance.lender_data):
-            instance.workflow_status = 'LMS FETCHED'
+            workflow_status = 'LMS FETCHED'
 
         elif len(lms_api_failure) or len(lender_api_failure):
-            instance.workflow_status = 'FAILED'
+            workflow_status = 'FAILED'
         else:
-            instance.workflow_status = 'NOT COMPLETED'
+            workflow_status = 'NOT COMPLETED'
+
+        running_task = cache.get(instance.pk)
+        if running_task:
+            instance.task_name = running_task
+            instance.task_status = "RUNNING"
+        else:
+            instance.workflow_status = workflow_status
 
         return instance

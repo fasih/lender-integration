@@ -54,13 +54,16 @@ class LoanApplicationDataSerializer(serializers.ModelSerializer):
 
 class LoanApplicationStatusSerializer(serializers.ModelSerializer):
 
-    workflow_status = serializers.CharField()
+    task_name = serializers.CharField(required=False)
+    task_status = serializers.CharField(required=False)
+    workflow_status = serializers.CharField(required=False)
     lms_api_status = LoanApplicationDataSerializer(source='lms_data', many=True)
     lender_api_status = LoanDataSerializer(source='lender_data', many=True)
 
     class Meta:
         model = LoanApplication
-        fields = ('workflow_status', 'lms_api_status', 'lender_api_status')
+        fields = ('task_name', 'task_status', 'workflow_status',
+                    'lms_api_status', 'lender_api_status')
 
 
 

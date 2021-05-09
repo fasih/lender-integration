@@ -2,18 +2,21 @@ import copy
 import tempfile
 import structlog as logging
 
-from celery.decorators import task
 from collections import defaultdict
 from dictor import dictor
-from django.core.files import File
-from rest_framework import status
 from urllib.parse import urlparse
+
+from celery.decorators import task
+from django.core.files import File
+from django.core.cache import cache
+from rest_framework import status
 
 from base.models import *
 from base.utils import *
 from borrowers.models import *
 from lenders.models import *
 from platforms.models import *
+
 
 logger = logging.getLogger(__name__)
 
@@ -87,8 +90,9 @@ def fetch_from_lms(app):
                                 ).active().order_by('created')
 
         already_called_non_idempotent_api = False
+
         for each in app_data:
-            if each.lms_api == api and api.method == api.METHOD.POST:
+            if each.lms_api == api and api.method == api.METHOD.POST and each.process_status:
                 already_called_non_idempotent_api = True
                 break
             if each.lms_api:
@@ -138,28 +142,40 @@ def fetch_from_lms(app):
 
             if api.params:
                 api_query_params = render_from_string(api.params, context)
-                query_params.update(**api_query_params)
-                kwargs.update(params=query_params)
+                _query_params = copy.deepcopy(query_params)
+                _query_params.update(**api_query_params)
+                kwargs.update(params=_query_params)
 
             if api.headers:
                 api_headers = render_from_string(api.headers, context)
-                headers.update(**api_headers)
-                kwargs["headers"].update(headers)
+                _headers = copy.deepcopy(headers)
+                _headers.update(**api_headers)
+                kwargs["headers"].update(_headers)
 
             if api.body:
                 api_body = render_from_string(api.body, context)
                 if isinstance(api_body, dict):
-                    body.update(**api_body)
-                    kwargs.update(json=body)
+                    _body = copy.deepcopy(body)
+                    _body.update(**api_body)
+                    kwargs.update(json=_body)
                 else:
                     kwargs.update(json=api_body)
 
             response = request.send(url, **kwargs)
-            request_json = kwargs.copy()
+            request_json = copy.deepcopy(kwargs)
             request_json.update(url=url)
 
+            if api.process_status_logic:
+                process_status_context = copy.deepcopy(response.response_json)
+                process_status_context.update(**context)
+                process_status = bool(render_from_string(
+                        api.process_status_logic, process_status_context).strip())
+            else:
+                process_status = True
+
             data = LoanApplicationData(app=app, lms_api=api,
-                                        response_code=response.status_code)
+                                        response_code=response.status_code,
+                                        process_status=process_status)
 
             filename = get_filename(response.headers.get('content-disposition'))
             if filename:
@@ -269,8 +285,9 @@ def push_to_lender(app):
                                         ).active().order_by('created')
 
         already_called_non_idempotent_api = False
+
         for each in loan_data:
-            if each.lender_api == api and api.method == api.METHOD.POST:
+            if each.lender_api == api and api.method == api.METHOD.POST and each.process_status:
                 already_called_non_idempotent_api = True
                 break
             if each.lender_api:
@@ -348,9 +365,17 @@ def push_to_lender(app):
                     kwargs.update(json=api_body)
 
             response = request.send(url, **kwargs)
+            if api.process_status_logic:
+                process_status_context = copy.deepcopy(response.response_json)
+                process_status_context.update(**context)
+                process_status = bool(render_from_string(
+                        api.process_status_logic, process_status_context).strip())
+            else:
+                process_status = True
             data = LoanData(app=app, loan=loan, lender_api=api, request=kwargs,
                                 response=response.response_json,
-                                response_code=response.status_code)
+                                response_code=response.status_code,
+                                process_status=process_status)
             data.save()
             continue_status = status.is_success(response.status_code)
 
@@ -367,6 +392,7 @@ def loans_post(application_id):
     push_to_lender(app)
 
     logger.info('loans_post', status='Finished', **locals())
+    cache.delete(application_id)
 
 
 
@@ -380,6 +406,7 @@ def loans_patch(application_id):
     fetch_from_svc(app)
 
     logger.info('loans_patch', status='Finished', **locals())
+    cache.delete(application_id)
 
 
 
@@ -392,6 +419,7 @@ def loans_put(application_id):
     push_to_lender(app)
 
     logger.info('loans_put', status='Finished', **locals())
+    cache.delete(application_id)
 
 
 
