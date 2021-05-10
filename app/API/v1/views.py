@@ -117,10 +117,12 @@ class LoanApplicationAPIView(MFAPIView):
         serializer = self.get_serializer(instance)
         return Response(serializer.data)
 
-    @swagger_auto_schema(responses={
+    @swagger_auto_schema(request_body=serializers.Serializer,
+        responses={
             status.HTTP_200_OK: LoanApplicationTaskSerializer,
             status.HTTP_406_NOT_ACCEPTABLE: LoanApplicationTaskSerializer,
-    })
+        },
+    )
     def patch(self, request, *args, **kwargs):
         """Loan Application LMS API
 
@@ -148,10 +150,12 @@ class LoanApplicationAPIView(MFAPIView):
 
         return Response(app.data, status=status_code)
 
-    @swagger_auto_schema(responses={
+    @swagger_auto_schema(request_body=serializers.Serializer,
+        responses={
             status.HTTP_200_OK: LoanApplicationTaskSerializer,
             status.HTTP_406_NOT_ACCEPTABLE: LoanApplicationTaskSerializer,
-    })
+        },
+    )
     def put(self, request, *args, **kwargs):
         """Loan Application Lender API
 
