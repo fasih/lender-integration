@@ -9,7 +9,7 @@ from .choices import *
 class LoanApplicationCreateSerializer(serializers.ModelSerializer):
 
     loan_id = serializers.CharField(max_length=255, label='Loan ID',
-                        help_text='Loan Application Reference No. at LMS')
+                        help_text='Loan Application ID at LMS')
 
     lms_code = serializers.ChoiceField(choices=LMS_CHOICES, label='LMS Code',
                         help_text='Loan Management System Code')

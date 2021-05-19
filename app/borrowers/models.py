@@ -8,8 +8,7 @@ from base.utils import *
 
 class LoanApplication(BaseModel):
     lmsid = models.CharField(max_length=255, null=True,
-                    verbose_name='LoanID', help_text='Loan Application '
-                            'Reference No. at LMS')
+                    verbose_name='LoanID', help_text='Loan Application ID at LMS')
 
     lms = models.ForeignKey('platforms.LoanManagementSystem', null=True,
                     on_delete=models.SET_NULL, verbose_name='LMS')
