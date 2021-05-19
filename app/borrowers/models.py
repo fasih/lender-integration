@@ -49,7 +49,7 @@ class LoanApplicationData(BaseModel):
     response = models.JSONField(null=True, default=dict, blank=True)
     response_code = models.PositiveSmallIntegerField(null=True, blank=True)
     response_time = models.DecimalField(max_digits=10, decimal_places=5, null=True, blank=True)
-    process_status = models.BooleanField(default=True, verbose_name='Logic')
+    process_status = models.BooleanField(null=True, blank=True, verbose_name='Logic')
 
     response_file = models.FileField(null=True, blank=True,
                         verbose_name='Request Response File',

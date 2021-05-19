@@ -171,7 +171,7 @@ def fetch_from_lms(app):
                 process_status = bool(render_from_string(
                         api.process_status_logic, process_status_context).strip())
             else:
-                process_status = True
+                process_status = None
 
             data = LoanApplicationData(app=app, lms_api=api,
                                         response_code=response.status_code,
@@ -372,7 +372,7 @@ def push_to_lender(app):
                 process_status = bool(render_from_string(
                         api.process_status_logic, process_status_context).strip())
             else:
-                process_status = True
+                process_status = None
             data = LoanData(app=app, loan=loan, lender_api=api, request=kwargs,
                                 response=response.response_json,
                                 response_code=response.status_code,

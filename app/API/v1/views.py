@@ -87,7 +87,7 @@ class LoanApplicationCreateAPIView(MFAPIView):
         try:
             instance, created = LoanApplication.objects.get_or_create(
                                         lmsid=serializer.data['loan_id'],
-                                        lms=lms, lender=lender, cp=cp)
+                                        lms=lms, lender=lender)
             existing_svc = instance.svc.all()
             for each in svc:
                 if each not in existing_svc:
