@@ -8,3 +8,4 @@ data:
   DB_PORT: '5432'
   DB_HOST: rc-psql-postgresql.release
   RABBITMQ_SVC: rc-rbmq-rabbitmq.release:5672
+  MEMCACHE_SVC: rc-memc-memcached.release:11211

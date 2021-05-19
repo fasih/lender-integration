@@ -121,7 +121,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"loan_id\": \"{{loan_id}}\",\n    \"lms_code\": \"FF\",\n    \"lender_code\": \"KU\",\n    \"svc_code\": [\n        \"PD\"\n    ],\n    \"cp_code\": \"LT\"\n}"
+							"raw": "{\n    \"loan_id\": \"{{loan_id}}\",\n    \"lms_code\": \"FF\",\n    \"lender_code\": \"KU\"\n}"
 						},
 						"url": {
 							"raw": "{{baseUrl}}/loans/",
