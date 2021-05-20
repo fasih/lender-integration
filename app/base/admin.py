@@ -90,7 +90,7 @@ class JSONBaseAdmin(object):
 
 class APIBaseAdmin(object):
     exclude = BaseAdmin.exclude
-    search_fields = ('name',)
+    search_fields = ('name', 'body', 'headers', 'params')
     towhom = 'name'
     ordering = ('-status', 'priority')
 
