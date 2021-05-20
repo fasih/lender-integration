@@ -30,6 +30,5 @@ class TASK_STATUS(models.TextChoices):
 class WORKFLOW_STATUS(models.TextChoices):
     FAILED = 'FAILED'
     FETCHED = 'FETCHED'
-    RUNNING = 'RUNNING'
     COMPLETED = 'COMPLETED'
     NOT_COMPLETED = 'NOT COMPLETED'
