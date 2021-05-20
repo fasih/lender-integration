@@ -17,8 +17,8 @@ class LoanDataAdmin(JSONBaseAdmin, BaseAdmin, admin.ModelAdmin):
     search_fields = ('app__lmsid', 'request', 'response')
 
     autocomplete_fields = ('loan', 'lender_api')
-    fields = (('loan', 'lender_api', 'response_code'), ('request', 'response'))
-
+    fields = (('loan', 'lender_api', 'response_code', 'process_status'),
+                ('request', 'response'))
 
 
 

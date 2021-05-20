@@ -218,7 +218,8 @@ class LoanApplicationAPIView(MFAPIView):
             else:
                 instance.lms_data.append(each)
 
-            if status.is_success(each.response_code):
+            if status.is_success(each.response_code) and (each.process_status \
+            or each.process_status is None):
                 lms_api_success.update({each.lms_api.pk: True})
                 lms_api_failure.pop(each.lms_api.pk, None)
 
@@ -239,7 +240,8 @@ class LoanApplicationAPIView(MFAPIView):
             else:
                 instance.lender_data.append(each)
 
-            if status.is_success(each.response_code):
+            if status.is_success(each.response_code) and (each.process_status \
+            or each.process_status is None):
                 lender_api_success.update({each.lender_api.pk: True})
                 lender_api_failure.pop(each.lender_api.pk, None)
 

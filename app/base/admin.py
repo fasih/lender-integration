@@ -122,7 +122,7 @@ class APIBaseAdmin(object):
                 'classes': ('collapse',),
                 'fields': ('iterable_data', 'iterable_filters')
             }),
-            ('Process Logic Settings', {
+            ('Logic Processing Settings', {
                 'classes': ('collapse',),
                 'fields': ('process_status_logic',)
             }),

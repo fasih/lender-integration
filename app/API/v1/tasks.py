@@ -92,9 +92,10 @@ def fetch_from_lms(app):
         already_called_non_idempotent_api = False
 
         for each in app_data:
-            if each.lms_api == api and api.method == api.METHOD.POST and each.process_status:
-                already_called_non_idempotent_api = True
-                break
+            if each.lms_api == api and api.method == api.METHOD.POST:
+                if each.process_status or each.process_status is None:
+                    already_called_non_idempotent_api = True
+                    break
             if each.lms_api:
                 context['lms_api'].update({each.lms_api.name: each.response})
 
@@ -288,9 +289,10 @@ def push_to_lender(app):
         already_called_non_idempotent_api = False
 
         for each in loan_data:
-            if each.lender_api == api and api.method == api.METHOD.POST and each.process_status:
-                already_called_non_idempotent_api = True
-                break
+            if each.lender_api == api and api.method == api.METHOD.POST:
+                if each.process_status or each.process_status is None:
+                    already_called_non_idempotent_api = True
+                    break
             if each.lender_api:
                 context['lender_api'].update({each.lender_api.name: each.response})
 
