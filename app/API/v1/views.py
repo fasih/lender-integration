@@ -22,6 +22,10 @@ logger = logging.getLogger(__name__)
 
 
 
+API_TAG = ['Lender Integration']
+
+
+
 class LoanApplicationCreateAPIView(MFAPIView):
     serializer_class = LoanApplicationCreateSerializer
 
@@ -33,7 +37,8 @@ class LoanApplicationCreateAPIView(MFAPIView):
         summary='Loan Application Workflow API',
         description=('API submits a full workflow task to fetch borrower\'s '
             'loan application from LMS and other services and then push it '
-            'to the lender side.')
+            'to the lender side.'),
+        tags=API_TAG,
     )
     def post(self, request, *args, **kwargs):
         return self.create(request, *args, **kwargs)
@@ -107,6 +112,7 @@ class LoanApplicationAPIView(MFAPIView):
 
     @extend_schema(summary='Loan Application Status API',
         description=('API fetches task & workflow status for a loan application'),
+        tags=API_TAG,
     )
     def get(self, request, *args, **kwargs):
         instance = self.get_object()
@@ -122,6 +128,7 @@ class LoanApplicationAPIView(MFAPIView):
         summary='Loan Application LMS API',
         description=('API submits a half workflow task to fetch a loan '
             'application from the LMS by calling LMS APIs in the background.'),
+        tags=API_TAG,
     )
     def patch(self, request, *args, **kwargs):
         instance = self.get_object()
@@ -154,6 +161,7 @@ class LoanApplicationAPIView(MFAPIView):
         description=('API submits a half workflow task to push a loan '
             'application at the lender side by calling Lender APIs in the '
             'background.'),
+        tags=API_TAG,
     )
     def put(self, request, *args, **kwargs):
         instance = self.get_object()
@@ -249,7 +257,7 @@ class LoanApplicationAPIView(MFAPIView):
         if running_task:
             instance.task_name = running_task
             instance.task_status = TASK_STATUS.RUNNING
-            instance.workflow_status = WORKFLOW_STATUS.RUNNING
+            instance.workflow_status = WORKFLOW_STATUS.NOT_COMPLETED
         else:
             instance.workflow_status = workflow_status
 
