@@ -413,8 +413,10 @@ SPECTACULAR_SETTINGS = {
         |API Services         |Links                             |
         |---------------------|----------------------------------|
         |API Authentication   |[Login](/api/login/?next=/api/)   |
+        |API Collections      |[Postman](/postman)               |
         |API Documentation    |[ReDoc](/api/)                    |
         |API Explorer         |[Swagger](/api/swagger/)          |
+        |API Specification    |[OpenAPI 3.0.3](/api/swagger.json)|
         '''
     ),
 

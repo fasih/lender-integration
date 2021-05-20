@@ -38,6 +38,7 @@ class LoanApplicationCreateAPIView(MFAPIView):
         description=('API submits a full workflow task to fetch borrower\'s '
             'loan application from LMS and other services and then push it '
             'to the lender side.'),
+        operation_id='workflow-task-create',
         tags=API_TAG,
     )
     def post(self, request, *args, **kwargs):
@@ -113,6 +114,7 @@ class LoanApplicationAPIView(MFAPIView):
     @extend_schema(summary='Loan Application Status API',
         description=('API fetches task & workflow status for a loan application'),
         tags=API_TAG,
+        operation_id='workflow-task-status',
     )
     def get(self, request, *args, **kwargs):
         instance = self.get_object()
@@ -129,6 +131,7 @@ class LoanApplicationAPIView(MFAPIView):
         description=('API submits a half workflow task to fetch a loan '
             'application from the LMS by calling LMS APIs in the background.'),
         tags=API_TAG,
+        operation_id='lms-task-create',
     )
     def patch(self, request, *args, **kwargs):
         instance = self.get_object()
@@ -162,6 +165,7 @@ class LoanApplicationAPIView(MFAPIView):
             'application at the lender side by calling Lender APIs in the '
             'background.'),
         tags=API_TAG,
+        operation_id='lender-task-create',
     )
     def put(self, request, *args, **kwargs):
         instance = self.get_object()

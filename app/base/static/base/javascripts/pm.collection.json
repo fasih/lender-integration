@@ -1,12 +1,12 @@
 {
 	"info": {
 		"name": "MayaFin API Services",
-		"description": "\n# MayaFin Services\n### Postman\n### [API Collection](https://services.mayafin.in/postman)\n### Swagger\n### [API Explorer](https://services.mayafin.in/api/swagger/)\n### ReDoc\n### [API Documentation](https://services.mayafin.in/api/#tag/loans)\n\n\nContact Support:\n Name: MayaFin Admin\n Email: admin@mayafin.in",
+		"description": "\n# MayaFin API Services\n### Postman\n### [API Collection](https://services.mayafin.in/postman)\n### Swagger\n### [API Explorer](https://services.mayafin.in/api/swagger/)\n### ReDoc\n### [API Documentation](https://services.mayafin.in/api/)\n\n\nContact Support:\n Name: MayaFin Admin\n Email: admin@mayafin.in",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
 		{
-			"name": "loans",
+			"name": "Lender Integration",
 			"item": [
 				{
 					"name": "{application_id}",
@@ -26,7 +26,7 @@
 										"{{application_id}}"
 									]
 								},
-								"description": "API fetches status of all APIs related to the loan application"
+								"description": "API fetches task & workflow status for a loan application"
 							},
 							"response": []
 						},
@@ -54,7 +54,7 @@
 										"{{application_id}}"
 									]
 								},
-								"description": "API submits a task to create loan application at the Lender by calling Lender APIs in the background."
+								"description": "API submits a half workflow task to push a loan application at the lender side by calling Lender APIs in the background."
 							},
 							"response": []
 						},
@@ -82,7 +82,7 @@
 										"{{application_id}}"
 									]
 								},
-								"description": "API submits a task to fetch loan application from the LMS by calling LMS APIs in the background."
+								"description": "API submits a half workflow task to fetch a loan application from the LMS by calling LMS APIs in the background."
 							},
 							"response": []
 						}
@@ -121,7 +121,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"loan_id\": \"{{loan_id}}\",\n    \"lms_code\": \"FF\",\n    \"lender_code\": \"KU\"\n}"
+							"raw": "{\n    \"loan_id\": \"{{loan_id}}\",\n    \"lms_code\": \"{{lms_code}}\",\n    \"lender_code\": \"{{lender_code}}\"\n}"
 						},
 						"url": {
 							"raw": "{{baseUrl}}/loans/",
@@ -133,7 +133,7 @@
 								""
 							]
 						},
-						"description": "API fetches borrower loan application from LMS and other services then create lender loan application."
+						"description": "API submits a full workflow task to fetch borrower's loan application from LMS and other services and then push it to the lender side."
 					},
 					"response": []
 				}
@@ -183,6 +183,14 @@
 		{
 			"key": "token",
 			"value": ""
+		},
+		{
+			"key": "lms_code",
+			"value": "FF"
+		},
+		{
+			"key": "lender_code",
+			"value": "KU"
 		}
 	]
 }
