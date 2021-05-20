@@ -15,7 +15,8 @@ django-settings-local
 django-structlog
 
 djangorestframework
-drf_yasg2
+drf-spectacular
+drf-yasg2
 
 furl
 fuzzywuzzy

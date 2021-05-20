@@ -18,7 +18,6 @@ from .schema import TagOpenAPISchemaGenerator
 # Create your views here.
 
 
-
 logger = logging.getLogger(__name__)
 
 
@@ -66,15 +65,14 @@ SchemaView = get_schema_view(
         title=title,
         default_version=version,
         description=description,
-        license=openapi.License(name="BSD License"),
         contact=openapi.Contact(**settings.API_CONTACT),
-        terms_of_service=settings.WEB_URL+"/terms-of-use/",
+        terms_of_service=settings.WEB_URL+"/",
         x_logo={
             "href": settings.API_URL,
             "altText": settings.SITE_URL,
-            "backgroundColor": settings.MATERIAL_ADMIN_SITE['MAIN_BG_COLOR'],
+            "backgroundColor": '#fff',
             "url": settings.SITE_URL + settings.STATIC_URL +
-                    'material/admin/images/login-logo-default.jpg',
+                    settings.MATERIAL_ADMIN_SITE['LOGIN_LOGO']
         },
     ),
     public=True,

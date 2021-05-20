@@ -1,15 +1,15 @@
 import structlog as logging
 
 from django.core.cache import cache
-from django.db.utils import IntegrityError
 
 from rest_framework import generics
 from rest_framework import status
 from rest_framework.response import Response
-from drf_yasg2.utils import swagger_auto_schema
+from drf_spectacular.utils import extend_schema as extend_schema
 
-from .serializers import *
+from .choices import *
 from .execptions import *
+from .serializers import *
 
 from API.views import MFAPIView
 from base.utils import apply_task
@@ -25,18 +25,17 @@ logger = logging.getLogger(__name__)
 class LoanApplicationCreateAPIView(MFAPIView):
     serializer_class = LoanApplicationCreateSerializer
 
-    @swagger_auto_schema(responses={
+    @extend_schema(responses={
             status.HTTP_200_OK: LoanApplicationTaskSerializer,
             status.HTTP_201_CREATED: LoanApplicationTaskSerializer,
             status.HTTP_406_NOT_ACCEPTABLE: LoanApplicationTaskSerializer,
-    })
+        },
+        summary='Loan Application Workflow API',
+        description=('API submits a full workflow task to fetch borrower\'s '
+            'loan application from LMS and other services and then push it '
+            'to the lender side.')
+    )
     def post(self, request, *args, **kwargs):
-        """Loan Application Create API
-
-        API fetches borrower loan application from LMS and other services then
-        create lender loan application.
-        """        
-
         return self.create(request, *args, **kwargs)
 
     def create(self, request, *args, **kwargs):
@@ -50,12 +49,12 @@ class LoanApplicationCreateAPIView(MFAPIView):
         if running_task:
             status_code = status.HTTP_406_NOT_ACCEPTABLE
             instance.task_name = running_task
-            instance.task_status = "RUNNING"
+            instance.task_status = TASK_STATUS.RUNNING
         else:
             apply_task(loans_post.s(instance.pk), TASK_SYNC)
             status_code = created and status.HTTP_201_CREATED or status.HTTP_200_OK
             instance.task_name = loans_post.name
-            instance.task_status = "SUBMITTED"
+            instance.task_status = TASK_STATUS.SUBMITTED
 
             cache.set(instance.pk, instance.task_name)
 
@@ -106,29 +105,25 @@ class LoanApplicationAPIView(MFAPIView):
     queryset = LoanApplication.objects
     serializer_class = LoanApplicationStatusSerializer
 
+    @extend_schema(summary='Loan Application Status API',
+        description=('API fetches task & workflow status for a loan application'),
+    )
     def get(self, request, *args, **kwargs):
-        """Loan Application Status API
-
-        API fetches status of all APIs related to the loan application
-        """
-
         instance = self.get_object()
         instance = self.get_status(instance)
         serializer = self.get_serializer(instance)
         return Response(serializer.data)
 
-    @swagger_auto_schema(request_body=serializers.Serializer,
+    @extend_schema(request=serializers.Serializer,
         responses={
             status.HTTP_200_OK: LoanApplicationTaskSerializer,
             status.HTTP_406_NOT_ACCEPTABLE: LoanApplicationTaskSerializer,
         },
+        summary='Loan Application LMS API',
+        description=('API submits a half workflow task to fetch a loan '
+            'application from the LMS by calling LMS APIs in the background.'),
     )
     def patch(self, request, *args, **kwargs):
-        """Loan Application LMS API
-
-        API submits a task to fetch loan application from the LMS
-        by calling LMS APIs in the background.
-        """        
         instance = self.get_object()
 
         from .tasks import loans_patch
@@ -137,12 +132,12 @@ class LoanApplicationAPIView(MFAPIView):
         if running_task:
             status_code = status.HTTP_406_NOT_ACCEPTABLE
             instance.task_name = running_task
-            instance.task_status = "RUNNING"
+            instance.task_status = TASK_STATUS.RUNNING
         else:
             apply_task(loans_patch.s(instance.pk), TASK_SYNC)
             status_code = status.HTTP_200_OK
             instance.task_name = loans_patch.name
-            instance.task_status = "SUBMITTED"
+            instance.task_status = TASK_STATUS.SUBMITTED
 
             cache.set(instance.pk, instance.task_name)
 
@@ -150,18 +145,17 @@ class LoanApplicationAPIView(MFAPIView):
 
         return Response(app.data, status=status_code)
 
-    @swagger_auto_schema(request_body=serializers.Serializer,
+    @extend_schema(request=serializers.Serializer,
         responses={
             status.HTTP_200_OK: LoanApplicationTaskSerializer,
             status.HTTP_406_NOT_ACCEPTABLE: LoanApplicationTaskSerializer,
         },
+        summary='Loan Application Lender API',
+        description=('API submits a half workflow task to push a loan '
+            'application at the lender side by calling Lender APIs in the '
+            'background.'),
     )
     def put(self, request, *args, **kwargs):
-        """Loan Application Lender API
-
-        API submits a task to create loan application at the Lender
-        by calling Lender APIs in the background.
-        """        
         instance = self.get_object()
 
         from .tasks import loans_put
@@ -170,12 +164,12 @@ class LoanApplicationAPIView(MFAPIView):
         if running_task:
             status_code = status.HTTP_406_NOT_ACCEPTABLE
             instance.task_name = running_task
-            instance.task_status = "RUNNING"
+            instance.task_status = TASK_STATUS.RUNNING
         else:
             apply_task(loans_put.s(instance.pk), TASK_SYNC)
             status_code = status.HTTP_200_OK
             instance.task_name = loans_put.name
-            instance.task_status = "SUBMITTED"
+            instance.task_status = TASK_STATUS.SUBMITTED
 
             cache.set(instance.pk, instance.task_name)
 
@@ -241,20 +235,21 @@ class LoanApplicationAPIView(MFAPIView):
                 lender_api_failure.update({each.lender_api.pk: True})
 
         if all(lms_api_success.values()) and all(lender_api_success.values()):
-            workflow_status = 'COMPLETED'
+            workflow_status = WORKFLOW_STATUS.COMPLETED
 
         elif all(lms_api_success.values()) and not len(instance.lender_data):
-            workflow_status = 'LMS FETCHED'
+            workflow_status = WORKFLOW_STATUS.FETCHED
 
         elif len(lms_api_failure) or len(lender_api_failure):
-            workflow_status = 'FAILED'
+            workflow_status = WORKFLOW_STATUS.FAILED
         else:
-            workflow_status = 'NOT COMPLETED'
+            workflow_status = WORKFLOW_STATUS.NOT_COMPLETED
 
         running_task = cache.get(instance.pk)
         if running_task:
             instance.task_name = running_task
-            instance.task_status = "RUNNING"
+            instance.task_status = TASK_STATUS.RUNNING
+            instance.workflow_status = WORKFLOW_STATUS.RUNNING
         else:
             instance.workflow_status = workflow_status
 

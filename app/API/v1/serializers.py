@@ -62,8 +62,8 @@ class LoanApplicationDataSerializer(serializers.ModelSerializer):
 class LoanApplicationStatusSerializer(serializers.ModelSerializer):
 
     task_name = serializers.CharField(required=False)
-    task_status = serializers.CharField(required=False)
-    workflow_status = serializers.CharField(required=False)
+    task_status = serializers.ChoiceField(required=False, choices=TASK_STATUS.choices)
+    workflow_status = serializers.ChoiceField(choices=WORKFLOW_STATUS.choices)
     lms_api_status = LoanApplicationDataSerializer(source='lms_data', many=True)
     lender_api_status = LoanDataSerializer(source='lender_data', many=True)
 
@@ -78,4 +78,4 @@ class LoanApplicationTaskSerializer(serializers.Serializer):
 
     application_id = serializers.CharField(source='pk')
     task_name = serializers.CharField()
-    task_status = serializers.CharField()
+    task_status = serializers.ChoiceField(choices=TASK_STATUS.choices)

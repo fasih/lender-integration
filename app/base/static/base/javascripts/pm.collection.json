@@ -1,6 +1,6 @@
 {
 	"info": {
-		"name": "MayaFin Services API",
+		"name": "MayaFin API Services",
 		"description": "\n# MayaFin Services\n### Postman\n### [API Collection](https://services.mayafin.in/postman)\n### Swagger\n### [API Explorer](https://services.mayafin.in/api/swagger/)\n### ReDoc\n### [API Documentation](https://services.mayafin.in/api/#tag/loans)\n\n\nContact Support:\n Name: MayaFin Admin\n Email: admin@mayafin.in",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -89,7 +89,7 @@
 					]
 				},
 				{
-					"name": "Loan Application Create API",
+					"name": "Loan Application Workflow API",
 					"event": [
 						{
 							"listen": "test",

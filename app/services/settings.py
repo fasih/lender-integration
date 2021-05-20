@@ -55,6 +55,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'corsheaders',
     'drf_yasg2',
+    'drf_spectacular',
 
     'admin_auto_filters',
     'admin_reorder',
@@ -183,6 +184,9 @@ ROOT = '/'
 API = 'api/'
 ADMIN = 'admin/'
 
+API_TITLE = ('MayaFin API Services')
+API_VERSION = '0.3.0'
+
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
@@ -284,7 +288,8 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.SessionAuthentication',
         #'rest_framework_simplejwt.authentication.JWTAuthentication',
     ],
-    'DEFAULT_VERSIONING_CLASS': 'rest_framework.versioning.NamespaceVersioning',
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+    #'DEFAULT_VERSIONING_CLASS': 'rest_framework.versioning.NamespaceVersioning',
     'EXCEPTION_HANDLER': 'API.views.exception_handler',
     'UPLOADED_FILES_USE_URL': True,
 }
@@ -299,24 +304,12 @@ API_CONTACT = {
 
 SWAGGER_SETTINGS = {
     "SPEC_URL": API_URL + 'swagger.yaml',
-    'SECURITY_DEFINITIONS': {
-        'Token': {
-            'type': 'apiKey',
-            'name': 'Authorization',
-            'in': 'header'
-        },
-        'Session': {
-            'type': 'basic',
-        },
-    },
-    "DEFAULT_AUTO_SCHEMA_CLASS": "API.schema.AutoSchema",
 }
 
 
 REDOC_SETTINGS = {
     "SPEC_URL": API_URL + 'swagger.yaml',
     "REQUIRED_PROPS_FIRST": True,
-    "TITLE": 'MayaFin Services API',
 }
 
 
@@ -335,8 +328,8 @@ MATERIAL_ADMIN_SITE = {
     'FAVICON':  'base/images/favicon.ico',  # Admin site favicon (path to static should be specified)
     'MAIN_BG_COLOR':  '#2b5d83',  # Admin site main color, css color should be specified
     'MAIN_HOVER_COLOR':  '#2b5d83',  # Admin site main hover color, css color should be specified
-    'PROFILE_PICTURE':  'material/admin/images/login-logo-default.jpg',  # Admin site profile picture (path to static should be specified)
-    'LOGIN_LOGO':  'material/admin/images/login-logo-default.jpg',  # Admin site logo on login page (path to static should be specified)
+    'PROFILE_PICTURE':  'base/images/logo.png',  # Admin site profile picture (path to static should be specified)
+    'LOGIN_LOGO':  'base/images/logo.png',  # Admin site logo on login page (path to static should be specified)
     'PROFILE_BG':  'material/admin/images/login-bg-default.jpg',  # Admin site profile background (path to static should be specified)
     'LOGOUT_BG':  'material/admin/images/login-bg-default.jpg',  # Admin site background on login/logout pages (path to static should be specified)
     'SHOW_THEMES':  True,  #  Show default admin themes button
@@ -407,6 +400,42 @@ ADMIN_REORDER = (
 )
 
 ADMIN_REORDER_INDEX = ('borrowers', 'lenders', 'platforms',)
+
+
+SPECTACULAR_SETTINGS = {
+    'CONTACT': {
+        'email': ADMINS[0][1],
+        'name': ADMINS[0][0],
+        'url': WEB_URL,
+    },
+    'DESCRIPTION': ('## API Services'
+        '''
+        |API Services         |Links                             |
+        |---------------------|----------------------------------|
+        |API Authentication   |[Login](/api/login/?next=/api/)   |
+        |API Documentation    |[ReDoc](/api/)                    |
+        |API Explorer         |[Swagger](/api/swagger/)          |
+        '''
+    ),
+
+    'EXTENSIONS_INFO': {
+        "termsOfService": f'{WEB_URL}',
+        "x-logo": {
+            "altText": API_TITLE,
+            "backgroundColor": '#fff',
+            "href": WEB_URL,
+            "url": STATIC_URL + MATERIAL_ADMIN_SITE['LOGIN_LOGO'],
+        }
+    },
+
+    'SERVE_INCLUDE_SCHEMA': True,
+    'SERVE_PUBLIC': True,
+    'SORT_OPERATION_PARAMETERS': False,
+    'SWAGGER_UI_FAVICON_HREF': STATIC_URL + MATERIAL_ADMIN_SITE['FAVICON'],
+
+    'TITLE': API_TITLE,
+    'VERSION': API_VERSION,
+}
 
 
 # CELERY CONFIGURATIONS
