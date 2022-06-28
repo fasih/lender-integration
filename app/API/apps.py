@@ -6,4 +6,4 @@ class APIConfig(AppConfig):
     verbose_name = 'API'
 
     def ready(self):
-        from API.v1.tasks import task
+        from API.v1.tasks import shared_task
