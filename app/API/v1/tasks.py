@@ -2,7 +2,7 @@ import copy
 import tempfile
 import structlog as logging
 
-from celery.decorators import task
+from celery import shared_task
 from collections import defaultdict
 from dictor import dictor
 from django.core.files import File
@@ -356,7 +356,7 @@ def push_to_lender(app):
 
 
 
-@task(name="loans_post")
+@shared_task(name="loans_post")
 def loans_post(application_id):
     logger.info('loans_post', status='Started', **locals())
 
@@ -370,7 +370,7 @@ def loans_post(application_id):
 
 
 
-@task(name="loans_patch")
+@shared_task(name="loans_patch")
 def loans_patch(application_id):
     logger.info('loans_patch', status='Started', **locals())
 
@@ -383,7 +383,7 @@ def loans_patch(application_id):
 
 
 
-@task(name="loans_put")
+@shared_task(name="loans_put")
 def loans_put(application_id):
     logger.info('loans_put', status='Started', **locals())
 
